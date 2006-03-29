@@ -1,0 +1,22 @@
+<tal:block
+  define="
+    model request/ghost_model | request/model;
+    public options/public | nothing;
+    title_method python: test(public, 'get_title', 'get_title_editable');
+    append_to_url options/append_to_url | string:edit/tab_edit;
+    " >
+
+    <h2 class="heading"
+      tal:content="model/get_title">
+        Title
+    </h2>
+    
+  <p class="searchResults">
+    Search Results
+
+      <!--    url string:${item/absolute_url}/${append_to_url}" -->
+  </p>
+  <p tal:repeat="field model/getSearchFields"
+  tal:content="python:model.getFieldValue(field.getId())">
+  </p>
+</tal:block>
