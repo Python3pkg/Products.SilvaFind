@@ -12,7 +12,7 @@ class SearchObject:
     def setResultsSchema(self, schema):
         self.resultsSchema = schema
 
-    def getFieldValue(self, name):
+    def getCriteriaValue(self, name):
         if self.searchSchema:
             searchSchema = self.searchSchema
             if searchSchema.hasField(name):

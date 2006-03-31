@@ -16,7 +16,8 @@
 
       <!--    url string:${item/absolute_url}/${append_to_url}" -->
   </p>
-  <p tal:repeat="field model/getSearchFields"
-  tal:content="python:model.getFieldValue(field.getId())">
+  <p tal:repeat="fieldView model/getFieldViews">
+    <span tal:content="fieldView/getTitle" /> :
+    <span tal:content="fieldView/getValue" />
   </p>
 </tal:block>

@@ -26,6 +26,16 @@ def initialize(context):
 
     register_type_for_metadata()
 
+    from zope.app import zapi
+    from Products.SilvaFind.interfaces import IMetadataSearchField
+    from Products.SilvaFind.interfaces import ISearchFieldView
+    from Products.SilvaFind.interfaces import ISearchObject
+    from Products.SilvaFind.adapters import MetadataFieldView
+
+    Adapters = zapi.getService(zapi.servicenames.Adapters)
+    Adapters.register((IMetadataSearchField, ISearchObject), ISearchFieldView, '',
+       MetadataFieldView)
+
 def register_type_for_metadata():
     """
     register the silva core content types with the metadata system

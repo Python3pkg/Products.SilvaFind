@@ -4,6 +4,10 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
+# zope3
+from zope.interface import implements
+from zope.app import zapi
+
 # Silva
 from Products.Silva.Content import Content
 from Products.Silva.i18n import translate as _
@@ -11,9 +15,14 @@ from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle
 
+from Products.SilvaMetadata.Index import createIndexId
+
 #SilvaFind
 from Products.SilvaFind.searchobject import SearchObject
 from Products.SilvaFind import globalSearchSchema
+from Products.SilvaFind.interfaces import ISearchFieldView
+from Products.SilvaFind.interfaces import ISearchObject
+
 
 class SilvaFind(SearchObject, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
@@ -23,6 +32,8 @@ class SilvaFind(SearchObject, Content, SimpleItem):
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find"
+
+    implements(ISearchObject)
 
     def __init__(self, id):
         Content.__init__(self, id,
@@ -47,20 +58,25 @@ class SilvaFind(SearchObject, Content, SimpleItem):
         # XXX: we badly need Publishable type objects to behave right.
         return 1
 
-    security.declareProtected(SilvaPermissions.View, 'getSearchFields')
-    def getSearchFields(self):
-        coll = self.get_root().service_metadata.getCollection()
+    security.declareProtected(SilvaPermissions.View, 'getFieldViews')
+    def getFieldViews(self):
         result = []
         for field in self.searchSchema.getFields():
-            set = coll[field.getMetadataSet()]
-            element = getattr(set, field.getMetadataId())
-            result.append(element.field)
+            searchFieldView = zapi.getMultiAdapter((field, self), ISearchFieldView)
+            # wrapped to enable security checks
+            searchFieldView = searchFieldView.__of__(self)
+            result.append(searchFieldView)
         return result    
 
-
+    security.declareProtected(SilvaPermissions.View, 'search')
+    def search(self, REQUEST):
+        catalog = self.get_root().service_catalog
+        for field in self.getSearchFields():
+            pass 
+    
     #MUTATORS
     security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')
-    def manage_edit(self, REQUEST=None):
+    def manage_edit(self, REQUEST):
         """Store fields values
         """
         for field in self.searchSchema.getFields():

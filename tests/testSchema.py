@@ -43,15 +43,15 @@ class testSearchObject(TestCase):
         self.obj = SearchObject(self.schema)
 
     def testGetAttr(self):
-        self.assertEquals(None, self.obj.getFieldValue('foo'))
-        self.assertEquals(None, self.obj.getFieldValue('bar'))
-        self.assertRaises(AttributeError, self.obj.getFieldValue, 'xyz')
+        self.assertEquals(None, self.obj.getCriteriaValue('foo'))
+        self.assertEquals(None, self.obj.getCriteriaValue('bar'))
+        self.assertRaises(AttributeError, self.obj.getCriteriaValue, 'xyz')
 
     def testSetAttr(self):
         self.obj.setFieldValue('foo', 1)
-        self.assertEquals(1, self.obj.getFieldValue('foo'))
+        self.assertEquals(1, self.obj.getCriteriaValue('foo'))
         self.obj.setFieldValue('bar', '1')
-        self.assertEquals('1', self.obj.getFieldValue('bar'))
+        self.assertEquals('1', self.obj.getCriteriaValue('bar'))
 
 def test_suite():
     suite = TestSuite()

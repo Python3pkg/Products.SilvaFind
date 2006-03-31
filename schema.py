@@ -1,3 +1,7 @@
+from zope.interface import implements
+
+from Products.SilvaFind.interfaces import IMetadataSearchField
+
 class Schema:
     def __init__(self, fields):
         self.fields = fields
@@ -12,6 +16,8 @@ class Schema:
         return [field.getName() for field in self.getFields()]
 
 class MetadataField:
+    implements(IMetadataSearchField)
+
     def __init__(self, metadataSet, metadataId):
         self.metadataSet = metadataSet
         self.metadataId = metadataId
