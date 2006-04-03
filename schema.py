@@ -36,3 +36,11 @@ class ResultsSchema(Schema):
 
 class SearchSchema(Schema):
    pass 
+
+
+class ResultField:
+    def __init__(self, id):
+        self.id = id
+
+    def getColumnId(self):
+        return self.id

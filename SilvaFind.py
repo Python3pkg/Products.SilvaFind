@@ -20,9 +20,10 @@ from Products.SilvaMetadata.Index import createIndexId
 #SilvaFind
 from Products.SilvaFind.searchobject import SearchObject
 from Products.SilvaFind import globalSearchSchema
+from Products.SilvaFind import globalResultsSchema
 from Products.SilvaFind.interfaces import ISearchFieldView
 from Products.SilvaFind.interfaces import ISearchObject
-
+from Products.SilvaFind.interfaces import IQueryPart
 
 class SilvaFind(SearchObject, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
@@ -39,6 +40,7 @@ class SilvaFind(SearchObject, Content, SimpleItem):
         Content.__init__(self, id,
             '[Title is stored in metadata. This is a bug.]')
         SearchObject.__init__(self, globalSearchSchema)
+        self.setResultsSchema(globalResultsSchema)
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')
@@ -69,11 +71,20 @@ class SilvaFind(SearchObject, Content, SimpleItem):
         return result    
 
     security.declareProtected(SilvaPermissions.View, 'search')
-    def search(self, REQUEST):
+    def search(self, REQUEST=None):
         catalog = self.get_root().service_catalog
-        for field in self.getSearchFields():
-            pass 
-    
+        searchArguments = {}
+        for field in self.searchSchema.getFields():
+            queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
+            value = queryPart.getValue()
+            if value is None:
+                value = ''
+            searchArguments[queryPart.getIndexId()] = value
+        #need to filter inactive versions
+        return catalog.searchResults(searchArguments)
+   
+    security.declareProtected(SilvaPermissions.View, 'getResultsColumnIds')
+
     #MUTATORS
     security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')
     def manage_edit(self, REQUEST):

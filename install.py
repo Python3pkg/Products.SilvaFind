@@ -1,8 +1,16 @@
 """Install for Silva Find
 """
 
+# zope3
+from zope.app import zapi
+
+# Silva
 from Products.Silva.install import add_fss_directory_view
+
+# SilvaFind
 from Products.SilvaFind import SilvaFind
+from Products.SilvaFind import globalSearchSchema
+from Products.SilvaFind.interfaces import IIndexedField
 
 def install(root):
     # create the core views from filesystem
@@ -16,6 +24,8 @@ def install(root):
                            ['Editor', 'ChiefEditor', 'Manager'])
 
     root.service_metadata.addTypesMapping(('Silva Find', ), ('silva-content', 'silva-extra'))
+
+    checkIndexes(root)
 
 def uninstall(root):
     unregisterViews(root.service_view_registry)
@@ -41,4 +51,12 @@ def unregisterViews(reg):
         reg.unregister('edit', meta_type)
         reg.unregister('add', meta_type)
         reg.unregister('preview', '%s Version' % meta_type)
+
+def checkIndexes(root):
+    """check that all searchSchema fields are indexed
+    """
+
+    for field in globalSearchSchema.getFields():
+        indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
+        indexedField.checkIndex()
 

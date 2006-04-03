@@ -16,8 +16,18 @@
 
       <!--    url string:${item/absolute_url}/${append_to_url}" -->
   </p>
-  <p tal:repeat="fieldView model/getFieldViews">
-    <span tal:content="fieldView/getTitle" /> :
-    <span tal:content="fieldView/getValue" />
-  </p>
+  <div>
+    <tal:criteria repeat="fieldView model/getFieldViews">
+      <tal:one define="value fieldView/getValue" condition="value">
+        <span tal:content="fieldView/getTitle" /> :
+        <span tal:content="value" />;
+      </tal:one>
+    </tal:criteria>
+  </div>
+
+  <p tal:repeat="item model/search">
+      <tal:columns repeat="columnId model/getResultsColumnIds">
+        <span tal:content="item/?columnId" />&nbsp;
+      </tal:columns>
+  </p>    
 </tal:block>

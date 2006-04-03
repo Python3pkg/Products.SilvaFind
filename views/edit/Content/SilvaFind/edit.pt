@@ -56,7 +56,7 @@
   <tfoot>
     <tr class="controls">
       <td class="align-right" colspan="2">
-         <input type="submit" />
+         <input type="submit" value="Save" class="button" />
       </td>
     </tr>
   </tfoot>

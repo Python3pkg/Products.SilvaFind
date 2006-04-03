@@ -7,22 +7,35 @@ from ExtensionClass import Base
 
 # Silva
 from Products.Silva import SilvaPermissions
+from Products.SilvaMetadata.Index import createIndexId
 
-class MetadataFieldView(Implicit):
-    
-    security = ClassSecurityInfo()
-    
-    def __init__(self, field, searchObject):
+class SilvaFindError(Exception):
+    pass
+
+class MetadataFieldRoot:
+    def __init__(self, field, root):
         self.field = field
-        self.searchObject = searchObject
-        self.root = self.searchObject.get_root()
-    
+        self.root = root
+
     def _getMetadataElement(self):
         collection = self.root.service_metadata.getCollection()
         set = collection[self.field.getMetadataSet()]
         element = getattr(set, self.field.getMetadataId())
         return element
 
+    def getIndexId(self):
+        indexId = createIndexId(self._getMetadataElement())
+        return indexId
+
+class MetadataFieldView(Implicit, MetadataFieldRoot):
+    
+    security = ClassSecurityInfo()
+    
+    def __init__(self, field, searchObject):
+        root = searchObject.get_root()
+        MetadataFieldRoot.__init__(self, field, root)
+        self.searchObject = searchObject
+    
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self):
@@ -41,8 +54,16 @@ class MetadataFieldView(Implicit):
         element = self._getMetadataElement()
         return element.Title()
         
-    def getIndexId(self):
-        indexId = createIndexId(self._getMetadataElement())
-        return indexId
-
 InitializeClass(MetadataFieldView)
+
+
+class MetadataIndexedField(MetadataFieldRoot):
+    def __init__(self, field, root):
+        MetadataFieldRoot.__init__(self, field, root)
+        self.catalog = root.service_catalog
+
+    def checkIndex(self):
+        id = self.getIndexId()
+        if id not in self.catalog.indexes():
+            raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
+

@@ -15,6 +15,9 @@ class IQueryPart(Interface):
     def getIndexId():
         '''returns ZCatalog index id needed to construct query'''
 
+    def getValue():
+        '''returns stored value for the corresponding field'''
+
 class ISearchObject(Interface):
     def get_root():
         '''returns Silva Root where the object is stored'''
@@ -28,4 +31,11 @@ class IMetadataSearchField(Interface):
         
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
+
+class IIndexedField(Interface):
+    def checkIndex():
+        '''checks if a corresponding index exists;
+        raise an exception if not
+        '''
+        
         

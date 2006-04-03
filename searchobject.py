@@ -24,4 +24,8 @@ class SearchObject:
             searchSchema = self.searchSchema
             if searchSchema.hasField(name):
                 self.searchValues[name] = value
-        
+
+    def getResultsColumnIds(self):
+        return [field.getColumnId() 
+            for field in self.resultsSchema.getFields()]
+            
