@@ -21,9 +21,10 @@ from Products.SilvaMetadata.Index import createIndexId
 from Products.SilvaFind.searchobject import SearchObject
 from Products.SilvaFind import globalSearchSchema
 from Products.SilvaFind import globalResultsSchema
-from Products.SilvaFind.interfaces import ISearchFieldView
-from Products.SilvaFind.interfaces import ISearchObject
+from Products.SilvaFind.interfaces import ICriteriaView
+from Products.SilvaFind.interfaces import ISilvaQuery
 from Products.SilvaFind.interfaces import IQueryPart
+from Products.SilvaFind.interfaces import IStoredCriteria
 
 class SilvaFind(SearchObject, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
@@ -34,7 +35,7 @@ class SilvaFind(SearchObject, Content, SimpleItem):
 
     meta_type = "Silva Find"
 
-    implements(ISearchObject)
+    implements(ISilvaQuery)
 
     def __init__(self, id):
         Content.__init__(self, id,
@@ -64,7 +65,7 @@ class SilvaFind(SearchObject, Content, SimpleItem):
     def getFieldViews(self):
         result = []
         for field in self.searchSchema.getFields():
-            searchFieldView = zapi.getMultiAdapter((field, self), ISearchFieldView)
+            searchFieldView = zapi.getMultiAdapter((field, self), ICriteriaView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
@@ -81,7 +82,8 @@ class SilvaFind(SearchObject, Content, SimpleItem):
                 value = ''
             searchArguments[queryPart.getIndexId()] = value
         #need to filter inactive versions
-        return catalog.searchResults(searchArguments)
+        results = catalog.searchResults(searchArguments)
+        return results
    
     security.declareProtected(SilvaPermissions.View, 'getResultsColumnIds')
 
@@ -91,13 +93,8 @@ class SilvaFind(SearchObject, Content, SimpleItem):
         """Store fields values
         """
         for field in self.searchSchema.getFields():
-            set_name = field.getMetadataSet()
-            field_name = field.getMetadataId()
-            if hasattr(REQUEST, set_name):
-                set_values = getattr(REQUEST, set_name)
-                if set_values.has_key(field_name):
-                    field_value = set_values[field_name]
-                    self.setFieldValue(field_name, field_value)
+            requestPart = zapi.getMultiAdapter((field, self), IStoredCriteria)
+            requestPart.store()
         REQUEST.RESPONSE.redirect(self.absolute_url() + '/edit/tab_edit')
 
 InitializeClass(SilvaFind)

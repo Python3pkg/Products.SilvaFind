@@ -6,9 +6,11 @@ from Products.Silva.fssite import registerDirectory
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import ResultsSchema
 from Products.SilvaFind.schema import MetadataField
+from Products.SilvaFind.schema import FullTextField
 from Products.SilvaFind.schema import ResultField
 
 globalSearchSchema = SearchSchema([
+    FullTextField(),
     MetadataField('silva-content', 'maintitle'),
     MetadataField('silva-content', 'shorttitle'),
     ])
@@ -33,21 +35,39 @@ def initialize(context):
 
     from zope.app import zapi
     from Products.Silva.interfaces import IRoot
-    from Products.SilvaFind.interfaces import IMetadataSearchField
-    from Products.SilvaFind.interfaces import ISearchFieldView
-    from Products.SilvaFind.interfaces import ISearchObject
+    from Products.SilvaFind.interfaces import ICriteriaView
+    from Products.SilvaFind.interfaces import ISilvaQuery
     from Products.SilvaFind.interfaces import IQueryPart
     from Products.SilvaFind.interfaces import IIndexedField
-    from Products.SilvaFind.adapters import MetadataFieldView
-    from Products.SilvaFind.adapters import MetadataIndexedField 
+    from Products.SilvaFind.interfaces import IStoredCriteria
 
     Adapters = zapi.getService(zapi.servicenames.Adapters)
-    Adapters.register((IMetadataSearchField, ISearchObject), ISearchFieldView, '',
+    
+    from Products.SilvaFind.interfaces import IMetadataSearchField
+    from Products.SilvaFind.adapters import MetadataFieldView
+    from Products.SilvaFind.adapters import MetadataFieldStorage
+    from Products.SilvaFind.adapters import MetadataIndexedField 
+    Adapters.register((IMetadataSearchField, ISilvaQuery), ICriteriaView, '',
        MetadataFieldView)
-    Adapters.register((IMetadataSearchField, ISearchObject), IQueryPart, '',
+    Adapters.register((IMetadataSearchField, ISilvaQuery), IQueryPart, '',
        MetadataFieldView)
+    Adapters.register((IMetadataSearchField, ISilvaQuery), IStoredCriteria, '',
+       MetadataFieldStorage)
     Adapters.register((IMetadataSearchField, IRoot), IIndexedField, '',
        MetadataIndexedField)
+    
+    from Products.SilvaFind.interfaces import IFullTextField
+    from Products.SilvaFind.adapters import FullTextFieldView
+    from Products.SilvaFind.adapters import FullTextFieldStorage
+    from Products.SilvaFind.adapters import FullTextIndexedField
+    Adapters.register((IFullTextField, ISilvaQuery), ICriteriaView, '',
+       FullTextFieldView)
+    Adapters.register((IFullTextField, ISilvaQuery), IQueryPart, '',
+       FullTextFieldView)
+    Adapters.register((IFullTextField, ISilvaQuery), IStoredCriteria, '',
+       FullTextFieldStorage)
+    Adapters.register((IFullTextField, IRoot), IIndexedField, '',
+       FullTextIndexedField)
 
 
 def register_type_for_metadata():

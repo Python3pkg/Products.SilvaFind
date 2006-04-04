@@ -1,6 +1,6 @@
 from zope.interface import Interface
 
-class ISearchFieldView(Interface):
+class ICriteriaView(Interface):
     def getTitle():
         '''returns field title for view'''
 
@@ -9,7 +9,11 @@ class ISearchFieldView(Interface):
 
     def getValue():
         '''returns stored value for the corresponding field'''
-
+        
+class IStoredCriteria(Interface):
+    def store():
+        '''store form values in search_object
+        '''
 
 class IQueryPart(Interface):
     def getIndexId():
@@ -18,7 +22,7 @@ class IQueryPart(Interface):
     def getValue():
         '''returns stored value for the corresponding field'''
 
-class ISearchObject(Interface):
+class ISilvaQuery(Interface):
     def get_root():
         '''returns Silva Root where the object is stored'''
 
@@ -32,10 +36,13 @@ class IMetadataSearchField(Interface):
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
 
+class IFullTextField(Interface):
+    pass
+
 class IIndexedField(Interface):
     def checkIndex():
         '''checks if a corresponding index exists;
         raise an exception if not
         '''
-        
+
         

@@ -1,6 +1,7 @@
 from zope.interface import implements
 
 from Products.SilvaFind.interfaces import IMetadataSearchField
+from Products.SilvaFind.interfaces import IFullTextField
 
 class Schema:
     def __init__(self, fields):
@@ -29,6 +30,12 @@ class MetadataField:
         return self.metadataId
 
     getName = getMetadataId
+
+class FullTextField:
+    implements(IFullTextField)
+
+    def getName(self):
+        return "fulltext"
 
 class ResultsSchema(Schema):
    pass 
