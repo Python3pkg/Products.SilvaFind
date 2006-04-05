@@ -18,15 +18,13 @@ from Products.Silva import mangle
 from Products.SilvaMetadata.Index import createIndexId
 
 #SilvaFind
-from Products.SilvaFind.searchobject import SearchObject
-from Products.SilvaFind import globalSearchSchema
-from Products.SilvaFind import globalResultsSchema
+from Products.SilvaFind.searchobject import Query
 from Products.SilvaFind.interfaces import ICriteriaView
 from Products.SilvaFind.interfaces import ISilvaQuery
 from Products.SilvaFind.interfaces import IQueryPart
 from Products.SilvaFind.interfaces import IStoredCriteria
 
-class SilvaFind(SearchObject, Content, SimpleItem):
+class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
        items resulting from a search with specific values for criteria 
        or a form to enter search criteria before getting results.""")
@@ -40,8 +38,7 @@ class SilvaFind(SearchObject, Content, SimpleItem):
     def __init__(self, id):
         Content.__init__(self, id,
             '[Title is stored in metadata. This is a bug.]')
-        SearchObject.__init__(self, globalSearchSchema)
-        self.setResultsSchema(globalResultsSchema)
+        Query.__init__(self)
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')

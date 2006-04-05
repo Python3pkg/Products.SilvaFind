@@ -46,7 +46,7 @@ class MetadataFieldView(Implicit, MetadataFieldRoot):
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         element = self._getMetadataElement()
-        value = self.searchObject.getCriteriaValue(element.field.getId())
+        value = self.searchObject.getCriteriaValue(self.field.getName())
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -82,7 +82,7 @@ class MetadataFieldStorage(Storage):
             set_values = getattr(REQUEST, set_name)
             if set_values.has_key(field_name):
                 field_value = set_values[field_name]
-                self.searchObject.setFieldValue(field_name, field_value)
+                self.searchObject.setCriteriaValue(field_name, field_value)
 
 class FullTextFieldStorage(Storage):
     def store(self):
@@ -90,7 +90,7 @@ class FullTextFieldStorage(Storage):
         field_name = self.field.getName()
         if hasattr(REQUEST, field_name):
             field_value = getattr(REQUEST, field_name)
-            self.searchObject.setFieldValue(field_name, field_value)
+            self.searchObject.setCriteriaValue(field_name, field_value)
 
 class FullTextFieldView(Implicit):
     

@@ -1,17 +1,23 @@
 from ZODB.PersistentMapping import PersistentMapping
+from schema import globalSearchSchema
+from schema import globalResultsSchema
 
-class SearchObject:
-    def __init__(self, searchSchema=None, resultsSchema=None):
-        self.searchSchema = searchSchema
-        self.resultsSchema = resultsSchema
+class Query:
+    def __init__(self):
         self.searchValues = PersistentMapping()
-
-    def setSearchSchema(self, schema):
-        self.searchSchema = schema
-        
-    def setResultsSchema(self, schema):
-        self.resultsSchema = schema
-
+    
+    def getSearchSchema(self):
+        return globalSearchSchema
+    
+    def getResultsSchema(self):
+        return globalResultsSchema
+    
+    searchSchema=property(getSearchSchema, None, None,
+        "access to the instance search schema")
+    
+    resultsSchema=property(getResultsSchema, None, None,
+        "access to the instance search schema")
+    
     def getCriteriaValue(self, name):
         if self.searchSchema:
             searchSchema = self.searchSchema
@@ -19,7 +25,7 @@ class SearchObject:
                 return self.searchValues.get(name, None)
         raise AttributeError(name)
         
-    def setFieldValue(self, name, value):
+    def setCriteriaValue(self, name, value):
         if self.searchSchema:
             searchSchema = self.searchSchema
             if searchSchema.hasField(name):
@@ -28,4 +34,4 @@ class SearchObject:
     def getResultsColumnIds(self):
         return [field.getColumnId() 
             for field in self.resultsSchema.getFields()]
-            
+           

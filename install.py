@@ -9,8 +9,8 @@ from Products.Silva.install import add_fss_directory_view
 
 # SilvaFind
 from Products.SilvaFind import SilvaFind
-from Products.SilvaFind import globalSearchSchema
-from Products.SilvaFind import globalResultsSchema
+from Products.SilvaFind.schema import globalSearchSchema
+from Products.SilvaFind.schema import globalResultsSchema
 from Products.SilvaFind.interfaces import IIndexedField
 from Products.SilvaFind.interfaces import ICatalogMetadataSetup
 

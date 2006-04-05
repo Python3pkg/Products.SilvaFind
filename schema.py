@@ -30,7 +30,8 @@ class MetadataField:
     def getMetadataId(self):
         return self.metadataId
 
-    getName = getMetadataId
+    def getName(self):
+        return "%s-%s" % (self.getMetadataSet(), self.getMetadataId())
 
 class FullTextField:
     implements(IFullTextField)
@@ -54,3 +55,13 @@ class ResultField:
 
     def getColumnId(self):
         return self.id
+
+globalSearchSchema = SearchSchema([
+    FullTextField(),
+    MetadataField('silva-content', 'maintitle'),
+    MetadataField('silva-content', 'shorttitle'),
+    ])
+   
+globalResultsSchema = ResultsSchema([
+    ResultField('get_title'),
+    ])

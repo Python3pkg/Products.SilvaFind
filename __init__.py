@@ -9,16 +9,6 @@ from Products.SilvaFind.schema import MetadataField
 from Products.SilvaFind.schema import FullTextField
 from Products.SilvaFind.schema import ResultField
 
-globalSearchSchema = SearchSchema([
-    FullTextField(),
-    MetadataField('silva-content', 'maintitle'),
-    MetadataField('silva-content', 'shorttitle'),
-    ])
-
-globalResultsSchema = ResultsSchema([
-    ResultField('get_title'),
-    ])
-
 def initialize(context):
     from Products.Silva.ExtensionRegistry import extensionRegistry
     import SilvaFind

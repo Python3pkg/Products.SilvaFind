@@ -3,7 +3,7 @@ from unittest import TestSuite
 from unittest import makeSuite
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import MetadataField
-from Products.SilvaFind.searchobject import SearchObject
+from Products.SilvaFind.searchobject import Query
 
 class testSchema(TestCase):
 
@@ -19,11 +19,11 @@ class testSchema(TestCase):
         self.assertEquals([self.field1, self.field2], self.schema.getFields())
 
     def testFieldNames(self):
-        self.assertEquals(['field-id1', 'field-id2'], self.schema.getFieldNames())
+        self.assertEquals(['meta-set-field-id1', 'meta-set-field-id2'], self.schema.getFieldNames())
 
     def testHasField(self):
-        self.failIf(self.schema.hasField('field-id3'))
-        self.failUnless(self.schema.hasField('field-id1'))
+        self.failIf(self.schema.hasField('meta-set-field-id3'))
+        self.failUnless(self.schema.hasField('meta-set-field-id1'))
         
 class testMetadataField(TestCase):
 
@@ -37,21 +37,19 @@ class testMetadataField(TestCase):
 
 class testSearchObject(TestCase):
     def setUp(self):
-        self.field1 = MetadataField('meta-set', 'foo')
-        self.field2 = MetadataField('meta-set', 'bar')
-        self.schema = SearchSchema([self.field1, self.field2])
-        self.obj = SearchObject(self.schema)
+        self.obj = Query()
 
-    def testGetAttr(self):
-        self.assertEquals(None, self.obj.getCriteriaValue('foo'))
-        self.assertEquals(None, self.obj.getCriteriaValue('bar'))
+    def testGetCriteriaValue(self):
+        self.assertEquals(None, self.obj.getCriteriaValue('fulltext'))
+        self.assertEquals(None,
+        self.obj.getCriteriaValue('silva-content-maintitle'))
         self.assertRaises(AttributeError, self.obj.getCriteriaValue, 'xyz')
 
-    def testSetAttr(self):
-        self.obj.setFieldValue('foo', 1)
-        self.assertEquals(1, self.obj.getCriteriaValue('foo'))
-        self.obj.setFieldValue('bar', '1')
-        self.assertEquals('1', self.obj.getCriteriaValue('bar'))
+    def testSetCriteriaValue(self):
+        self.obj.setCriteriaValue('fulltext', 1)
+        self.assertEquals(1, self.obj.getCriteriaValue('fulltext'))
+        self.obj.setCriteriaValue('silva-content-maintitle', '1')
+        self.assertEquals('1', self.obj.getCriteriaValue('silva-content-maintitle'))
 
 def test_suite():
     suite = TestSuite()
