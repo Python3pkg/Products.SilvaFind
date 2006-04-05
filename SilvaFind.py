@@ -18,7 +18,7 @@ from Products.Silva import mangle
 from Products.SilvaMetadata.Index import createIndexId
 
 #SilvaFind
-from Products.SilvaFind.searchobject import Query
+from Products.SilvaFind.query import Query
 from Products.SilvaFind.interfaces import ICriteriaView
 from Products.SilvaFind.interfaces import ISilvaQuery
 from Products.SilvaFind.interfaces import IQueryPart

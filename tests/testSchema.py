@@ -3,7 +3,7 @@ from unittest import TestSuite
 from unittest import makeSuite
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import MetadataField
-from Products.SilvaFind.searchobject import Query
+from Products.SilvaFind.query import Query
 
 class testSchema(TestCase):
 
