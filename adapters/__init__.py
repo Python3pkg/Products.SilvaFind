@@ -1,11 +1,11 @@
 # SilvaFind
-from Products.SilvaFind.adapters.metadatacriteria import MetadataFieldView
-from Products.SilvaFind.adapters.metadatacriteria import MetadataFieldStorage
-from Products.SilvaFind.adapters.metadatacriteria import MetadataIndexedField
+from Products.SilvaFind.adapters.metadatacriteria import MetadataCriteriaView
+from Products.SilvaFind.adapters.metadatacriteria import MetadataCriteriaStorage
+from Products.SilvaFind.adapters.metadatacriteria import IndexedMetadataCriteria
 
-from Products.SilvaFind.adapters.fulltextcriteria import FullTextFieldView
-from Products.SilvaFind.adapters.fulltextcriteria import FullTextFieldStorage
-from Products.SilvaFind.adapters.fulltextcriteria import FullTextIndexedField
+from Products.SilvaFind.adapters.fulltextcriteria import FullTextCriteriaView
+from Products.SilvaFind.adapters.fulltextcriteria import FullTextCriteriaStorage
+from Products.SilvaFind.adapters.fulltextcriteria import IndexedFullTextCriteria
 
 class CatalogMetadataSetup:
     def __init__(self, field, root):

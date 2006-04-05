@@ -6,27 +6,26 @@ from Acquisition import Implicit
 
 # Silva
 from Products.Silva import SilvaPermissions
-from Products.SilvaMetadata.Index import createIndexId
 
 # SilvaFind
-from Products.SilvaFind.adapters.criteria import Storage
+from Products.SilvaFind.adapters.criteria import CriteriaStorage
 from Products.SilvaFind.adapters.criteria import SilvaFindError
 
-class FullTextFieldStorage(Storage):
+class FullTextCriteriaStorage(CriteriaStorage):
     def store(self):
-        REQUEST = self.searchObject.REQUEST
-        field_name = self.field.getName()
+        REQUEST = self.query.REQUEST
+        field_name = self.criteria.getName()
         if hasattr(REQUEST, field_name):
-            field_value = getattr(REQUEST, field_name)
-            self.searchObject.setCriteriaValue(field_name, field_value)
+            criteria_value = getattr(REQUEST, field_name)
+            self.query.setCriteriaValue(field_name, criteria_value)
 
-class FullTextFieldView(Implicit):
+class FullTextCriteriaView(Implicit):
     
     security = ClassSecurityInfo()
     
-    def __init__(self, field, searchObject):
-        self.field = field
-        self.searchObject = searchObject
+    def __init__(self, criteria, query):
+        self.criteria = criteria
+        self.query = query
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
@@ -37,11 +36,11 @@ class FullTextFieldView(Implicit):
         html = '''
         <input type="text" name="%s" value="%s" /> 
         '''
-        return html % (self.field.getName(), value)
+        return html % (self.criteria.getName(), value)
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
-        value = self.searchObject.getCriteriaValue(self.field.getName())
+        value = self.query.getCriteriaValue(self.criteria.getName())
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -51,11 +50,11 @@ class FullTextFieldView(Implicit):
     def getIndexId(self):
         return 'fulltext'
 
-InitializeClass(FullTextFieldView)
+InitializeClass(FullTextCriteriaView)
 
-class FullTextIndexedField:
-    def __init__(self, field, root):
-        self.field = field
+class IndexedFullTextCriteria:
+    def __init__(self, criteria, root):
+        self.criteria = criteria
         self.root = root
         self.catalog = root.service_catalog
 

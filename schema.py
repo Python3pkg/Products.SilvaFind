@@ -1,7 +1,7 @@
 from zope.interface import implements
 
-from Products.SilvaFind.interfaces import IMetadataSearchField
-from Products.SilvaFind.interfaces import IFullTextField
+from Products.SilvaFind.interfaces import IMetadataCriteriaField
+from Products.SilvaFind.interfaces import IFullTextCriteriaField
 from Products.SilvaFind.interfaces import IResultField
 
 class Schema:
@@ -17,8 +17,14 @@ class Schema:
     def getFieldNames(self):
         return [field.getName() for field in self.getFields()]
 
-class MetadataField:
-    implements(IMetadataSearchField)
+class SearchSchema(Schema):
+   pass 
+
+class ResultsSchema(Schema):
+   pass 
+
+class MetadataCriteriaField:
+    implements(IMetadataCriteriaField)
 
     def __init__(self, metadataSet, metadataId):
         self.metadataSet = metadataSet
@@ -33,20 +39,18 @@ class MetadataField:
     def getName(self):
         return "%s-%s" % (self.getMetadataSet(), self.getMetadataId())
 
-class FullTextField:
-    implements(IFullTextField)
+class FullTextCriteriaField:
+    implements(IFullTextCriteriaField)
 
     def getName(self):
         return "fulltext"
 
-class ResultsSchema(Schema):
-   pass 
-
-
-class SearchSchema(Schema):
-   pass 
-
-
+globalSearchSchema = SearchSchema([
+    FullTextCriteriaField(),
+    MetadataCriteriaField('silva-content', 'maintitle'),
+    MetadataCriteriaField('silva-content', 'shorttitle'),
+    ])
+   
 class ResultField:
     implements(IResultField)
     
@@ -56,12 +60,6 @@ class ResultField:
     def getColumnId(self):
         return self.id
 
-globalSearchSchema = SearchSchema([
-    FullTextField(),
-    MetadataField('silva-content', 'maintitle'),
-    MetadataField('silva-content', 'shorttitle'),
-    ])
-   
 globalResultsSchema = ResultsSchema([
     ResultField('get_title'),
     ])

@@ -1,14 +1,6 @@
 #Silva
 from Products.Silva.fssite import registerDirectory
 
-
-#SilvaFind
-from Products.SilvaFind.schema import SearchSchema
-from Products.SilvaFind.schema import ResultsSchema
-from Products.SilvaFind.schema import MetadataField
-from Products.SilvaFind.schema import FullTextField
-from Products.SilvaFind.schema import ResultField
-
 def initialize(context):
     from Products.Silva.ExtensionRegistry import extensionRegistry
     import SilvaFind
@@ -39,31 +31,31 @@ def initialize(context):
     Adapters.register((IResultField, IRoot), ICatalogMetadataSetup, '',
        CatalogMetadataSetup)
     
-    from Products.SilvaFind.interfaces import IMetadataSearchField
-    from Products.SilvaFind.adapters import MetadataFieldView
-    from Products.SilvaFind.adapters import MetadataFieldStorage
-    from Products.SilvaFind.adapters import MetadataIndexedField 
-    Adapters.register((IMetadataSearchField, ISilvaQuery), ICriteriaView, '',
-       MetadataFieldView)
-    Adapters.register((IMetadataSearchField, ISilvaQuery), IQueryPart, '',
-       MetadataFieldView)
-    Adapters.register((IMetadataSearchField, ISilvaQuery), IStoredCriteria, '',
-       MetadataFieldStorage)
-    Adapters.register((IMetadataSearchField, IRoot), IIndexedField, '',
-       MetadataIndexedField)
+    from Products.SilvaFind.interfaces import IMetadataCriteriaField
+    from Products.SilvaFind.adapters import MetadataCriteriaView
+    from Products.SilvaFind.adapters import MetadataCriteriaStorage
+    from Products.SilvaFind.adapters import IndexedMetadataCriteria 
+    Adapters.register((IMetadataCriteriaField, ISilvaQuery), ICriteriaView, '',
+       MetadataCriteriaView)
+    Adapters.register((IMetadataCriteriaField, ISilvaQuery), IQueryPart, '',
+       MetadataCriteriaView)
+    Adapters.register((IMetadataCriteriaField, ISilvaQuery), IStoredCriteria, '',
+       MetadataCriteriaStorage)
+    Adapters.register((IMetadataCriteriaField, IRoot), IIndexedField, '',
+       IndexedMetadataCriteria)
     
-    from Products.SilvaFind.interfaces import IFullTextField
-    from Products.SilvaFind.adapters import FullTextFieldView
-    from Products.SilvaFind.adapters import FullTextFieldStorage
-    from Products.SilvaFind.adapters import FullTextIndexedField
-    Adapters.register((IFullTextField, ISilvaQuery), ICriteriaView, '',
-       FullTextFieldView)
-    Adapters.register((IFullTextField, ISilvaQuery), IQueryPart, '',
-       FullTextFieldView)
-    Adapters.register((IFullTextField, ISilvaQuery), IStoredCriteria, '',
-       FullTextFieldStorage)
-    Adapters.register((IFullTextField, IRoot), IIndexedField, '',
-       FullTextIndexedField)
+    from Products.SilvaFind.interfaces import IFullTextCriteriaField
+    from Products.SilvaFind.adapters import FullTextCriteriaView
+    from Products.SilvaFind.adapters import FullTextCriteriaStorage
+    from Products.SilvaFind.adapters import IndexedFullTextCriteria
+    Adapters.register((IFullTextCriteriaField, ISilvaQuery), ICriteriaView, '',
+       FullTextCriteriaView)
+    Adapters.register((IFullTextCriteriaField, ISilvaQuery), IQueryPart, '',
+       FullTextCriteriaView)
+    Adapters.register((IFullTextCriteriaField, ISilvaQuery), IStoredCriteria, '',
+       FullTextCriteriaStorage)
+    Adapters.register((IFullTextCriteriaField, IRoot), IIndexedField, '',
+       IndexedFullTextCriteria)
 
 
 def register_type_for_metadata():

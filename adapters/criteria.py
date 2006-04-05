@@ -2,8 +2,8 @@
 class SilvaFindError(Exception):
     pass
 
-class Storage:
-    def __init__(self, field, searchObject):
-        self.field = field
-        self.searchObject = searchObject
+class CriteriaStorage:
+    def __init__(self, criteria, query):
+        self.criteria = criteria
+        self.query = query
         

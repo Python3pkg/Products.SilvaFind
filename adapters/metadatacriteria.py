@@ -9,32 +9,32 @@ from Products.Silva import SilvaPermissions
 from Products.SilvaMetadata.Index import createIndexId
 
 # SilvaFind
-from Products.SilvaFind.adapters.criteria import Storage
+from Products.SilvaFind.adapters.criteria import CriteriaStorage
 from Products.SilvaFind.adapters.criteria import SilvaFindError
 
-class MetadataFieldRoot:
-    def __init__(self, field, root):
-        self.field = field
+class BaseMetadataCriteria:
+    def __init__(self, criteria, root):
+        self.criteria = criteria
         self.root = root
 
     def _getMetadataElement(self):
         collection = self.root.service_metadata.getCollection()
-        set = collection[self.field.getMetadataSet()]
-        element = getattr(set, self.field.getMetadataId())
+        set = collection[self.criteria.getMetadataSet()]
+        element = getattr(set, self.criteria.getMetadataId())
         return element
 
     def getIndexId(self):
         indexId = createIndexId(self._getMetadataElement())
         return indexId
 
-class MetadataFieldView(Implicit, MetadataFieldRoot):
+class MetadataCriteriaView(Implicit, BaseMetadataCriteria):
     
     security = ClassSecurityInfo()
     
-    def __init__(self, field, searchObject):
-        root = searchObject.get_root()
-        MetadataFieldRoot.__init__(self, field, root)
-        self.searchObject = searchObject
+    def __init__(self, criteria, query):
+        root = query.get_root()
+        BaseMetadataCriteria.__init__(self, criteria, root)
+        self.query = query
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
@@ -46,7 +46,7 @@ class MetadataFieldView(Implicit, MetadataFieldRoot):
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         element = self._getMetadataElement()
-        value = self.searchObject.getCriteriaValue(self.field.getName())
+        value = self.query.getCriteriaValue(self.criteria.getName())
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -54,40 +54,27 @@ class MetadataFieldView(Implicit, MetadataFieldRoot):
         element = self._getMetadataElement()
         return element.Title()
         
-InitializeClass(MetadataFieldView)
+InitializeClass(MetadataCriteriaView)
 
 
-class MetadataIndexedField(MetadataFieldRoot):
-    def __init__(self, field, root):
-        MetadataFieldRoot.__init__(self, field, root)
+class IndexedMetadataCriteria(BaseMetadataCriteria):
+    def __init__(self, criteria, root):
+        BaseMetadataCriteria.__init__(self, criteria, root)
         self.catalog = root.service_catalog
 
     def checkIndex(self):
         id = self.getIndexId()
         if id not in self.catalog.indexes():
             raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
-
             
-class MetadataFieldStorage(Storage):
+class MetadataCriteriaStorage(CriteriaStorage):
     def store(self):
-        REQUEST = self.searchObject.REQUEST
-        set_name = self.field.getMetadataSet()
-        field_name = self.field.getMetadataId()
+        REQUEST = self.query.REQUEST
+        set_name = self.criteria.getMetadataSet()
+        field_name = self.criteria.getMetadataId()
         if hasattr(REQUEST, set_name):
             set_values = getattr(REQUEST, set_name)
             if set_values.has_key(field_name):
-                field_value = set_values[field_name]
-                self.searchObject.setCriteriaValue(self.field.getName(), field_value)
+                criteria_value = set_values[field_name]
+                self.query.setCriteriaValue(self.criteria.getName(), criteria_value)
 
-
-
-class CatalogMetadataSetup:
-    def __init__(self, field, root):
-        self.field = field
-        self.root = root
-        self.catalog = root.service_catalog
-
-    def setUp(self):
-        id = self.field.getColumnId()
-        if not id in self.catalog.schema():
-            self.catalog.addColumn(id)

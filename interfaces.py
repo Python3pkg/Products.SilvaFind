@@ -29,14 +29,14 @@ class ISilvaQuery(Interface):
     def getCriteriaValue(schemaField):
         '''returns stored value for schemaField'''
 
-class IMetadataSearchField(Interface):
+class IMetadataCriteriaField(Interface):
     def getMetadataSet():
         '''returns Silva MetadataSet id'''
         
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
 
-class IFullTextField(Interface):
+class IFullTextCriteriaField(Interface):
     pass
 
 class IIndexedField(Interface):
