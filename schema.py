@@ -2,6 +2,7 @@ from zope.interface import implements
 
 from Products.SilvaFind.interfaces import IMetadataSearchField
 from Products.SilvaFind.interfaces import IFullTextField
+from Products.SilvaFind.interfaces import IResultField
 
 class Schema:
     def __init__(self, fields):
@@ -46,6 +47,8 @@ class SearchSchema(Schema):
 
 
 class ResultField:
+    implements(IResultField)
+    
     def __init__(self, id):
         self.id = id
 

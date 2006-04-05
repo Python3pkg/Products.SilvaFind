@@ -43,6 +43,12 @@ def initialize(context):
 
     Adapters = zapi.getService(zapi.servicenames.Adapters)
     
+    from Products.SilvaFind.interfaces import ICatalogMetadataSetup
+    from Products.SilvaFind.interfaces import IResultField
+    from Products.SilvaFind.adapters import CatalogMetadataSetup
+    Adapters.register((IResultField, IRoot), ICatalogMetadataSetup, '',
+       CatalogMetadataSetup)
+    
     from Products.SilvaFind.interfaces import IMetadataSearchField
     from Products.SilvaFind.adapters import MetadataFieldView
     from Products.SilvaFind.adapters import MetadataFieldStorage

@@ -139,3 +139,14 @@ class FullTextIndexedField:
         if id not in self.catalog.indexes():
             raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
 
+
+class CatalogMetadataSetup:
+    def __init__(self, field, root):
+        self.field = field
+        self.root = root
+        self.catalog = root.service_catalog
+
+    def setUp(self):
+        id = self.field.getColumnId()
+        if not id in self.catalog.schema():
+            self.catalog.addColumn(id)

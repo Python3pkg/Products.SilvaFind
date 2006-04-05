@@ -10,7 +10,9 @@ from Products.Silva.install import add_fss_directory_view
 # SilvaFind
 from Products.SilvaFind import SilvaFind
 from Products.SilvaFind import globalSearchSchema
+from Products.SilvaFind import globalResultsSchema
 from Products.SilvaFind.interfaces import IIndexedField
+from Products.SilvaFind.interfaces import ICatalogMetadataSetup
 
 def install(root):
     # create the core views from filesystem
@@ -26,6 +28,8 @@ def install(root):
     root.service_metadata.addTypesMapping(('Silva Find', ), ('silva-content', 'silva-extra'))
 
     checkIndexes(root)
+
+    setupMetadataColumns(root)
 
 def uninstall(root):
     unregisterViews(root.service_view_registry)
@@ -59,4 +63,13 @@ def checkIndexes(root):
     for field in globalSearchSchema.getFields():
         indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
         indexedField.checkIndex()
+
+
+def setupMetadataColumns(root):
+    """setup of metadata columns in catalog according to ResultsSchema
+    """
+
+    for field in globalResultsSchema.getFields():
+        metadataField = zapi.getMultiAdapter((field, root), ICatalogMetadataSetup)
+        metadataField.setUp()
 

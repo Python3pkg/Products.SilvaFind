@@ -45,4 +45,13 @@ class IIndexedField(Interface):
         raise an exception if not
         '''
 
+class ICatalogMetadataSetup(Interface):
+    def setUp():
+        '''setup of metadata column in catalog
+        '''
+
+class IResultField(Interface):
+    def getColumnId():
+        '''returns catalog column id
+        '''
         
