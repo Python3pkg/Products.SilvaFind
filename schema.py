@@ -48,9 +48,12 @@ class FullTextCriteriaField:
 class ResultField:
     implements(IResultField)
     
-    def __init__(self, id):
+    def __init__(self, id, title):
         self.id = id
+        self.title = title
 
     def getColumnId(self):
         return self.id
 
+    def getColumnTitle(self):
+        return self.title

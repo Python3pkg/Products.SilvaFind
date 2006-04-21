@@ -40,3 +40,7 @@ class Query:
         return [field.getColumnId() 
             for field in self.resultsSchema.getFields()]
            
+    def getResultsColumnTitles(self):
+        return [field.getColumnTitle() 
+            for field in self.resultsSchema.getFields()]
+           

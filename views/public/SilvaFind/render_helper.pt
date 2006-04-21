@@ -26,18 +26,21 @@
   </div>
 
   <table tal:define="results model/search;
-                     columnIds model/getResultsColumnIds">
+                     columnIds model/getResultsColumnIds;
+                     columnTitles model/getResultsColumnTitles">
     <thead>
       <tr>
+        <th tal:repeat="columnTitle columnTitles"
+            tal:content="columnTitle"
+            i18n:translate="">
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr tal:repeat="item results" tal:condition="columnIds">
-        <td><a tal:define="columnId python:columnIds[0];
-                           version item/getObject;
-                           object version/object"
+        <td><a tal:define="columnId python:columnIds[0]"
                tal:content="item/?columnId"
-               tal:attributes="href object/absolute_url">
+               tal:attributes="href item/silva_object_url">
             </a>
         <td tal:repeat="columnId python:columnIds[1:]"
             tal:content="item/?columnId">
