@@ -1,0 +1,69 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    >
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IResultField
+         Products.Silva.interfaces.IRoot"
+    provides=".interfaces.ICatalogMetadataSetup"
+    factory=".criteria.CatalogMetadataSetup"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriteriaView"
+    factory=".metadatacriteria.MetadataCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".metadatacriteria.MetadataCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriteria"
+    factory=".metadatacriteria.StoreMetadataCriteria"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+         Products.Silva.interfaces.IRoot"
+    provides=".interfaces.IIndexedField"
+    factory=".metadatacriteria.IndexedMetadataCriteria"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriteriaView"
+    factory=".fulltextcriteria.FullTextCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".fulltextcriteria.FullTextCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriteria"
+    factory=".fulltextcriteria.StoreFullTextCriteria"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+         Products.Silva.interfaces.IRoot"
+    provides=".interfaces.IIndexedField"
+    factory=".fulltextcriteria.IndexedFullTextCriteria"
+    />
+
+</configure>

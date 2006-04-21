@@ -8,10 +8,10 @@ from Acquisition import Implicit
 from Products.Silva import SilvaPermissions
 
 # SilvaFind
-from Products.SilvaFind.adapters.criteria import CriteriaStorage
-from Products.SilvaFind.adapters.criteria import SilvaFindError
+from Products.SilvaFind.adapters.criteria import StoreCriteria
+from Products.SilvaFind.errors import SilvaFindError
 
-class FullTextCriteriaStorage(CriteriaStorage):
+class StoreFullTextCriteria(StoreCriteria):
     def store(self):
         REQUEST = self.query.REQUEST
         field_name = self.criteria.getName()

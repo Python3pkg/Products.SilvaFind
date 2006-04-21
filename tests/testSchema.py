@@ -4,6 +4,7 @@ from unittest import makeSuite
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import MetadataCriteriaField
 from Products.SilvaFind.query import Query
+from Products.SilvaFind.errors import SilvaFindError
 
 class testSchema(TestCase):
 
@@ -43,7 +44,7 @@ class testSearchObject(TestCase):
         self.assertEquals(None, self.obj.getCriteriaValue('fulltext'))
         self.assertEquals(None,
         self.obj.getCriteriaValue('silva-content-maintitle'))
-        self.assertRaises(AttributeError, self.obj.getCriteriaValue, 'xyz')
+        self.assertRaises(SilvaFindError, self.obj.getCriteriaValue, 'xyz')
 
     def testSetCriteriaValue(self):
         self.obj.setCriteriaValue('fulltext', 1)

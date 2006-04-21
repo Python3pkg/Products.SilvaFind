@@ -9,8 +9,8 @@ from Products.Silva import SilvaPermissions
 from Products.SilvaMetadata.Index import createIndexId
 
 # SilvaFind
-from Products.SilvaFind.adapters.criteria import CriteriaStorage
-from Products.SilvaFind.adapters.criteria import SilvaFindError
+from Products.SilvaFind.adapters.criteria import StoreCriteria
+from Products.SilvaFind.errors import SilvaFindError
 
 class BaseMetadataCriteria:
     def __init__(self, criteria, root):
@@ -67,14 +67,16 @@ class IndexedMetadataCriteria(BaseMetadataCriteria):
         if id not in self.catalog.indexes():
             raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
             
-class MetadataCriteriaStorage(CriteriaStorage):
+class StoreMetadataCriteria(StoreCriteria):
     def store(self):
         REQUEST = self.query.REQUEST
         set_name = self.criteria.getMetadataSet()
         field_name = self.criteria.getMetadataId()
-        if hasattr(REQUEST, set_name):
-            set_values = getattr(REQUEST, set_name)
-            if set_values.has_key(field_name):
-                criteria_value = set_values[field_name]
-                self.query.setCriteriaValue(self.criteria.getName(), criteria_value)
+        set_values = getattr(REQUEST, set_name, None)
+        if set_values is None:
+            return
+        criteria_value = set_values.get(field_name, None)
+        if criteria_value is None:
+            return
+        self.query.setCriteriaValue(self.criteria.getName(), criteria_value)
 

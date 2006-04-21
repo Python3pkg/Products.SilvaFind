@@ -1,35 +1,23 @@
 from zope.interface import Interface
 
-class ICriteriaView(Interface):
-    def getTitle():
-        '''returns field title for view'''
-
-    def renderWidget():
-        '''returns widget HTML for view'''
-
-    def getValue():
-        '''returns stored value for the corresponding field'''
-        
-class IStoredCriteria(Interface):
-    def store():
-        '''store form values in search_object
-        '''
-
-class IQueryPart(Interface):
-    def getIndexId():
-        '''returns ZCatalog index id needed to construct query'''
-
-    def getValue():
-        '''returns stored value for the corresponding field'''
+'''
+A query is a set of criteria.
+A criteria is made both of an indexed field of content items
+and of value(s) that will be searched for in the catalog.
+'''
 
 class ISilvaQuery(Interface):
+    '''Persistent query'''
     def get_root():
-        '''returns Silva Root where the object is stored'''
+        '''returns the Silva Root under which the object is stored'''
 
     def getCriteriaValue(schemaField):
         '''returns stored value for schemaField'''
 
 class IMetadataCriteriaField(Interface):
+    '''
+    Criteria corresponding to indexed SilvaMetadata fields
+    '''
     def getMetadataSet():
         '''returns Silva MetadataSet id'''
         
@@ -37,21 +25,13 @@ class IMetadataCriteriaField(Interface):
         '''returns Silva MetadataSet element id'''
 
 class IFullTextCriteriaField(Interface):
-    pass
-
-class IIndexedField(Interface):
-    def checkIndex():
-        '''checks if a corresponding index exists;
-        raise an exception if not
-        '''
-
-class ICatalogMetadataSetup(Interface):
-    def setUp():
-        '''setup of metadata column in catalog
-        '''
-
+    '''
+    Criteria corresponding to the Silva full text index
+    '''
 class IResultField(Interface):
+    '''
+    Mapping between schema results field and ZCatalog metadata column
+    '''
     def getColumnId():
         '''returns catalog column id
         '''
-        

@@ -19,10 +19,10 @@ from Products.SilvaMetadata.Index import createIndexId
 
 #SilvaFind
 from Products.SilvaFind.query import Query
-from Products.SilvaFind.interfaces import ICriteriaView
 from Products.SilvaFind.interfaces import ISilvaQuery
-from Products.SilvaFind.interfaces import IQueryPart
-from Products.SilvaFind.interfaces import IStoredCriteria
+from Products.SilvaFind.adapters.interfaces import ICriteriaView
+from Products.SilvaFind.adapters.interfaces import IQueryPart
+from Products.SilvaFind.adapters.interfaces import IStoreCriteria
 
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
@@ -89,10 +89,15 @@ class SilvaFind(Query, Content, SimpleItem):
     def manage_edit(self, REQUEST):
         """Store fields values
         """
-        for field in self.searchSchema.getFields():
-            requestPart = zapi.getMultiAdapter((field, self), IStoredCriteria)
-            requestPart.store()
+        self._edit()
         REQUEST.RESPONSE.redirect(self.absolute_url() + '/edit/tab_edit')
+
+    def _edit(self):
+        """Store fields values
+        """
+        for field in self.searchSchema.getFields():
+            storeCriteria = zapi.getMultiAdapter((field, self), IStoreCriteria)
+            storeCriteria.store()
 
 InitializeClass(SilvaFind)
 

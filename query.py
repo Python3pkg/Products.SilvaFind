@@ -1,6 +1,8 @@
 from ZODB.PersistentMapping import PersistentMapping
-from schema import globalSearchSchema
-from schema import globalResultsSchema
+from globalschema import globalSearchSchema
+from globalschema import globalResultsSchema
+
+from errors import SilvaFindError
 
 class Query:
     def __init__(self):
@@ -19,17 +21,20 @@ class Query:
         "access to the instance search schema")
     
     def getCriteriaValue(self, name):
-        if self.searchSchema:
-            searchSchema = self.searchSchema
-            if searchSchema.hasField(name):
-                return self.searchValues.get(name, None)
-        raise AttributeError(name)
+        searchSchema = self.searchSchema
+        if searchSchema.hasField(name):
+            return self.searchValues.get(name, None)
+        else:
+            raise SilvaFindError('No field named %s defined in search schema' %
+            name)
         
     def setCriteriaValue(self, name, value):
-        if self.searchSchema:
-            searchSchema = self.searchSchema
-            if searchSchema.hasField(name):
-                self.searchValues[name] = value
+        searchSchema = self.searchSchema
+        if searchSchema.hasField(name):
+            self.searchValues[name] = value
+        else:
+            raise SilvaFindError('No field named %s defined in search schema' %
+            name)
 
     def getResultsColumnIds(self):
         return [field.getColumnId() 

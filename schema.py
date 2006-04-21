@@ -45,12 +45,6 @@ class FullTextCriteriaField:
     def getName(self):
         return "fulltext"
 
-globalSearchSchema = SearchSchema([
-    FullTextCriteriaField(),
-    MetadataCriteriaField('silva-content', 'maintitle'),
-    MetadataCriteriaField('silva-content', 'shorttitle'),
-    ])
-   
 class ResultField:
     implements(IResultField)
     
@@ -60,6 +54,3 @@ class ResultField:
     def getColumnId(self):
         return self.id
 
-globalResultsSchema = ResultsSchema([
-    ResultField('get_title'),
-    ])
