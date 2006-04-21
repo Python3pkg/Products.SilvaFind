@@ -16,7 +16,7 @@
 
       <!--    url string:${item/absolute_url}/${append_to_url}" -->
   </p>
-  <div>
+  <div class="criteria">
     <tal:criteria repeat="fieldView model/getFieldViews">
       <tal:one define="value fieldView/getValue" condition="value">
         <span tal:content="fieldView/getTitle" /> :
@@ -25,9 +25,24 @@
     </tal:criteria>
   </div>
 
-  <p tal:repeat="item model/search">
-      <tal:columns repeat="columnId model/getResultsColumnIds">
-        <span tal:content="item/?columnId" />&nbsp;
-      </tal:columns>
-  </p>    
+  <table tal:define="results model/search;
+                     columnIds model/getResultsColumnIds">
+    <thead>
+      <tr>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:repeat="item results" tal:condition="columnIds">
+        <td><a tal:define="columnId python:columnIds[0];
+                           version item/getObject;
+                           object version/object"
+               tal:content="item/?columnId"
+               tal:attributes="href object/absolute_url">
+            </a>
+        <td tal:repeat="columnId python:columnIds[1:]"
+            tal:content="item/?columnId">
+        </td>
+      </tr>
+    </tbody>
+  </table>  
 </tal:block>
