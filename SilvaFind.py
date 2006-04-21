@@ -24,6 +24,9 @@ from Products.SilvaFind.adapters.interfaces import ICriteriaView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriteria
 
+
+icon='www/find.png'
+
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
        items resulting from a search with specific values for criteria 
