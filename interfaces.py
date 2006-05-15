@@ -24,10 +24,17 @@ class IMetadataCriteriaField(Interface):
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
 
+class IDateRangeMetadataCriteriaField(IMetadataCriteriaField):
+    '''
+    Criteria corresponding to indexed SilvaMetadata fields
+    date
+    '''
+
 class IFullTextCriteriaField(Interface):
     '''
     Criteria corresponding to the Silva full text index
     '''
+
 class IResultField(Interface):
     '''
     Mapping between schema results field and ZCatalog metadata column

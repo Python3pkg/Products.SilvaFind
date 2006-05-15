@@ -3,6 +3,7 @@ from Globals import InitializeClass
 # Zope
 from AccessControl import ClassSecurityInfo
 from Acquisition import Implicit
+from DateTime import DateTime
 
 # Silva
 from Products.Silva import SilvaPermissions
@@ -45,7 +46,6 @@ class MetadataCriteriaView(Implicit, BaseMetadataCriteria):
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
-        element = self._getMetadataElement()
         value = self.query.getCriteriaValue(self.criteria.getName())
         return value
         
@@ -56,6 +56,46 @@ class MetadataCriteriaView(Implicit, BaseMetadataCriteria):
         
 InitializeClass(MetadataCriteriaView)
 
+class DateRangeMetadataCriteriaView(MetadataCriteriaView):
+    
+    security = ClassSecurityInfo()
+   
+    def getRange(self):
+        value = self.query.getCriteriaValue(self.criteria.getName())
+        if value is None:
+            return ("", "")
+        else:
+            return value
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderWidget')
+    def renderWidget(self):
+        value_begin, value_end = self.getRange()
+        widget = """
+        <span>From</span>&nbsp;<input name="%(name)s_begin" value="%(begin)s" />
+        
+        <span>To</span>&nbsp;<input name="%(name)s_end" value="%(end)s" />
+        """
+        return widget % {'name':self.criteria.getName() , 'begin':value_begin, 'end':value_end}
+
+    security.declareProtected(SilvaPermissions.View, 'getValue')
+    def getValue(self):
+        value_begin, value_end = self.getRange()
+        if not value_begin:
+            if not value_end:
+                return None
+            else:
+                date_end = DateTime(value_end)
+                return {'query':date_end, 'range':'max'}
+        else:
+            date_begin = DateTime(value_begin)
+            if not value_end:
+                return {'query':date_begin, 'range':'min'}
+            else:
+                date_end = DateTime(value_end)
+                return {'query':[date_begin, date_end], 'range':'min:max'}
+
+InitializeClass(DateRangeMetadataCriteriaView)
 
 class IndexedMetadataCriteria(BaseMetadataCriteria):
     def __init__(self, criteria, root):
@@ -80,3 +120,13 @@ class StoreMetadataCriteria(StoreCriteria):
             return
         self.query.setCriteriaValue(self.criteria.getName(), criteria_value)
 
+class StoreDateRangeMetadataCriteria(StoreCriteria):
+    def store(self):
+        REQUEST = self.query.REQUEST
+        field_name = self.criteria.getName()
+        criteria_value_begin = getattr(REQUEST, field_name+'_begin', None)
+        criteria_value_end = getattr(REQUEST, field_name+'_end', None)
+        if criteria_value_begin is None and criteria_value_end is None:
+            return
+        self.query.setCriteriaValue(self.criteria.getName(),
+            (criteria_value_begin, criteria_value_end))

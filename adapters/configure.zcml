@@ -39,6 +39,27 @@
     />
 
   <adapter
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriteriaView"
+    factory=".metadatacriteria.DateRangeMetadataCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".metadatacriteria.DateRangeMetadataCriteriaView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriteria"
+    factory=".metadatacriteria.StoreDateRangeMetadataCriteria"
+    />
+
+  <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriteriaField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.ICriteriaView"

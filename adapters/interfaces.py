@@ -28,7 +28,8 @@ class IQueryPart(Interface):
         '''returns ZCatalog index id of the criteria'''
 
     def getValue():
-        '''returns criteria stored value'''
+        '''returns value used by catalog searches, could be a dict for
+        DateIndex for instance.'''
 
 class IIndexedField(Interface):
     '''
