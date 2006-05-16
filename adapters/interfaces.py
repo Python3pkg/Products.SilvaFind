@@ -7,18 +7,30 @@ class ICriteriaView(Interface):
     def getTitle():
         '''returns field title for view'''
 
-    def renderWidget():
+    def renderWidget(value):
         '''returns widget HTML for view'''
 
-    def getValue():
+    def renderEditWidget():
+        '''returns widget HTML rendered with stored value'''
+
+    def renderPublicWidget():
+        '''returns widget HTML rendered with value from REQUEST'''
+
+    def getValue(REQUEST):
+        '''returns value from REQUEST or stored value'''
+        
+    def getStoredValue():
         '''returns stored value for the corresponding field'''
         
 class IStoreCriteria(Interface):
     '''
     Stores criteria value in query instance
     '''
-    def store():
-        '''store value in query'''
+    def store(REQUEST):
+        '''store value in query
+        
+           REQUEST could be a dict
+        '''
 
 class IQueryPart(Interface):
     '''
@@ -27,9 +39,13 @@ class IQueryPart(Interface):
     def getIndexId():
         '''returns ZCatalog index id of the criteria'''
 
-    def getValue():
+    def getIndexValue(REQUEST):
         '''returns value used by catalog searches, could be a dict for
-        DateIndex for instance.'''
+        DateIndex for instance.
+        
+        The value in REQUEST is used.
+        If not found, stored value is used.
+        '''
 
 class IIndexedField(Interface):
     '''

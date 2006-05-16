@@ -11,21 +11,41 @@
         Title
     </h2>
     
-  <p class="searchResults">
-    Search Results
-
-      <!--    url string:${item/absolute_url}/${append_to_url}" -->
-  </p>
   <div class="criteria">
     <tal:criteria repeat="fieldView model/getFieldViews">
-      <tal:one define="value fieldView/getValue" condition="value">
+      <tal:one define="value fieldView/getStoredValue" 
+               condition="python:value and not model.isShown(fieldView.getName())">
         <span tal:content="fieldView/getTitle" /> :
         <span tal:content="value" />;
       </tal:one>
     </tal:criteria>
   </div>
 
-  <table tal:define="results model/search;
+  <div class="form" tal:condition="model/isFormNeeded">
+    <form tal:attributes="action model/absolute_url">
+      <table>
+        <tbody>
+          <tr tal:repeat="fieldView model/getPublicFieldViews">
+            <td tal:content="fieldView/getTitle">
+              A search object.
+            </td>
+            <td tal:content="structure fieldView/renderPublicWidget">
+              A search object.
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><input type="submit" value="Search" /></td>
+          </tr>
+        </tbody>
+      </table>  
+    </form>
+  </div>
+
+  <p class="searchResults">
+    Search Results
+  </p>
+
+  <table tal:define="results python:model.searchResults(request);
                      columnIds model/getResultsColumnIds;
                      columnTitles model/getResultsColumnTitles">
     <thead>

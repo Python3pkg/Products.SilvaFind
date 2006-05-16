@@ -73,14 +73,27 @@ class SilvaFind(Query, Content, SimpleItem):
             result.append(searchFieldView)
         return result  
 
+    security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
+    def getPublicFieldViews(self):
+        result = [view for view in self.getFieldViews()
+                    if self.isShown(view.getName())]
+        return result  
+
     security.declareProtected(SilvaPermissions.View, 'isShown')
     def isShown(self, fieldName):
         return self.shownFields.get(fieldName, False)
 
-    security.declareProtected(SilvaPermissions.View, 'search')
-    def search(self, REQUEST=None):
+    security.declareProtected(SilvaPermissions.View, 'isFormNeeded')
+    def isFormNeeded(self):
+        for value in self.shownFields.values():
+            if value:
+                return True
+        return False
+
+    security.declareProtected(SilvaPermissions.View, 'searchResults')
+    def searchResults(self, REQUEST=None):
         catalog = self.get_root().service_catalog
-        searchArguments = self.getCatalogSearchArguments()
+        searchArguments = self.getCatalogSearchArguments(REQUEST)
         results = catalog.searchResults(searchArguments)
         return results
    
@@ -111,11 +124,11 @@ class SilvaFind(Query, Content, SimpleItem):
             fieldName = field.getName()
             self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
 
-    def getCatalogSearchArguments(self):
+    def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
         for field in self.searchSchema.getFields():
             queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
-            value = queryPart.getValue()
+            value = queryPart.getIndexValue(REQUEST)
             if value is None:
                 value = ''
             searchArguments[queryPart.getIndexId()] = value

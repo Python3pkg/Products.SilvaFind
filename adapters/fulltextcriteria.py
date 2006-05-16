@@ -28,9 +28,20 @@ class FullTextCriteriaView(Implicit):
         self.query = query
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderEditWidget')
+    def renderEditWidget(self):
+        value = self.getStoredValue()
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderPublicWidget')
+    def renderPublicWidget(self):
+        value = self.getValue(self.query.REQUEST)
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
-    def renderWidget(self):
-        value = self.getValue()
+    def renderWidget(self, value):
         if value is None:
             value = ""
         html = '''
@@ -39,7 +50,17 @@ class FullTextCriteriaView(Implicit):
         return html % (self.criteria.getName(), value)
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self):
+    def getValue(self, REQUEST):
+        field_name = self.criteria.getName()
+        value = REQUEST.get(field_name, None)
+        if value is None:
+            value = self.getStoredValue()
+        return value
+        
+    getIndexValue = getValue
+    
+    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
+    def getStoredValue(self):
         value = self.query.getCriteriaValue(self.criteria.getName())
         return value
         

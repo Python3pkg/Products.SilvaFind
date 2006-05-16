@@ -47,7 +47,7 @@
       <td tal:content="fieldView/getTitle">
         A search object.
       </td>
-      <td tal:content="structure fieldView/renderWidget">
+      <td tal:content="structure fieldView/renderEditWidget">
         A search object.
       </td>
       <td>
