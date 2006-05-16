@@ -3,12 +3,11 @@
 # Python
 
 # Zope
+from OFS import Folder
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
 # Silva
-from Products.Silva import Folder
-from Products.Silva import helpers
 from Products.Silva import helpers
 
 
@@ -24,8 +23,10 @@ class FindService(Folder.Folder):
         () +
         Folder.Folder.manage_options
         )
+    #needed to be able to add a SilvaFind object
+    def _add_ordered_id(self, item):
+        pass
 
-        
 InitializeClass(FindService)
 
 def manage_addFindService(
