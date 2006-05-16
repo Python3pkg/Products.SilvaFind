@@ -37,6 +37,7 @@ def install(root):
 def uninstall(root):
     unregisterViews(root.service_view_registry)
     root.service_views.manage_delObjects(['SilvaFind'])
+    root.manage_delObjects(['service_find'])
     
 def is_installed(root):
     return hasattr(root.service_views, 'SilvaFind')
@@ -83,3 +84,4 @@ def setupService(root):
     """
     if not 'service_find' in root.objectIds():
         findservice.manage_addFindService(root)
+    SilvaFind.manage_addSilvaFind(root.service_find, 'default', 'Default search')

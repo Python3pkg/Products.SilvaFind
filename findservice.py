@@ -3,11 +3,12 @@
 # Python
 
 # Zope
-from OFS import Folder
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
 
 # Silva
+from Products.Silva import Folder
+from Products.Silva import helpers
 from Products.Silva import helpers
 
 

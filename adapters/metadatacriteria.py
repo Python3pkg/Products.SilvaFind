@@ -108,11 +108,10 @@ class IndexedMetadataCriteria(BaseMetadataCriteria):
             raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
             
 class StoreMetadataCriteria(StoreCriteria):
-    def store(self):
-        REQUEST = self.query.REQUEST
+    def store(self, REQUEST):
         set_name = self.criteria.getMetadataSet()
         field_name = self.criteria.getMetadataId()
-        set_values = getattr(REQUEST, set_name, None)
+        set_values = REQUEST.get(set_name, None)
         if set_values is None:
             return
         criteria_value = set_values.get(field_name, None)
@@ -121,11 +120,10 @@ class StoreMetadataCriteria(StoreCriteria):
         self.query.setCriteriaValue(self.criteria.getName(), criteria_value)
 
 class StoreDateRangeMetadataCriteria(StoreCriteria):
-    def store(self):
-        REQUEST = self.query.REQUEST
+    def store(self, REQUEST):
         field_name = self.criteria.getName()
-        criteria_value_begin = getattr(REQUEST, field_name+'_begin', None)
-        criteria_value_end = getattr(REQUEST, field_name+'_end', None)
+        criteria_value_begin = REQUEST.get(field_name+'_begin', None)
+        criteria_value_end = REQUEST.get(field_name+'_end', None)
         if criteria_value_begin is None and criteria_value_end is None:
             return
         self.query.setCriteriaValue(self.criteria.getName(),

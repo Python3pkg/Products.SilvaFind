@@ -12,12 +12,12 @@ from Products.SilvaFind.adapters.criteria import StoreCriteria
 from Products.SilvaFind.errors import SilvaFindError
 
 class StoreFullTextCriteria(StoreCriteria):
-    def store(self):
-        REQUEST = self.query.REQUEST
+    def store(self, REQUEST):
         field_name = self.criteria.getName()
-        if hasattr(REQUEST, field_name):
-            criteria_value = getattr(REQUEST, field_name)
-            self.query.setCriteriaValue(field_name, criteria_value)
+        criteria_value = REQUEST.get(field_name, None)
+        if criteria_value is None:
+            return
+        self.query.setCriteriaValue(field_name, criteria_value)
 
 class FullTextCriteriaView(Implicit):
     

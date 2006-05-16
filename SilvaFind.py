@@ -74,14 +74,7 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'search')
     def search(self, REQUEST=None):
         catalog = self.get_root().service_catalog
-        searchArguments = {}
-        for field in self.searchSchema.getFields():
-            queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
-            value = queryPart.getValue()
-            if value is None:
-                value = ''
-            searchArguments[queryPart.getIndexId()] = value
-        #need to filter inactive versions
+        searchArguments = self.getCatalogSearchArguments()
         results = catalog.searchResults(searchArguments)
         return results
    
@@ -92,15 +85,26 @@ class SilvaFind(Query, Content, SimpleItem):
     def manage_edit(self, REQUEST):
         """Store fields values
         """
-        self._edit()
+        self._edit(REQUEST)
         REQUEST.RESPONSE.redirect(self.absolute_url() + '/edit/tab_edit')
 
-    def _edit(self):
+    def _edit(self, REQUEST):
         """Store fields values
         """
         for field in self.searchSchema.getFields():
             storeCriteria = zapi.getMultiAdapter((field, self), IStoreCriteria)
-            storeCriteria.store()
+            storeCriteria.store(REQUEST)
+
+    #HELPERS
+    def getCatalogSearchArguments(self):
+        searchArguments = {}
+        for field in self.searchSchema.getFields():
+            queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
+            value = queryPart.getValue()
+            if value is None:
+                value = ''
+            searchArguments[queryPart.getIndexId()] = value
+        return searchArguments
 
 InitializeClass(SilvaFind)
 
