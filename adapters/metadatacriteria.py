@@ -14,6 +14,9 @@ from Products.SilvaFind.adapters.criteria import StoreCriteria
 from Products.SilvaFind.errors import SilvaFindError
 
 class BaseMetadataCriteria:
+    
+    security = ClassSecurityInfo()
+   
     def __init__(self, criteria, root):
         self.criteria = criteria
         self.root = root
@@ -28,6 +31,13 @@ class BaseMetadataCriteria:
         indexId = createIndexId(self._getMetadataElement())
         return indexId
 
+    security.declareProtected(SilvaPermissions.View,
+        'getName')
+    def getName(self):
+        return self.criteria.getName()
+
+InitializeClass(BaseMetadataCriteria)
+
 class MetadataCriteriaView(Implicit, BaseMetadataCriteria):
     
     security = ClassSecurityInfo()
@@ -37,7 +47,7 @@ class MetadataCriteriaView(Implicit, BaseMetadataCriteria):
         BaseMetadataCriteria.__init__(self, criteria, root)
         self.query = query
     
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderWidget')
     def renderWidget(self):
         element = self._getMetadataElement()

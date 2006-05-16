@@ -3,6 +3,7 @@ from OFS.SimpleItem import SimpleItem
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from ZODB.PersistentMapping import PersistentMapping
 
 # zope3
 from zope.interface import implements
@@ -42,6 +43,7 @@ class SilvaFind(Query, Content, SimpleItem):
         Content.__init__(self, id,
             '[Title is stored in metadata. This is a bug.]')
         Query.__init__(self)
+        self.shownFields = PersistentMapping()
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')
@@ -69,7 +71,11 @@ class SilvaFind(Query, Content, SimpleItem):
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
-        return result    
+        return result  
+
+    security.declareProtected(SilvaPermissions.View, 'isShown')
+    def isShown(self, fieldName):
+        return self.shownFields.get(fieldName, False)
 
     security.declareProtected(SilvaPermissions.View, 'search')
     def search(self, REQUEST=None):
@@ -91,11 +97,20 @@ class SilvaFind(Query, Content, SimpleItem):
     def _edit(self, REQUEST):
         """Store fields values
         """
+        self.storeCriteriaValues(REQUEST)
+        self.storeShownCriteria(REQUEST)
+
+    #HELPERS
+    def storeCriteriaValues(self, REQUEST):
         for field in self.searchSchema.getFields():
             storeCriteria = zapi.getMultiAdapter((field, self), IStoreCriteria)
             storeCriteria.store(REQUEST)
 
-    #HELPERS
+    def storeShownCriteria(self, REQUEST):
+        for field in self.searchSchema.getFields():
+            fieldName = field.getName()
+            self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
+
     def getCatalogSearchArguments(self):
         searchArguments = {}
         for field in self.searchSchema.getFields():

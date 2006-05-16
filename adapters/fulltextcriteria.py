@@ -50,6 +50,11 @@ class FullTextCriteriaView(Implicit):
     def getIndexId(self):
         return 'fulltext'
 
+    security.declareProtected(SilvaPermissions.View,
+        'getName')
+    def getName(self):
+        return self.criteria.getName()
+
 InitializeClass(FullTextCriteriaView)
 
 class IndexedFullTextCriteria:

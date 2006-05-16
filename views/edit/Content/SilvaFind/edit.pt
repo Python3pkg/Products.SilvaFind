@@ -33,7 +33,7 @@
       ______________ vein + title row ______________
     </tal:block>
     <tr>
-      <td class="top" colspan="2">
+      <td class="top" colspan="3">
         <h2>
           <img tal:replace="structure python:view.render_icon(model)" />
           <tal:block i18n:translate="">search content
@@ -50,12 +50,18 @@
       <td tal:content="structure fieldView/renderWidget">
         A search object.
       </td>
+      <td>
+         <input type="checkbox"
+                tal:attributes="name string:show_${fieldView/getName}:bool;
+                                checked python:model.isShown(fieldView.getName())"
+                />
+      </td>
     </tr>
   </tbody>
 
   <tfoot>
     <tr class="controls">
-      <td class="align-right" colspan="2">
+      <td class="align-right" colspan="3">
          <input type="submit" value="Save" class="button" />
       </td>
     </tr>
