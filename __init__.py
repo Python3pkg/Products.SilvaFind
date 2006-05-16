@@ -4,6 +4,7 @@ from Products.Silva.fssite import registerDirectory
 def initialize(context):
     from Products.Silva.ExtensionRegistry import extensionRegistry
     import SilvaFind
+    import findservice
     import install
     
     registerDirectory('views', globals())
@@ -12,6 +13,13 @@ def initialize(context):
         'SilvaFind', 'Silva Find', context, [
         SilvaFind,
         ], install, depends_on='Silva')
+
+    context.registerClass(
+        findservice.FindService,
+        constructors = (
+            findservice.manage_addFindService,),
+        icon = "www/find.png"
+        )
 
     register_type_for_metadata()
 

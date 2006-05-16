@@ -9,6 +9,7 @@ from Products.Silva.install import add_fss_directory_view
 
 # SilvaFind
 from Products.SilvaFind import SilvaFind
+from Products.SilvaFind import findservice
 from Products.SilvaFind.globalschema import globalSearchSchema
 from Products.SilvaFind.globalschema import globalResultsSchema
 from Products.SilvaFind.adapters.interfaces import IIndexedField
@@ -30,6 +31,8 @@ def install(root):
     checkIndexes(root)
 
     setupMetadataColumns(root)
+
+    setupService(root)
 
 def uninstall(root):
     unregisterViews(root.service_view_registry)
@@ -74,3 +77,9 @@ def setupMetadataColumns(root):
         metadataField.setUp()
     root.service_catalog.refreshCatalog()
 
+
+def setupService(root):
+    """instanciate service in root
+    """
+    if not 'service_find' in root.objectIds():
+        findservice.manage_addFindService(root)
