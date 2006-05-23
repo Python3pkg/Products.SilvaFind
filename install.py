@@ -65,15 +65,6 @@ def checkIndexes(root, service):
         indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
         indexedField.checkIndex()
 
-#def setupMetadataColumns(root, service):
-#    """setup of metadata columns in catalog according to ResultsSchema
-#    """
-
-#    for field in globalResultsSchema.getFields():
-#        metadataField = zapi.getMultiAdapter((field, root), ICatalogMetadataSetup)
-#        metadataField.setUp()
-#    root.service_catalog.refreshCatalog()
-
 def setupService(root):
     """instanciate service in root
     """
