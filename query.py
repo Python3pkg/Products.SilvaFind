@@ -1,6 +1,4 @@
 from ZODB.PersistentMapping import PersistentMapping
-from globalschema import globalSearchSchema
-from globalschema import globalResultsSchema
 
 from errors import SilvaFindError
 
@@ -9,19 +7,13 @@ class Query:
         self.searchValues = PersistentMapping()
     
     def getSearchSchema(self):
-        return globalSearchSchema
+        return self.service_find.getSearchSchema()
     
     def getResultsSchema(self):
-        return globalResultsSchema
-    
-    searchSchema=property(getSearchSchema, None, None,
-        "access to the instance search schema")
-    
-    resultsSchema=property(getResultsSchema, None, None,
-        "access to the instance search schema")
+        return self.service_find.getResultsSchema()
     
     def getCriteriaValue(self, name):
-        searchSchema = self.searchSchema
+        searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
             return self.searchValues.get(name, None)
         else:
@@ -29,7 +21,7 @@ class Query:
             name)
         
     def setCriteriaValue(self, name, value):
-        searchSchema = self.searchSchema
+        searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
             self.searchValues[name] = value
         else:
@@ -38,9 +30,9 @@ class Query:
 
     def getResultsColumnIds(self):
         return [field.getColumnId() 
-            for field in self.resultsSchema.getFields()]
+            for field in self.getResultsSchema().getFields()]
            
     def getResultsColumnTitles(self):
         return [field.getColumnTitle() 
-            for field in self.resultsSchema.getFields()]
+            for field in self.getResultsSchema().getFields()]
            

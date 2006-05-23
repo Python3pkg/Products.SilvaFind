@@ -66,7 +66,7 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getFieldViews')
     def getFieldViews(self):
         result = []
-        for field in self.searchSchema.getFields():
+        for field in self.service_find.getSearchSchema().getFields():
             searchFieldView = zapi.getMultiAdapter((field, self), ICriteriaView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
@@ -96,7 +96,12 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         results = catalog.searchResults(searchArguments)
         return results
-   
+
+    security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
+    def searchResultsObjects(self, REQUEST=None):
+        results = self.searchResults(REQUEST)
+        return [result.getObject() for result in results]
+    
     security.declareProtected(SilvaPermissions.View, 'getResultsColumnIds')
 
     #MUTATORS

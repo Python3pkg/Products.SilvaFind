@@ -10,8 +10,6 @@ from Products.Silva.install import add_fss_directory_view
 # SilvaFind
 from Products.SilvaFind import SilvaFind
 from Products.SilvaFind import findservice
-from Products.SilvaFind.globalschema import globalSearchSchema
-from Products.SilvaFind.globalschema import globalResultsSchema
 from Products.SilvaFind.adapters.interfaces import IIndexedField
 from Products.SilvaFind.adapters.interfaces import ICatalogMetadataSetup
 
@@ -29,7 +27,7 @@ def install(root):
     root.service_metadata.addTypesMapping(('Silva Find', ), ('silva-content', 'silva-extra'))
 
     setupService(root)
-    checkIndexes(root, root.service_find)
+    checkIndexes(root)
 
 def uninstall(root):
     unregisterViews(root.service_view_registry)
@@ -57,17 +55,18 @@ def unregisterViews(reg):
         reg.unregister('add', meta_type)
         reg.unregister('preview', '%s Version' % meta_type)
 
-def checkIndexes(root, service):
-    """check that all searchSchema fields are indexed
-    """
-
-    for field in globalSearchSchema.getFields():
-        indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
-        indexedField.checkIndex()
-
 def setupService(root):
     """instanciate service in root
     """
     if not 'service_find' in root.objectIds():
         findservice.manage_addFindService(root)
     SilvaFind.manage_addSilvaFind(root.service_find, 'default', 'Default search')
+
+def checkIndexes(root):
+    """check that all searchSchema fields are indexed
+    """
+
+    for field in root.service_find.getSearchSchema().getFields():
+        indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
+        indexedField.checkIndex()
+    
