@@ -9,7 +9,7 @@ from Globals import InitializeClass
 
 # Silva
 from Products.Silva import helpers
-
+from Products.SilvaFind.globalschema import globalSearchSchema, globalResultsSchema 
 
 class FindService(Folder.Folder):
     """Find Service
@@ -24,9 +24,20 @@ class FindService(Folder.Folder):
         Folder.Folder.manage_options
         )
     #needed to be able to add a SilvaFind object
+    def __init__(self, id):
+        FindService.inheritedAttribute('__init__')(self, id)
+        self.search_schema = globalSearchSchema
+        self.results_schema = globalResultsSchema
+    
     def _add_ordered_id(self, item):
         pass
 
+    def getSearchSchema(self):
+        return self.search_schema
+
+    def getResultsSchema(self):
+        return self.results_schema
+    
 InitializeClass(FindService)
 
 def manage_addFindService(

@@ -82,11 +82,11 @@
     <tbody>
       <tr tal:repeat="item batch" tal:condition="columnIds">
         <td><a tal:define="columnId python:columnIds[0]"
-               tal:content="item/?columnId"
+               tal:content="python: getattr(item.getObject(), columnId)()"
                tal:attributes="href item/silva_object_url">
             </a>
         <td tal:repeat="columnId python:columnIds[1:]"
-            tal:content="item/?columnId">
+            tal:content="python: getattr(item.getObject(), columnId)()">
         </td>
       </tr>
     </tbody>

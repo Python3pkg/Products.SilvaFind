@@ -28,11 +28,8 @@ def install(root):
 
     root.service_metadata.addTypesMapping(('Silva Find', ), ('silva-content', 'silva-extra'))
 
-    checkIndexes(root)
-
-    setupMetadataColumns(root)
-
     setupService(root)
+    checkIndexes(root, root.service_find)
 
 def uninstall(root):
     unregisterViews(root.service_view_registry)
@@ -60,7 +57,7 @@ def unregisterViews(reg):
         reg.unregister('add', meta_type)
         reg.unregister('preview', '%s Version' % meta_type)
 
-def checkIndexes(root):
+def checkIndexes(root, service):
     """check that all searchSchema fields are indexed
     """
 
@@ -68,16 +65,14 @@ def checkIndexes(root):
         indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
         indexedField.checkIndex()
 
+#def setupMetadataColumns(root, service):
+#    """setup of metadata columns in catalog according to ResultsSchema
+#    """
 
-def setupMetadataColumns(root):
-    """setup of metadata columns in catalog according to ResultsSchema
-    """
-
-    for field in globalResultsSchema.getFields():
-        metadataField = zapi.getMultiAdapter((field, root), ICatalogMetadataSetup)
-        metadataField.setUp()
-    root.service_catalog.refreshCatalog()
-
+#    for field in globalResultsSchema.getFields():
+#        metadataField = zapi.getMultiAdapter((field, root), ICatalogMetadataSetup)
+#        metadataField.setUp()
+#    root.service_catalog.refreshCatalog()
 
 def setupService(root):
     """instanciate service in root
