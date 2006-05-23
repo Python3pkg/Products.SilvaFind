@@ -125,13 +125,13 @@ class SilvaFind(Query, Content, SimpleItem):
             storeCriteria.store(REQUEST)
 
     def storeShownCriteria(self, REQUEST):
-        for field in self.searchSchema.getFields():
+        for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
 
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
-        for field in self.searchSchema.getFields():
+        for field in self.getSearchSchema().getFields():
             queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
             value = queryPart.getIndexValue(REQUEST)
             if value is None:
