@@ -61,7 +61,12 @@ def setupService(root):
     if not 'service_find' in root.objectIds():
         findservice.manage_addFindService(root)
     SilvaFind.manage_addSilvaFind(root.service_find, 'default', 'Default search')
-
+    default = root.service_find.default
+    for field in root.service_find.getSearchSchema().getFields():
+        fieldName = field.getName()
+        default.shownFields[fieldName] = True
+    default._p_changed = True
+    
 def checkIndexes(root):
     """check that all searchSchema fields are indexed
     """

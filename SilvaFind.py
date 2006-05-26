@@ -120,7 +120,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
     #HELPERS
     def storeCriteriaValues(self, REQUEST):
-        for field in self.searchSchema.getFields():
+        for field in self.getSearchSchema().getFields():
             storeCriteria = zapi.getMultiAdapter((field, self), IStoreCriteria)
             storeCriteria.store(REQUEST)
 
