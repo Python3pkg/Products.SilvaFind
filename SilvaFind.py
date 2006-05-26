@@ -100,7 +100,7 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
     def searchResultsObjects(self, REQUEST=None):
         results = self.searchResults(REQUEST)
-        return [result.getObject() for result in results]
+        return [result.getObject().get_silva_object() for result in results]
     
     security.declareProtected(SilvaPermissions.View, 'getResultsColumnIds')
 
