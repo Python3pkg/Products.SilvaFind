@@ -94,7 +94,7 @@ class SilvaFind(Query, Content, SimpleItem):
     def searchResults(self, REQUEST=None):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
-        searchArguments['version_status'] = 'public'
+        searchArguments['version_status'] = ['public']
         results = catalog.searchResults(searchArguments)
         return results
 
