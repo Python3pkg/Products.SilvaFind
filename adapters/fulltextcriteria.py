@@ -8,23 +8,23 @@ from Acquisition import Implicit
 from Products.Silva import SilvaPermissions
 
 # SilvaFind
-from Products.SilvaFind.adapters.criteria import StoreCriteria
+from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
-class StoreFullTextCriteria(StoreCriteria):
+class StoreFullTextCriterion(StoreCriterion):
     def store(self, REQUEST):
-        field_name = self.criteria.getName()
-        criteria_value = REQUEST.get(field_name, None)
-        if criteria_value is None:
+        field_name = self.criterion.getName()
+        criterion_value = REQUEST.get(field_name, None)
+        if criterion_value is None:
             return
-        self.query.setCriteriaValue(field_name, criteria_value)
+        self.query.setCriterionValue(field_name, criterion_value)
 
-class FullTextCriteriaView(Implicit):
+class FullTextCriterionView(Implicit):
     
     security = ClassSecurityInfo()
     
-    def __init__(self, criteria, query):
-        self.criteria = criteria
+    def __init__(self, criterion, query):
+        self.criterion = criterion
         self.query = query
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
@@ -47,11 +47,11 @@ class FullTextCriteriaView(Implicit):
         html = '''
         <input type="text" name="%s" value="%s" /> 
         '''
-        return html % (self.criteria.getName(), value)
+        return html % (self.criterion.getName(), value)
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
-        field_name = self.criteria.getName()
+        field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value is None:
             value = self.getStoredValue()
@@ -61,7 +61,7 @@ class FullTextCriteriaView(Implicit):
     
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
-        value = self.query.getCriteriaValue(self.criteria.getName())
+        value = self.query.getCriterionValue(self.criterion.getName())
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -74,13 +74,13 @@ class FullTextCriteriaView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
-        return self.criteria.getName()
+        return self.criterion.getName()
 
-InitializeClass(FullTextCriteriaView)
+InitializeClass(FullTextCriterionView)
 
-class IndexedFullTextCriteria:
-    def __init__(self, criteria, root):
-        self.criteria = criteria
+class IndexedFullTextCriterion:
+    def __init__(self, criterion, root):
+        self.criterion = criterion
         self.root = root
         self.catalog = root.service_catalog
 

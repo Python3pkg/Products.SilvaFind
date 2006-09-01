@@ -1,8 +1,8 @@
 from zope.interface import implements
 
-from Products.SilvaFind.interfaces import IMetadataCriteriaField
-from Products.SilvaFind.interfaces import IDateRangeMetadataCriteriaField
-from Products.SilvaFind.interfaces import IFullTextCriteriaField
+from Products.SilvaFind.interfaces import IMetadataCriterionField
+from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
+from Products.SilvaFind.interfaces import IFullTextCriterionField
 from Products.SilvaFind.interfaces import IResultField
 
 class Schema:
@@ -24,7 +24,7 @@ class SearchSchema(Schema):
 class ResultsSchema(Schema):
    pass 
 
-class BaseMetadataCriteriaField:
+class BaseMetadataCriterionField:
 
     def __init__(self, metadataSet, metadataId):
         self.metadataSet = metadataSet
@@ -39,14 +39,14 @@ class BaseMetadataCriteriaField:
     def getName(self):
         return "%s-%s" % (self.getMetadataSet(), self.getMetadataId())
 
-class MetadataCriteriaField(BaseMetadataCriteriaField):
-    implements(IMetadataCriteriaField)
+class MetadataCriterionField(BaseMetadataCriterionField):
+    implements(IMetadataCriterionField)
 
-class DateRangeMetadataCriteriaField(BaseMetadataCriteriaField):
-    implements(IDateRangeMetadataCriteriaField)
+class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
+    implements(IDateRangeMetadataCriterionField)
 
-class FullTextCriteriaField:
-    implements(IFullTextCriteriaField)
+class FullTextCriterionField:
+    implements(IFullTextCriterionField)
 
     def getName(self):
         return "fulltext"

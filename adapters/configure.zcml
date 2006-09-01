@@ -7,84 +7,84 @@
     for="Products.SilvaFind.interfaces.IResultField
          Products.Silva.interfaces.IRoot"
     provides=".interfaces.ICatalogMetadataSetup"
-    factory=".criteria.CatalogMetadataSetup"
+    factory=".criterion.CatalogMetadataSetup"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+    for="Products.SilvaFind.interfaces.IMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.ICriteriaView"
-    factory=".metadatacriteria.MetadataCriteriaView"
+    provides=".interfaces.ICriterionView"
+    factory=".metadatacriterion.MetadataCriterionView"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+    for="Products.SilvaFind.interfaces.IMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.IQueryPart"
-    factory=".metadatacriteria.MetadataCriteriaView"
+    factory=".metadatacriterion.MetadataCriterionView"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+    for="Products.SilvaFind.interfaces.IMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.IStoreCriteria"
-    factory=".metadatacriteria.StoreMetadataCriteria"
+    provides=".interfaces.IStoreCriterion"
+    factory=".metadatacriterion.StoreMetadataCriterion"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IMetadataCriteriaField
+    for="Products.SilvaFind.interfaces.IMetadataCriterionField
          Products.Silva.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
-    factory=".metadatacriteria.IndexedMetadataCriteria"
+    factory=".metadatacriterion.IndexedMetadataCriterion"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.ICriteriaView"
-    factory=".metadatacriteria.DateRangeMetadataCriteriaView"
+    provides=".interfaces.ICriterionView"
+    factory=".metadatacriterion.DateRangeMetadataCriterionView"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
-         Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.IQueryPart"
-    factory=".metadatacriteria.DateRangeMetadataCriteriaView"
-    />
-
-  <adapter
-    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriteriaField
-         Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.IStoreCriteria"
-    factory=".metadatacriteria.StoreDateRangeMetadataCriteria"
-    />
-
-  <adapter
-    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
-         Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.ICriteriaView"
-    factory=".fulltextcriteria.FullTextCriteriaView"
-    />
-
-  <adapter
-    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.IQueryPart"
-    factory=".fulltextcriteria.FullTextCriteriaView"
+    factory=".metadatacriterion.DateRangeMetadataCriterionView"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+    for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.IStoreCriteria"
-    factory=".fulltextcriteria.StoreFullTextCriteria"
+    provides=".interfaces.IStoreCriterion"
+    factory=".metadatacriterion.StoreDateRangeMetadataCriterion"
     />
 
   <adapter
-    for="Products.SilvaFind.interfaces.IFullTextCriteriaField
+    for="Products.SilvaFind.interfaces.IFullTextCriterionField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriterionView"
+    factory=".fulltextcriterion.FullTextCriterionView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriterionField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".fulltextcriterion.FullTextCriterionView"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriterionField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriterion"
+    factory=".fulltextcriterion.StoreFullTextCriterion"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IFullTextCriterionField
          Products.Silva.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
-    factory=".fulltextcriteria.IndexedFullTextCriteria"
+    factory=".fulltextcriterion.IndexedFullTextCriterion"
     />
 
 </configure>

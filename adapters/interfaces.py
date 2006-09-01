@@ -1,8 +1,8 @@
 from zope.interface import Interface
 
-class ICriteriaView(Interface):
+class ICriterionView(Interface):
     '''
-    To display a criteria both in view and in edit form. 
+    To display a criterion both in view and in edit form. 
     '''
     def getTitle():
         '''returns field title for view'''
@@ -22,9 +22,9 @@ class ICriteriaView(Interface):
     def getStoredValue():
         '''returns stored value for the corresponding field'''
         
-class IStoreCriteria(Interface):
+class IStoreCriterion(Interface):
     '''
-    Stores criteria value in query instance
+    Stores criterion value in query instance
     '''
     def store(REQUEST):
         '''store value in query
@@ -37,7 +37,7 @@ class IQueryPart(Interface):
     To build a ZCatalog query
     '''
     def getIndexId():
-        '''returns ZCatalog index id of the criteria'''
+        '''returns ZCatalog index id of the criterion'''
 
     def getIndexValue(REQUEST):
         '''returns value used by catalog searches, could be a dict for

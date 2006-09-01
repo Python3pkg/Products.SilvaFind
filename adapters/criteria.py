@@ -1,7 +1,7 @@
 
-class StoreCriteria:
-    def __init__(self, criteria, query):
-        self.criteria = criteria
+class StoreCriterion:
+    def __init__(self, criterion, query):
+        self.criterion = criterion
         self.query = query
         
 class CatalogMetadataSetup:
