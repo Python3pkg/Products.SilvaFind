@@ -4,15 +4,15 @@ from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import ResultsSchema
 
 from Products.SilvaFind.schema import ResultField
-from Products.SilvaFind.schema import FullTextCriteriaField
-from Products.SilvaFind.schema import MetadataCriteriaField
-from Products.SilvaFind.schema import DateRangeMetadataCriteriaField
+from Products.SilvaFind.schema import FullTextCriterionField
+from Products.SilvaFind.schema import MetadataCriterionField
+from Products.SilvaFind.schema import DateRangeMetadataCriterionField
 
 globalSearchSchema = SearchSchema([
-    FullTextCriteriaField(),
-    MetadataCriteriaField('silva-content', 'maintitle'),
-    MetadataCriteriaField('silva-content', 'shorttitle'),
-    DateRangeMetadataCriteriaField('silva-extra', 'publicationtime'),
+    FullTextCriterionField(),
+    MetadataCriterionField('silva-content', 'maintitle'),
+    MetadataCriterionField('silva-content', 'shorttitle'),
+    DateRangeMetadataCriterionField('silva-extra', 'publicationtime'),
     ])
    
 globalResultsSchema = ResultsSchema([

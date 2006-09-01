@@ -12,7 +12,7 @@ class Query:
     def getResultsSchema(self):
         return self.service_find.getResultsSchema()
     
-    def getCriteriaValue(self, name):
+    def getCriterionValue(self, name):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
             return self.searchValues.get(name, None)
@@ -20,7 +20,7 @@ class Query:
             raise SilvaFindError('No field named %s defined in search schema' %
             name)
         
-    def setCriteriaValue(self, name, value):
+    def setCriterionValue(self, name, value):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
             self.searchValues[name] = value

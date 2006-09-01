@@ -21,16 +21,16 @@ from Products.SilvaMetadata.Index import createIndexId
 #SilvaFind
 from Products.SilvaFind.query import Query
 from Products.SilvaFind.interfaces import ISilvaQuery
-from Products.SilvaFind.adapters.interfaces import ICriteriaView
+from Products.SilvaFind.adapters.interfaces import ICriterionView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
-from Products.SilvaFind.adapters.interfaces import IStoreCriteria
+from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
 
 icon='www/find.png'
 
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
-       items resulting from a search with specific values for criteria 
+       items resulting from a search with specific values for criteria
        or a form to enter search criteria before getting results.""")
 
     security = ClassSecurityInfo()
@@ -67,7 +67,7 @@ class SilvaFind(Query, Content, SimpleItem):
     def getFieldViews(self):
         result = []
         for field in self.service_find.getSearchSchema().getFields():
-            searchFieldView = zapi.getMultiAdapter((field, self), ICriteriaView)
+            searchFieldView = zapi.getMultiAdapter((field, self), ICriterionView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
@@ -116,16 +116,16 @@ class SilvaFind(Query, Content, SimpleItem):
     def _edit(self, REQUEST):
         """Store fields values
         """
-        self.storeCriteriaValues(REQUEST)
-        self.storeShownCriteria(REQUEST)
+        self.storeCriterionValues(REQUEST)
+        self.storeShownCriterion(REQUEST)
 
     #HELPERS
-    def storeCriteriaValues(self, REQUEST):
+    def storeCriterionValues(self, REQUEST):
         for field in self.getSearchSchema().getFields():
-            storeCriteria = zapi.getMultiAdapter((field, self), IStoreCriteria)
-            storeCriteria.store(REQUEST)
+            storeCriterion = zapi.getMultiAdapter((field, self), IStoreCriterion)
+            storeCriterion.store(REQUEST)
 
-    def storeShownCriteria(self, REQUEST):
+    def storeShownCriterion(self, REQUEST):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)

@@ -11,7 +11,7 @@
         Title
     </h2>
     
-  <div class="criteria">
+  <div class="criterion">
     <tal:block repeat="fieldView model/getFieldViews">
       <tal:block define="value fieldView/getStoredValue">
         <tal:block 
