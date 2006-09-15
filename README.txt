@@ -30,6 +30,23 @@ For example the default global schema that SilvaFind installs
         ResultField('get_title', _('Title')),
         ])
 
+The resultschema defines what fields get shown in the list of results, for
+instance as columns in a results table.
+
+The following SearchField types exist for now, and of course it is possible
+to roll your own::
+
+    FulltextCriterionField: allows the fulltext of the content item to be
+        searched.
+
+    MetadataCriterionField: allows a specific metadata field of a specific
+        metadata set to be searched.
+
+    DateRangeMetadataCriterionField: allows a specific datetime based
+        metadata field of a specific metadata set to be searched, using a 
+        date range.
+
+
 Making your own is as simple as creating a different SearchSchema and
 ResultsSchema in your extension, and registering it in the install.py of
 your extension. You can replace the global default search schema as
