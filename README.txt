@@ -1,0 +1,70 @@
+SilvaFind is a Silva extension to allow easy creation of search forms, both
+for use by authors in the ZMI, and by users of the public site. Simple
+schemas can be defined to indicate which fields should be searchable.
+
+Authors can add a 'Silva Find' object anywhere, and define which fields to
+make searchable by end users of the public site, and/or which fields to
+limit to a preset value.
+
+For example the default global schema that SilvaFind installs
+(globalschema.py) looks as follows::
+
+    from Products.Silva.i18n import translate as _
+
+    from Products.SilvaFind.schema import SearchSchema
+    from Products.SilvaFind.schema import ResultsSchema
+
+    from Products.SilvaFind.schema import ResultField
+    from Products.SilvaFind.schema import FullTextCriterionField
+    from Products.SilvaFind.schema import MetadataCriterionField
+    from Products.SilvaFind.schema import DateRangeMetadataCriterionField
+
+    globalSearchSchema = SearchSchema([
+        FullTextCriterionField(),
+        MetadataCriterionField('silva-content', 'maintitle'),
+        MetadataCriterionField('silva-content', 'shorttitle'),
+        DateRangeMetadataCriterionField('silva-extra', 'publicationtime'),
+        ])
+   
+    globalResultsSchema = ResultsSchema([
+        ResultField('get_title', _('Title')),
+        ])
+
+Making your own is as simple as creating a different SearchSchema and
+ResultsSchema in your extension, and registering it in the install.py of
+your extension. You can replace the global default search schema as
+follows, assuming myVeryOwnSearchSchema is a valid SearchSchema object::
+
+    def register_search_schema(root):
+        root.service_find.search_schema = myVeryOwnSearchSchema
+        root.service_find.manage_delObjects(['default'])
+        SilvaFind.manage_addSilvaFind(
+            root.service_find, 'default', 'Default search')
+        default = root.service_find.default
+        for field in root.service_find.getSearchSchema().getFields():
+            fieldName = field.getName()
+            default.shownFields[fieldName] = True
+        default._p_changed = True
+
+If your extension defines its own metadata-set, making the fields in
+that set searchable by putting them in your schema is trivially easy::
+
+    myVeryOwnSearchSchema = SearchSchema([
+        
+        ...
+    
+        MetadataCriterionField('my-metadataset', 'my-field1'),
+        MetadataCriterionField('my-metadataset', 'my-field2'),
+        
+        ...
+
+        ])
+
+For a good example of how to customize and use SilvaFind from your own
+extension, see SilvaDLCMS, which you can find here: 
+
+svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
+
+and look at searchschema.py
+
+
