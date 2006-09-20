@@ -17,9 +17,11 @@ For example the default global schema that SilvaFind installs
     from Products.SilvaFind.schema import ResultField
     from Products.SilvaFind.schema import FullTextCriterionField
     from Products.SilvaFind.schema import MetadataCriterionField
+    from Products.SilvaFind.schema import MetatypeCriterionField
     from Products.SilvaFind.schema import DateRangeMetadataCriterionField
 
     globalSearchSchema = SearchSchema([
+        MetatypeCriterionField(),
         FullTextCriterionField(),
         MetadataCriterionField('silva-content', 'maintitle'),
         MetadataCriterionField('silva-content', 'shorttitle'),
@@ -35,6 +37,9 @@ instance as columns in a results table.
 
 The following SearchField types exist for now, and of course it is possible
 to roll your own::
+
+    MetatypeCriterionField: allows the content that is to be searched, to be
+        restricted to certain (one or more) content types.
 
     FulltextCriterionField: allows the fulltext of the content item to be
         searched.

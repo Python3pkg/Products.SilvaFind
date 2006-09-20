@@ -10,8 +10,8 @@ from Products.SilvaFind.schema import MetatypeCriterionField
 from Products.SilvaFind.schema import DateRangeMetadataCriterionField
 
 globalSearchSchema = SearchSchema([
-    FullTextCriterionField(),
     MetatypeCriterionField(),
+    FullTextCriterionField(),
     MetadataCriterionField('silva-content', 'maintitle'),
     MetadataCriterionField('silva-content', 'shorttitle'),
     DateRangeMetadataCriterionField('silva-extra', 'publicationtime'),
