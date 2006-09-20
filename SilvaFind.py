@@ -91,7 +91,7 @@ class SilvaFind(Query, Content, SimpleItem):
         return False
 
     security.declareProtected(SilvaPermissions.View, 'searchResults')
-    def searchResults(self, REQUEST=None):
+    def searchResults(self, REQUEST={}):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         searchArguments['version_status'] = ['public']
@@ -99,7 +99,7 @@ class SilvaFind(Query, Content, SimpleItem):
         return results
 
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
-    def searchResultsObjects(self, REQUEST=None):
+    def searchResultsObjects(self, REQUEST={}):
         results = self.searchResults(REQUEST)
         return [result.getObject().get_silva_object() for result in results]
     

@@ -24,13 +24,15 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
         query = self.root.query
         request = query.REQUEST
         request.set('fulltext', 'xyz')
+        request.set('meta_type', 'Olliphant')
         request.set('silva-content',
                     {'maintitle':'Title',
                      'shorttitle':'Short'})
-        query._edit()
-        self.assertEquals(query.getFieldViews()[0].getValue(), 'xyz')
-        self.assertEquals(query.getFieldViews()[1].getValue(), 'Title')
-        self.assertEquals(query.getFieldViews()[2].getValue(), 'Short')
+        query._edit(request)
+        self.assertEquals(query.getFieldViews()[0].getStoredValue(), 'Olliphant')
+        self.assertEquals(query.getFieldViews()[1].getStoredValue(), 'xyz')
+        self.assertEquals(query.getFieldViews()[2].getStoredValue(), 'Title')
+        self.assertEquals(query.getFieldViews()[3].getStoredValue(), 'Short')
 
     def test_search(self):
         document = self.add_document(self.root, 'doc', 'Document')
@@ -40,8 +42,8 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
         query = self.root.query
         request = query.REQUEST
         request.set('fulltext', 'xyz')
-        query._edit()
-        resultBrains = query.search()
+        query._edit(request)
+        resultBrains = query.searchResults()
         self.assertEquals(len(resultBrains), 1)
         resultObjects = [result.getObject().object() for result in resultBrains]
         self.failUnless(document in resultObjects)

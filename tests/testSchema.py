@@ -36,25 +36,8 @@ class testMetadataCriterionField(TestCase):
         self.assertEquals('meta-set', self.field.getMetadataSet())
         self.assertEquals('field-id', self.field.getMetadataId())
 
-class testSearchObject(TestCase):
-    def setUp(self):
-        self.obj = Query()
-
-    def testGetCriterionValue(self):
-        self.assertEquals(None, self.obj.getCriterionValue('fulltext'))
-        self.assertEquals(None,
-        self.obj.getCriterionValue('silva-content-maintitle'))
-        self.assertRaises(SilvaFindError, self.obj.getCriterionValue, 'xyz')
-
-    def testSetCriterionValue(self):
-        self.obj.setCriterionValue('fulltext', 1)
-        self.assertEquals(1, self.obj.getCriterionValue('fulltext'))
-        self.obj.setCriterionValue('silva-content-maintitle', '1')
-        self.assertEquals('1', self.obj.getCriterionValue('silva-content-maintitle'))
-
 def test_suite():
     suite = TestSuite()
     suite.addTest(makeSuite(testSchema, 'test'))
     suite.addTest(makeSuite(testMetadataCriterionField, 'test'))
-    suite.addTest(makeSuite(testSearchObject, 'test'))
     return suite
