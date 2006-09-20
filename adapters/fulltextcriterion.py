@@ -53,7 +53,9 @@ class FullTextCriterionView(Implicit):
     def getValue(self, REQUEST):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
-        if value is None:
+        if value:
+            value = unicode(value, 'UTF-8')
+        else:
             value = self.getStoredValue()
         return value
         
