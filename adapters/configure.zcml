@@ -39,6 +39,34 @@
     />
 
   <adapter
+    for="Products.SilvaFind.interfaces.IMetatypeCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriterionView"
+    factory=".metatypecriterion.MetatypeCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetatypeCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".metatypecriterion.MetatypeCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetatypeCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriterion"
+    factory=".metatypecriterion.StoreMetatypeCriterion"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IMetatypeCriterionField
+      Products.Silva.interfaces.IRoot"
+    provides=".interfaces.IIndexedField"
+    factory=".metatypecriterion.IndexedMetatypeCriterion"
+  />
+  
+  <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.ICriterionView"

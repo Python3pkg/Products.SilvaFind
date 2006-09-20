@@ -4,6 +4,7 @@ from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IFullTextCriterionField
 from Products.SilvaFind.interfaces import IResultField
+from Products.SilvaFind.interfaces import IMetatypeCriterionField
 
 class Schema:
     def __init__(self, fields):
@@ -51,6 +52,12 @@ class FullTextCriterionField:
     def getName(self):
         return "fulltext"
 
+class MetatypeCriterionField:
+    implements(IMetatypeCriterionField)
+    
+    def getName(self):
+        return "meta_type"
+    
 class ResultField:
     implements(IResultField)
     

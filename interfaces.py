@@ -35,6 +35,11 @@ class IFullTextCriterionField(Interface):
     Criterion corresponding to the Silva full text index
     '''
 
+class IMetatypeCriterionField(Interface):
+    '''
+    Criterion corresponding to the Silva Meta Type of an object
+    '''   
+    
 class IResultField(Interface):
     '''
     Mapping between schema results field and ZCatalog metadata column
