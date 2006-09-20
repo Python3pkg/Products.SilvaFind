@@ -16,13 +16,19 @@
       <tal:block define="value fieldView/getStoredValue">
         <tal:block 
           condition="python:not model.isShown(fieldView.getName())">
-          <tal:block define="is_tuple python: same_type(value, ('',))">
+          <tal:block define="is_tuple python: same_type(value, ('',));
+            is_list python: same_type(value, [])">
             <tal:block condition="python: is_tuple and (value[0] or value[1])">
               <span tal:content="fieldView/getTitle" /> :
               <span tal:content="python:value[0]" /> -
               <span tal:content="python:value[1]" />
             </tal:block>
-            <tal:block condition="python: value and not is_tuple">
+            <tal:block condition="python: is_list and value">
+              <span tal:content="fieldView/getTitle" /> :
+              <span tal:content="python:' or '.join(value)" />
+            </tal:block>
+            
+            <tal:block condition="python: value and not is_tuple and not is_list">
               <span tal:content="fieldView/getTitle" /> :
               <span tal:content="value" />
             </tal:block>
