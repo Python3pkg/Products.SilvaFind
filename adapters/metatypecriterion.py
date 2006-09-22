@@ -11,15 +11,16 @@ from Products.Silva import SilvaPermissions
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
-class StoreFullTextCriterion(StoreCriterion):
+class StoreMetatypeCriterion(StoreCriterion):
     def store(self, REQUEST):
+        #XXX some room for refactoring here
         field_name = self.criterion.getName()
         criterion_value = REQUEST.get(field_name, None)
         if criterion_value is None:
             return
         self.query.setCriterionValue(field_name, criterion_value)
 
-class FullTextCriterionView(Implicit):
+class MetatypeCriterionView(Implicit):
     
     security = ClassSecurityInfo()
     
@@ -44,11 +45,17 @@ class FullTextCriterionView(Implicit):
     def renderWidget(self, value):
         if value is None:
             value = ""
-        html = '''
-        <input type="text" name="%s" value="%s" size="20" style="width: 100%%" /> 
-        '''
-        return html % (self.criterion.getName(), value)
-
+        html = '<select multiple="1" name="%s:list" size="5" style="width: 100%%" > ' % self.criterion.getName()
+        meta_types = []
+        for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
+            selected = ''
+            if meta_type == value:
+                selected = ' selected="true"'
+            meta_types.append('<option value="%s"%s>%s</option>' % (meta_type, selected, meta_type))
+        html += '/n'.join(meta_types) 
+        html += '</select>'
+        return html 
+    
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
         field_name = self.criterion.getName()
@@ -68,26 +75,26 @@ class FullTextCriterionView(Implicit):
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
-        return 'full text'
+        return 'Content Type'
         
     def getIndexId(self):
-        return 'fulltext'
+        return 'meta_type'
 
     security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
         return self.criterion.getName()
 
-InitializeClass(FullTextCriterionView)
+InitializeClass(MetatypeCriterionView)
 
-class IndexedFullTextCriterion:
+class IndexedMetatypeCriterion:
     def __init__(self, criterion, root):
         self.criterion = criterion
         self.root = root
         self.catalog = root.service_catalog
 
     def getIndexId(self):
-        return 'fulltext'
+        return 'meta_type'
 
     def checkIndex(self):
         id = self.getIndexId()
