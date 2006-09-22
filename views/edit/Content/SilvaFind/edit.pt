@@ -33,13 +33,30 @@
       ______________ vein + title row ______________
     </tal:block>
     <tr>
-      <td class="top" colspan="3">
+      <td class="top" colspan="4">
         <h2>
           <img tal:replace="structure python:view.render_icon(model)" />
           <tal:block i18n:translate="">search content
           &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
         </h2>
       </td>
+    </tr>
+    <tr>
+      <th class="align-right"
+        width="12%"
+        i18n:translate="">
+        element
+      </th>
+      <th i18n:translate="">
+        content
+      </th>
+      <th i18n:translate="">
+        allow public search
+      </th>
+      <th width="25%"
+        i18n:translate="">
+        note
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -56,12 +73,17 @@
                                 checked python:model.isShown(fieldView.getName())"
                 />
       </td>
+      <td>
+        <tal:block content="structure fieldView/getDescription" i18n:translate="">
+          Element description
+        </tal:block>
+      </td>
     </tr>
   </tbody>
 
   <tfoot>
     <tr class="controls">
-      <td class="align-right" colspan="3">
+      <td class="align-right" colspan="4">
          <input type="submit" value="save" class="button" />
       </td>
     </tr>

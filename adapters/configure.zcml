@@ -88,6 +88,27 @@
     />
 
   <adapter
+    for="Products.SilvaFind.interfaces.IIntegerRangeMetadataCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriterionView"
+    factory=".metadatacriterion.IntegerRangeMetadataCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IIntegerRangeMetadataCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".metadatacriterion.IntegerRangeMetadataCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IIntegerRangeMetadataCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriterion"
+    factory=".metadatacriterion.StoreIntegerRangeMetadataCriterion"
+  />
+  
+  <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.ICriterionView"

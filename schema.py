@@ -2,6 +2,7 @@ from zope.interface import implements
 
 from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
+from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IFullTextCriterionField
 from Products.SilvaFind.interfaces import IResultField
 from Products.SilvaFind.interfaces import IMetatypeCriterionField
@@ -45,6 +46,9 @@ class MetadataCriterionField(BaseMetadataCriterionField):
 
 class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
     implements(IDateRangeMetadataCriterionField)
+
+class IntegerRangeMetadataCriterionField(BaseMetadataCriterionField):
+    implements(IIntegerRangeMetadataCriterionField)
 
 class FullTextCriterionField:
     implements(IFullTextCriterionField)

@@ -74,6 +74,11 @@ class FullTextCriterionView(Implicit):
         return 'fulltext'
 
     security.declareProtected(SilvaPermissions.View,
+        'getDescription')
+    def getDescription(self):
+        return 'The full text of the content.'
+        
+    security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
         return self.criterion.getName()

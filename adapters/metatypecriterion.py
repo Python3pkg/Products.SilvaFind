@@ -85,6 +85,11 @@ class MetatypeCriterionView(Implicit):
     def getName(self):
         return self.criterion.getName()
 
+    security.declareProtected(SilvaPermissions.View,
+        'getDescription')
+    def getDescription(self):
+        return 'The Content Type of the object(s).'
+    
 InitializeClass(MetatypeCriterionView)
 
 class IndexedMetatypeCriterion:

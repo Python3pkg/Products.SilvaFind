@@ -7,6 +7,9 @@ class ICriterionView(Interface):
     def getTitle():
         '''returns field title for view'''
 
+    def getDescription():
+        '''returns description of the criterion field'''
+        
     def renderWidget(value):
         '''returns widget HTML for view'''
 

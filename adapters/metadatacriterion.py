@@ -36,6 +36,13 @@ class BaseMetadataCriterion:
     def getName(self):
         return self.criterion.getName()
 
+    security.declareProtected(SilvaPermissions.View,
+        'getDescription')
+    def getDescription(self):
+        element = self._getMetadataElement()
+        print repr(element), repr(element.description)
+        return element.description
+    
 InitializeClass(BaseMetadataCriterion)
 
 class MetadataCriterionView(Implicit, BaseMetadataCriterion):
@@ -88,7 +95,7 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
     def getTitle(self):
         element = self._getMetadataElement()
         return element.Title()
-        
+    
 InitializeClass(MetadataCriterionView)
 
 class IndexedMetadataCriterion(BaseMetadataCriterion):
@@ -113,6 +120,80 @@ class StoreMetadataCriterion(StoreCriterion):
             return
         self.query.setCriterionValue(self.criterion.getName(), criterion_value)
 
+class IntegerRangeMetadataCriterionView(MetadataCriterionView):
+    
+    security = ClassSecurityInfo()
+   
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderEditWidget')
+    def renderEditWidget(self):
+        value = self.getStoredValue()
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderPublicWidget')
+    def renderPublicWidget(self):
+        value = self.getValue(self.query.REQUEST)
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'renderWidget')
+    def renderWidget(self, value):
+        value_lower, value_upper = value
+        widget = """
+        <input name="%(name)s_lower" value="%(lower)s" />&nbsp;-&nbsp;<input
+        name="%(name)s_upper" value="%(upper)s" />
+        """
+        return widget % {'name':self.criterion.getName() , 'lower':value_lower, 'upper':value_upper}
+
+    security.declareProtected(SilvaPermissions.View, 'getValue')
+    def getValue(self, REQUEST):
+        field_name = self.criterion.getName()
+        value_lower = REQUEST.get(field_name+'_lower', None)
+        value_upper = REQUEST.get(field_name+'_upper', None)
+        if value_lower is None and value_upper is None:
+            value_lower, value_upper = self.getStoredValue()
+        return value_lower, value_upper
+   
+    def getIndexValue(self, REQUEST):
+        value_lower, value_upper = self.getValue(REQUEST)
+        return self.constructQuery(value_lower, value_upper)    
+
+    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
+    def getStoredValue(self):
+        value = self.query.getCriterionValue(self.criterion.getName())
+        if value is None:
+            return ("", "")
+        else:
+            return value
+    
+    def constructQuery(self, value_lower, value_upper):
+        if not value_lower:
+            if not value_upper:
+                return None
+            else:
+                upper = int(value_upper)
+                return {'query':upper, 'range':'max'}
+        else:
+            lower = int(value_lower)
+            if not value_upper:
+                return {'query':lower, 'range':'min'}
+            else:
+                upper = int(value_upper)
+                return {'query':[lower, upper], 'range':'min:max'}
+
+InitializeClass(IntegerRangeMetadataCriterionView)
+
+class StoreIntegerRangeMetadataCriterion(StoreCriterion):
+    def store(self, REQUEST):
+        field_name = self.criterion.getName()
+        criterion_value_lower = REQUEST.get(field_name+'_lower', None)
+        criterion_value_upper = REQUEST.get(field_name+'_upper', None)
+        if criterion_value_lower is None and criterion_value_upper is None:
+            return
+        self.query.setCriterionValue(self.criterion.getName(),
+            (criterion_value_lower, criterion_value_upper))
+            
 class DateRangeMetadataCriterionView(MetadataCriterionView):
     
     security = ClassSecurityInfo()
@@ -177,6 +258,7 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
                 return {'query':[date_begin, date_end], 'range':'min:max'}
 
 InitializeClass(DateRangeMetadataCriterionView)
+
 class StoreDateRangeMetadataCriterion(StoreCriterion):
     def store(self, REQUEST):
         field_name = self.criterion.getName()

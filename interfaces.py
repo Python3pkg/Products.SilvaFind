@@ -30,6 +30,12 @@ class IDateRangeMetadataCriterionField(IMetadataCriterionField):
     date
     '''
 
+class IIntegerRangeMetadataCriterionField(IMetadataCriterionField):
+    '''
+    Criterion corresponding to indexed SilvaMetadata fields
+    date
+    '''
+
 class IFullTextCriterionField(Interface):
     '''
     Criterion corresponding to the Silva full text index
