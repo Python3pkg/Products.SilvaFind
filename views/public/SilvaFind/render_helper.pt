@@ -70,12 +70,10 @@
       <tr class="controls">
         <td class="rowhead" align="left">
           <tal:block condition="request/previous_batch_url | nothing">
-            [<a href="previousbatch" tal:attributes="href request/previous_batch_url" i18n:translate="">
-            &lt;&lt; Previous
-            </a>]
+            [<a href="previousbatch" tal:attributes="href request/previous_batch_url" i18n:translate="">&lt;&lt;&nbsp;Previous</a>]
           </tal:block>
         </td>
-        <td class="rowhead" nowrap="1" i18n:translate="">
+        <td class="rowhead" nowrap="1" i18n:translate="" tal:attributes="colspan python: max(1,len(columnTitles) - 1)">
           Showing results
           <tal:block replace="batch/start" i18n:name="batch_start" />
           to
@@ -83,13 +81,12 @@
         </td>
         <td class="rowhead" align="right">
           <tal:block condition="request/next_batch_url | nothing">
-            [<a href="nextbatch" tal:attributes="href request/next_batch_url" i18n:translate="">
-            Next &gt;&gt;
-            </a>]
+            [<a href="nextbatch" tal:attributes="href request/next_batch_url" i18n:translate="">Next&nbsp;&gt;&gt;</a>]
           </tal:block>
         </td>
       </tr>
       <tr>
+        <th>#</th>
         <th tal:repeat="columnTitle columnTitles"
             tal:content="columnTitle"
             i18n:translate="">
@@ -98,13 +95,17 @@
     </thead>
     <tbody>
       <tr tal:repeat="item batch" tal:condition="columnIds">
+        <tal:block define="ix repeat/item/index">
+        <td tal:content="python: batch.start + ix" />
         <td><a tal:define="columnId python:columnIds[0]"
                tal:content="python: getattr(item.getObject(), columnId)() or '?'"
                tal:attributes="href item/silva_object_url">
             </a>
+        </td>
         <td tal:repeat="columnId python:columnIds[1:]"
             tal:content="python: getattr(item.getObject(), columnId)()">
         </td>
+        </tal:block>
       </tr>
     </tbody>
   </table>  
