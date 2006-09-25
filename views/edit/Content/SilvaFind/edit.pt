@@ -51,7 +51,7 @@
         content
       </th>
       <th i18n:translate="">
-        allow public search
+        show
       </th>
       <th width="25%"
         i18n:translate="">
