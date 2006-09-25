@@ -115,7 +115,7 @@ class StoreMetadataCriterion(StoreCriterion):
         set_values = REQUEST.get(set_name, None)
         if set_values is None:
             return
-        criterion_value = set_values.get(field_name, None)
+        criterion_value = unicode(set_values.get(field_name, None), 'UTF-8')
         if criterion_value is None:
             return
         self.query.setCriterionValue(self.criterion.getName(), criterion_value)
@@ -191,6 +191,10 @@ class StoreIntegerRangeMetadataCriterion(StoreCriterion):
         criterion_value_upper = REQUEST.get(field_name+'_upper', None)
         if criterion_value_lower is None and criterion_value_upper is None:
             return
+        if criterion_value_lower:
+            criterion_value_lower = int(criterion_value_lower)
+        if criterion_value_upper:
+            criterion_value_upper = int(criterion_value_upper)
         self.query.setCriterionValue(self.criterion.getName(),
             (criterion_value_lower, criterion_value_upper))
             
@@ -215,9 +219,9 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
     def renderWidget(self, value):
         value_begin, value_end = value
         widget = """
-        <span>From</span>&nbsp;<input name="%(name)s_begin" value="%(begin)s" />
+        <span>from</span>&nbsp;<input name="%(name)s_begin" value="%(begin)s" />
         
-        <span>To</span>&nbsp;<input name="%(name)s_end" value="%(end)s" />
+        <span>to</span>&nbsp;<input name="%(name)s_end" value="%(end)s" />
         """
         return widget % {'name':self.criterion.getName() , 'begin':value_begin, 'end':value_end}
 

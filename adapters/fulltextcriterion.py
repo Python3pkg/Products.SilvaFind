@@ -14,7 +14,7 @@ from Products.SilvaFind.errors import SilvaFindError
 class StoreFullTextCriterion(StoreCriterion):
     def store(self, REQUEST):
         field_name = self.criterion.getName()
-        criterion_value = REQUEST.get(field_name, None)
+        criterion_value = unicode(REQUEST.get(field_name, None),'UTF-8')
         if criterion_value is None:
             return
         self.query.setCriterionValue(field_name, criterion_value)

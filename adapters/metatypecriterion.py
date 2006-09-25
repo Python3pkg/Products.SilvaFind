@@ -49,10 +49,10 @@ class MetatypeCriterionView(Implicit):
         meta_types = []
         for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
             selected = ''
-            if meta_type == value:
+            if meta_type in value:
                 selected = ' selected="true"'
             meta_types.append('<option value="%s"%s>%s</option>' % (meta_type, selected, meta_type))
-        html += '/n'.join(meta_types) 
+        html += '\n'.join(meta_types) 
         html += '</select>'
         return html 
     
