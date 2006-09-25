@@ -75,7 +75,7 @@ class MetatypeCriterionView(Implicit):
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
-        return 'Content Type'
+        return 'content type'
         
     def getIndexId(self):
         return 'meta_type'
