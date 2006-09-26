@@ -76,9 +76,6 @@ class ResultField:
     def getColumnTitle(self):
         return self.title
 
-    def getColumnIdandRenderedValue(self, item):
-        return (self.id, self.render(item))
-        
     def render(self, context, item):
         return getattr(item.getObject(), self.id)()
     
