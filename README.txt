@@ -32,8 +32,10 @@ For example the default global schema that SilvaFind installs
         ResultField('get_title', _('Title')),
         ])
 
-The resultschema defines what fields get shown in the list of results, for
-instance as columns in a results table.
+The resultschema defines what fields get shown in the list of results, by
+default as columns in a results table. There are currently 3 types of
+resultfields (plain vanilla, metatype and metadata), and it is not hard to
+make your own. See schema.py for how that is done.
 
 The following SearchField types exist for now, and of course it is possible
 to roll your own::
