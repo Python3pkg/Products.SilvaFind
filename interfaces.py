@@ -50,6 +50,11 @@ class IResultField(Interface):
     '''
     Mapping between schema results field and ZCatalog metadata column
     '''
-    def getColumnId():
-        '''returns catalog column id
+    def getColumnTitle():
+        '''returns catalog column title
         '''
+
+    def render(item):
+        '''renders result field for item
+        '''
+        

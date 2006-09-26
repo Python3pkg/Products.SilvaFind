@@ -98,12 +98,15 @@ class SilvaFind(Query, Content, SimpleItem):
         results = catalog.searchResults(searchArguments)
         return results
 
+    security.declareProtected(SilvaPermissions.View, 'getResultColumns')
+    def getResultColumns(self):
+        return [(field.getColumnTitle(), field.render) for field in self.getResultsSchema().getFields()]
+        
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
     def searchResultsObjects(self, REQUEST={}):
         results = self.searchResults(REQUEST)
         return [result.getObject().get_silva_object() for result in results]
     
-    security.declareProtected(SilvaPermissions.View, 'getResultsColumnIds')
 
     #MUTATORS
     security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')

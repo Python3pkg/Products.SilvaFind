@@ -1,5 +1,6 @@
 from zope.interface import implements
 
+from Products.Silva.ViewCode import ViewCode
 from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
@@ -74,3 +75,24 @@ class ResultField:
 
     def getColumnTitle(self):
         return self.title
+
+    def getColumnIdandRenderedValue(self, item):
+        return (self.id, self.render(item))
+        
+    def render(self, context, item):
+        return getattr(item.getObject(), self.id)()
+    
+class MetatypeResultField(ResultField):
+    implements(IResultField)
+
+    def render(self, context, item):
+        return context.render_icon_by_meta_type(getattr(item.getObject().object(), 'meta_type'))
+    
+class MetadataResultField(ResultField):
+    implements(IResultField)
+
+    def render(self, context, item):
+        binding = context.service_metadata.getMetadata(item.getObject())
+        set, element = self.id.split(':')
+        return binding.get(set, element)
+    

@@ -89,7 +89,7 @@ class MetatypeCriterionView(Implicit):
         'getDescription')
     def getDescription(self):
         return 'The Content Type of the object(s).'
-    
+
 InitializeClass(MetatypeCriterionView)
 
 class IndexedMetatypeCriterion:

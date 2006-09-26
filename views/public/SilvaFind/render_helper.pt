@@ -63,7 +63,6 @@
   </p>
 
   <table tal:define="results python:model.searchResults(request);
-                     columnIds model/getResultsColumnIds;
                      columnTitles model/getResultsColumnTitles;
                      batch python:template.getBatch(results);">
     <thead>
@@ -94,17 +93,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr tal:repeat="item batch" tal:condition="columnIds">
-        <tal:block define="ix repeat/item/index">
-        <td tal:content="python: batch.start + ix" />
-        <td><a tal:define="columnId python:columnIds[0]"
-               tal:content="python: getattr(item.getObject(), columnId)() or '?'"
-               tal:attributes="href item/silva_object_url">
-            </a>
-        </td>
-        <td tal:repeat="columnId python:columnIds[1:]"
-            tal:content="python: getattr(item.getObject(), columnId)()">
-        </td>
+      <tr tal:repeat="item batch">
+        <tal:block define="ix repeat/item/index;
+          columns python: model.getRenderedColumns(context, item);"
+          condition="columns">
+          <td tal:content="python: batch.start + ix" />
+          <td><a tal:define="column python:columns[0]"
+            tal:content="structure python: column or '?'"
+            tal:attributes="href item/silva_object_url">
+          </a>
+          </td>
+          <td tal:repeat="column python:columns[1:]"
+            tal:content="structure python: column or '?'">
+          </td>
         </tal:block>
       </tr>
     </tbody>

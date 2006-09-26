@@ -35,4 +35,8 @@ class Query:
     def getResultsColumnTitles(self):
         return [field.getColumnTitle() 
             for field in self.getResultsSchema().getFields()]
-           
+
+    def getRenderedColumns(self, context, item):
+        return [field.render(context, item) 
+            for field in self.getResultsSchema().getFields()]
+        
