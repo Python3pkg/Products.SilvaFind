@@ -140,10 +140,14 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
-        value_lower, value_upper = value
+        if value:
+            value_lower, value_upper = value
+        else:
+            value_lower = ''
+            value_upper = ''
         widget = """
         <input name="%(name)s_lower" value="%(lower)s" />&nbsp;-&nbsp;<input
-        name="%(name)s_upper" value="%(upper)s" />
+        name="%(name)s_upper" value="%(upper)s" /><br /><small>* only integers</small>
         """
         return widget % {'name':self.criterion.getName() , 'lower':value_lower, 'upper':value_upper}
 
@@ -218,11 +222,15 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
-        value_begin, value_end = value
+        if value:
+            value_begin, value_end = value
+        else:
+            value_begin = ''
+            value_end = ''
         widget = """
         <span>from</span>&nbsp;<input name="%(name)s_begin" value="%(begin)s" />
         
-        <span>to</span>&nbsp;<input name="%(name)s_end" value="%(end)s" />
+        <span>to</span>&nbsp;<input name="%(name)s_end" value="%(end)s" /><br /><small>* dddd/mm/yy</small>
         """
         return widget % {'name':self.criterion.getName() , 'begin':value_begin, 'end':value_end}
 
