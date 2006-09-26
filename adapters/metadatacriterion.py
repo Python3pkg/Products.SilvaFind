@@ -79,7 +79,9 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
         if set_values is None:
             return
         value = set_values.get(field_name, None)
-        if value is None:
+        if value:
+            value = unicode(value, 'UTF-8')
+        else:
             value = self.getStoredValue()
         return value
         
