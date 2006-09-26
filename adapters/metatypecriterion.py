@@ -61,7 +61,13 @@ class MetatypeCriterionView(Implicit):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value:
-            value = unicode(value, 'UTF-8')
+            if type(value) != type([]):
+                value = unicode(value, 'UTF-8')
+            else:
+                values = []
+                for vl in value:
+                    values.append(unicode(vl, 'UTF-8'))
+                value = values
         else:
             value = self.getStoredValue()
         return value
