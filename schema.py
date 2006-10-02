@@ -1,6 +1,7 @@
 from zope.interface import implements
 
 from Products.Silva.ViewCode import ViewCode
+from Products.Silva.interfaces import IVersion
 from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
@@ -83,7 +84,10 @@ class MetatypeResultField(ResultField):
     implements(IResultField)
 
     def render(self, context, item):
-        return context.render_icon_by_meta_type(getattr(item.getObject().object(), 'meta_type'))
+        the_object = item.getObject()
+        if IVersion.providedBy(the_object):
+            the_object = the_object.object()
+        return context.render_icon_by_meta_type(getattr(the_object, 'meta_type'))
     
 class MetadataResultField(ResultField):
     implements(IResultField)
