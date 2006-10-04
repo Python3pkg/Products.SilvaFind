@@ -177,14 +177,23 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             if not value_upper:
                 return None
             else:
-                upper = int(value_upper)
+                try:
+                    upper = int(value_upper)
+                except:
+                    return {}
                 return {'query':upper, 'range':'max'}
         else:
-            lower = int(value_lower)
+            try:
+                lower = int(value_lower)
+            except:
+                lower = 0
             if not value_upper:
                 return {'query':lower, 'range':'min'}
             else:
-                upper = int(value_upper)
+                try:
+                    upper = int(value_upper)
+                except:
+                    return {'query':lower, 'range':'min'}
                 return {'query':[lower, upper], 'range':'min:max'}
 
 InitializeClass(IntegerRangeMetadataCriterionView)
@@ -260,14 +269,26 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
             if not value_end:
                 return None
             else:
-                date_end = DateTime(value_end)
+                try:
+                    date_end = DateTime(value_end)
+                except:
+                    return {}
                 return {'query':date_end, 'range':'max'}
         else:
-            date_begin = DateTime(value_begin)
+            try:
+                date_begin = DateTime(value_begin)
+            except:
+                date_begin = None
             if not value_end:
                 return {'query':date_begin, 'range':'min'}
             else:
-                date_end = DateTime(value_end)
+                try:
+                    date_end = DateTime(value_end)
+                except:
+                    if date_begin:
+                        return {'query':date_begin, 'range':'min'}
+                    else:
+                        return {}
                 return {'query':[date_begin, date_end], 'range':'min:max'}
 
 InitializeClass(DateRangeMetadataCriterionView)

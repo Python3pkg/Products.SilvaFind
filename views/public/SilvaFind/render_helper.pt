@@ -76,7 +76,9 @@
           Showing results
           <tal:block replace="batch/start" i18n:name="batch_start" />
           to
-          <tal:block replace="batch/end" i18n:name="batch_end" />.
+          <tal:block replace="batch/end" i18n:name="batch_end" />
+          of 
+          <tal:block replace="python: len(results)" i18n:name="total" />.
         </td>
         <td class="rowhead" align="right">
           <tal:block condition="request/next_batch_url | nothing">
