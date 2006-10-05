@@ -73,16 +73,16 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
+        value = self.getStoredValue()
+        if value:
+            return value
         set_name = self.criterion.getMetadataSet()
         field_name = self.criterion.getMetadataId()
         set_values = REQUEST.get(set_name, None)
-        if set_values is None:
-            return
-        value = set_values.get(field_name, None)
+        if set_values:
+            value = set_values.get(field_name, None)
         if value:
             value = unicode(value, 'UTF-8')
-        else:
-            value = self.getStoredValue()
         return value
         
     getIndexValue = getValue
@@ -142,6 +142,10 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
     def renderWidget(self, value):
         if value:
             value_lower, value_upper = value
+            if value_lower == None:
+                value_lower = ''
+            if value_upper == None:
+                value_upper = ''
         else:
             value_lower = ''
             value_upper = ''
@@ -156,8 +160,23 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         field_name = self.criterion.getName()
         value_lower = REQUEST.get(field_name+'_lower', None)
         value_upper = REQUEST.get(field_name+'_upper', None)
-        if value_lower is None and value_upper is None:
-            value_lower, value_upper = self.getStoredValue()
+        stored_lower, stored_upper = self.getStoredValue()
+        if value_lower:
+            try:
+                value_lower = int(value_lower)
+            except:
+                value_lower = ''
+        if value_upper:
+            try:
+                value_upper = int(value_upper)
+            except:
+                value_upper = ''
+        if stored_lower:
+            if not(value_lower) or value_lower < stored_lower:
+                value_lower = stored_lower
+        if stored_upper:
+            if not(value_upper) or value_upper > stored_upper:
+                value_upper = stored_upper
         return value_lower, value_upper
    
     def getIndexValue(self, REQUEST):
@@ -233,6 +252,10 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
     def renderWidget(self, value):
         if value:
             value_begin, value_end = value
+            if value_begin == None:
+                value_begin = ''
+            if value_end == None:
+                value_end = ''
         else:
             value_begin = ''
             value_end = ''
@@ -248,10 +271,25 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         field_name = self.criterion.getName()
         value_begin = REQUEST.get(field_name+'_begin', None)
         value_end = REQUEST.get(field_name+'_end', None)
-        if value_begin is None and value_end is None:
-            value_begin, value_end = self.getStoredValue()
+        stored_begin, stored_end = self.getStoredValue()
+        if value_begin:
+            try:
+                value_begin = DateTime(value_begin)
+            except:
+                value_begin = ''
+        if value_end:
+            try:
+                value_end = DateTime(value_end)
+            except:
+                value_end = ''
+        if stored_begin:
+            if not(value_begin) or value_begin < stored_begin:
+                value_begin = stored_begin
+        if stored_end:
+            if not(value_end) or value_end > stored_end:
+                value_end = stored_end
         return value_begin, value_end
-   
+    
     def getIndexValue(self, REQUEST):
         value_begin, value_end = self.getValue(REQUEST)
         return self.constructQuery(value_begin, value_end)    
