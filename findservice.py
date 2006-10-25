@@ -26,17 +26,18 @@ class FindService(Folder.Folder):
     #needed to be able to add a SilvaFind object
     def __init__(self, id):
         FindService.inheritedAttribute('__init__')(self, id)
-        self.search_schema = globalSearchSchema
-        self.results_schema = globalResultsSchema
     
     def _add_ordered_id(self, item):
         pass
 
+    def _remove_ordered_id(self, item):
+        pass
+
     def getSearchSchema(self):
-        return self.search_schema
+        return globalSearchSchema
 
     def getResultsSchema(self):
-        return self.results_schema
+        return globalResultsSchema
     
 InitializeClass(FindService)
 
