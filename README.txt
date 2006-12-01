@@ -1,5 +1,5 @@
 SilvaFind is a Silva extension to allow easy creation of search forms, both
-for use by authors in the ZMI, and by users of the public site. Simple
+for use by authors in the SMI, and by users of the public site. Simple
 schemas can be defined to indicate which fields should be searchable.
 
 Authors can add a 'Silva Find' object anywhere, and define which fields to
