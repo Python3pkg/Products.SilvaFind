@@ -87,13 +87,14 @@ class MetatypeResultField(ResultField):
         the_object = item.getObject()
         if IVersion.providedBy(the_object):
             the_object = the_object.object()
-        return context.render_icon_by_meta_type(getattr(the_object, 'meta_type'))
+        return context.render_icon_by_meta_type(
+            getattr(the_object, 'meta_type'))
     
 class MetadataResultField(ResultField):
     implements(IResultField)
 
     def render(self, context, item):
-        binding = context.service_metadata.getMetadata(item.getObject())
         set, element = self.id.split(':')
-        return binding.get(set, element)
+        return context.service_metadata.getMetadata(
+            item.getObject(), set, element)
     
