@@ -95,6 +95,6 @@ class MetadataResultField(ResultField):
 
     def render(self, context, item):
         set, element = self.id.split(':')
-        return context.service_metadata.getMetadata(
+        return context.service_metadata.getMetadataValue(
             item.getObject(), set, element)
     
