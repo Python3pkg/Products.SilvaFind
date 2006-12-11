@@ -3,6 +3,4 @@ All rights reserved. See also LICENSE.txt
 
 0.1
 
-SilvaFind 0.1 depends on Silva-1.6.x or later. (Note: it may work with
-versions 1.5.x when we've tested that, this text will be edited
-appropriately.)
+SilvaFind 0.1 depends on Silva-1.5.x or later.
