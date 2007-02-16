@@ -4,3 +4,6 @@ All rights reserved. See also LICENSE.txt
 0.1
 
 SilvaFind 0.1 depends on Silva-1.5.x or later.
+
+Put SilvaFind into your Products folder and restart zope
+and install Silva Find in Silva Service Extensions.
