@@ -5,6 +5,11 @@ schemas can be defined to indicate which fields should be searchable.
 Authors can add a 'Silva Find' object anywhere, and define which fields to
 make searchable by end users of the public site, and/or which fields to
 limit to a preset value.
+If you can't add the 'Silva Find' object in the SMI you should make sure it's
+checked in the 'addables' section. If it's not checked, check it and uncheck
+the inheritance checkbox
+(otherwise inheritance will overrule it and uncheck it again).
+
 
 For example the default global schema that SilvaFind installs
 (globalschema.py) looks as follows::
@@ -27,7 +32,7 @@ For example the default global schema that SilvaFind installs
         MetadataCriterionField('silva-content', 'shorttitle'),
         DateRangeMetadataCriterionField('silva-extra', 'publicationtime'),
         ])
-   
+
     globalResultsSchema = ResultsSchema([
         ResultField('get_title', _('Title')),
         ])
@@ -50,7 +55,7 @@ to roll your own::
         metadata set to be searched.
 
     DateRangeMetadataCriterionField: allows a specific datetime based
-        metadata field of a specific metadata set to be searched, using a 
+        metadata field of a specific metadata set to be searched, using a
         date range.
 
 
@@ -74,21 +79,19 @@ If your extension defines its own metadata-set, making the fields in
 that set searchable by putting them in your schema is trivially easy::
 
     myVeryOwnSearchSchema = SearchSchema([
-        
+
         ...
-    
+
         MetadataCriterionField('my-metadataset', 'my-field1'),
         MetadataCriterionField('my-metadataset', 'my-field2'),
-        
+
         ...
 
         ])
 
 For a good example of how to customize and use SilvaFind from your own
-extension, see SilvaDLCMS, which you can find here: 
+extension, see SilvaDLCMS, which you can find here:
 
 svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
 
 and look at searchschema.py
-
-
