@@ -262,8 +262,8 @@ class FullTextResultField(ResultField):
                     term = term[1:]
                 if term.endswith('"'):
                     term = term[:-1]
-                text = text.replace(' %s ' % term , 
-                                    ' <strong>%s</strong> ' % term)
+                text = text.replace(' %s ' % term.lower() , 
+                                    ' <strong>%s</strong> ' % term.lower())
         return '<div class="searchresult-description">%s</div>' % text.strip()
         
             
