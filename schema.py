@@ -138,7 +138,7 @@ class PublicationDateResultField(ResultField):
         object = item.getObject()
         date = None
         if object.meta_type == 'Silva Document Version':
-            date = object.get_approved_version_publication_datetime()
+            date = object.publication_datetime()
         if date == None:
             date = object.get_modification_datetime()
         datestr = date.strftime('%d %b %Y %H:%M').lower()
