@@ -1,22 +1,29 @@
 from Products.Silva.i18n import translate as _
 
-from Products.SilvaFind.schema import SearchSchema
-from Products.SilvaFind.schema import ResultsSchema
+from Products.SilvaFind.schema import IconResultField, LinkResultField
+from Products.SilvaFind.schema import PublicationDateResultField, BreadcrumbsResultField
+from Products.SilvaFind.schema import ResultField, FullTextResultField 
+from Products.SilvaFind.schema import ThumbnailResultField                               
+from Products.SilvaFind.schema import ResultCountField
+from Products.SilvaFind.schema import MetadataResultField
 
-from Products.SilvaFind.schema import ResultField
 from Products.SilvaFind.schema import FullTextCriterionField
-from Products.SilvaFind.schema import MetadataCriterionField
 from Products.SilvaFind.schema import MetatypeCriterionField
-from Products.SilvaFind.schema import DateRangeMetadataCriterionField
+from Products.SilvaFind.schema import PathCriterionField
 
-globalSearchSchema = SearchSchema([
+globalSearchFields= [
     MetatypeCriterionField(),
     FullTextCriterionField(),
-    MetadataCriterionField('silva-content', 'maintitle'),
-    MetadataCriterionField('silva-content', 'shorttitle'),
-    DateRangeMetadataCriterionField('silva-extra', 'publicationtime'),
-    ])
+    PathCriterionField(),
+    ]
    
-globalResultsSchema = ResultsSchema([
-    ResultField('get_title', _('Title')),
-    ])
+globalResultsFields = [
+    ResultCountField('',        _(u'ResultCount')),
+    IconResultField('',         _(u'Icon'), 
+                                _(u'Shows icon corresponding to content type')),
+    LinkResultField('',         _(u'Link')),
+    PublicationDateResultField('', _(u'Publication Date')),
+    FullTextResultField('',     _(u'Text snippet'),),
+    ThumbnailResultField('',    _(u'Thumbnail')),
+    BreadcrumbsResultField('',  _(u'Breadcrumbs')),
+    ]

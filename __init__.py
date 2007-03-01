@@ -8,6 +8,7 @@ def initialize(context):
     import install
     
     registerDirectory('views', globals())
+    registerDirectory('resources', globals())
     
     extensionRegistry.register(
         'SilvaFind', 'Silva Find', context, [

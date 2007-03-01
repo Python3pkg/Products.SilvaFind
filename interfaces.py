@@ -46,6 +46,11 @@ class IMetatypeCriterionField(Interface):
     Criterion corresponding to the Silva Meta Type of an object
     '''   
     
+class IPathCriterionField(Interface):
+    '''
+    Criterion used to restrict searchresults so they start with a specific path
+    '''
+    
 class IResultField(Interface):
     '''
     Mapping between schema results field and ZCatalog metadata column

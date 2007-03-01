@@ -67,6 +67,34 @@
   />
   
   <adapter
+    for="Products.SilvaFind.interfaces.IPathCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.ICriterionView"
+    factory=".pathcriterion.PathCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IPathCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IQueryPart"
+    factory=".pathcriterion.PathCriterionView"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IPathCriterionField
+      Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IStoreCriterion"
+    factory=".pathcriterion.StorePathCriterion"
+  />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IPathCriterionField
+      Products.Silva.interfaces.IRoot"
+    provides=".interfaces.IIndexedField"
+    factory=".pathcriterion.IndexedPathCriterion"
+  />
+  
+  <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.ICriterionView"
@@ -134,6 +162,13 @@
          Products.Silva.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
     factory=".fulltextcriterion.IndexedFullTextCriterion"
+    />
+
+  <adapter
+    for="Products.SilvaFind.interfaces.IResultField
+         Products.SilvaFind.interfaces.ISilvaQuery"
+    provides=".interfaces.IResultView"
+    factory=".result.ResultView"
     />
 
 </configure>

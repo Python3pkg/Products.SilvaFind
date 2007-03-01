@@ -11,15 +11,18 @@ from Products.Silva import SilvaPermissions
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
-class StoreFullTextCriterion(StoreCriterion):
+class StorePathCriterion(StoreCriterion):
     def store(self, REQUEST):
+        #XXX some room for refactoring here
         field_name = self.criterion.getName()
-        criterion_value = unicode(REQUEST.get(field_name, None),'UTF-8')
+        criterion_value = REQUEST.get(field_name, None)
         if criterion_value is None:
             return
+        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        criterion_value = (sitepath + '/' + criterion_value).replace('//', '/')
         self.query.setCriterionValue(field_name, criterion_value)
 
-class FullTextCriterionView(Implicit):
+class PathCriterionView(Implicit):
     
     security = ClassSecurityInfo()
     
@@ -30,18 +33,24 @@ class FullTextCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'canBeShown')
     def canBeShown(self):
-        return True 
+        return False
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
     def renderEditWidget(self):
-        value = self.getStoredValue()
+        value = self.getStoredValue() or ''
+        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        if value.startswith(sitepath):
+            value = value[len(sitepath):]
         return self.renderWidget(value)
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderPublicWidget')
     def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST)
+        value = self.getValue(self.query.REQUEST) or ''
+        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        if value.startswith(sitepath):
+            value = value[len(sitepath):]
         return self.renderWidget(value)
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
@@ -52,10 +61,10 @@ class FullTextCriterionView(Implicit):
         html = '''
         <input type="text" name="%s" id="%s" value="%s" size="20" style="width: 100%%" /> 
         '''
-        return html % (self.criterion.getName(),
+        return html % (self.criterion.getName(), 
                        self.criterion.getName(),
                        value)
-
+    
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
         field_name = self.criterion.getName()
@@ -64,10 +73,12 @@ class FullTextCriterionView(Implicit):
             value = unicode(value, 'UTF-8')
         else:
             value = self.getStoredValue()
+        if value is None:
+            value = ''
         return value
         
     getIndexValue = getValue
-    
+
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
@@ -75,31 +86,31 @@ class FullTextCriterionView(Implicit):
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
-        return 'full text'
+        return 'below path'
         
     def getIndexId(self):
-        return 'fulltext'
+        return 'path'
 
-    security.declareProtected(SilvaPermissions.View,
-        'getDescription')
-    def getDescription(self):
-        return 'The full text of the content.'
-        
     security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
         return self.criterion.getName()
 
-InitializeClass(FullTextCriterionView)
+    security.declareProtected(SilvaPermissions.View,
+        'getDescription')
+    def getDescription(self):
+        return 'Only return object from below path (starting from site root)'
 
-class IndexedFullTextCriterion:
+InitializeClass(PathCriterionView)
+
+class IndexedPathCriterion:
     def __init__(self, criterion, root):
         self.criterion = criterion
         self.root = root
         self.catalog = root.service_catalog
 
     def getIndexId(self):
-        return 'fulltext'
+        return 'path'
 
     def checkIndex(self):
         id = self.getIndexId()

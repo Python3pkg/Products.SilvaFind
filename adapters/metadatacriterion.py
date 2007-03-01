@@ -31,6 +31,11 @@ class BaseMetadataCriterion:
         indexId = createIndexId(self._getMetadataElement())
         return indexId
 
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'canBeShown')
+    def canBeShown(self):
+        return True 
+        
     security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
@@ -260,11 +265,24 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
             value_begin = ''
             value_end = ''
         widget = """
-        <span>from</span>&nbsp;<input name="%(name)s_begin" value="%(begin)s" />
-        
-        <span>to</span>&nbsp;<input name="%(name)s_end" value="%(end)s" /><br /><small>* dddd/mm/yy</small>
+        <table border="0">
+        <tr>
+            <td style="border:0;">from</td>
+            <td style="border:0;"><input name="%(name)s_begin" id="%(idname)s" value="%(begin)s"/></td>
+        </tr>
+        <tr>
+            <td style="border:0;">to</td>
+            <td style="border:0;"><input name="%(name)s_end" value="%(end)s"/></td>
+        </tr>
+        <tr>
+            <td style="border:0;"></td>
+            <td style="border:0;"><small>* yyyy/mm/dd</small></td>
+        </tr>
+        </table>
         """
-        return widget % {'name':self.criterion.getName() , 'begin':value_begin, 'end':value_end}
+        return widget % {'name':self.criterion.getName(), 'begin':value_begin, 
+                         'end':value_end, 
+                         'idname':self.criterion.getName().split('-')[-1]}
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):

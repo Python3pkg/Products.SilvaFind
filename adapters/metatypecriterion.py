@@ -29,6 +29,11 @@ class MetatypeCriterionView(Implicit):
         self.query = query
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+        'canBeShown')
+    def canBeShown(self):
+        return True 
+
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
@@ -45,7 +50,8 @@ class MetatypeCriterionView(Implicit):
     def renderWidget(self, value):
         if value is None:
             value = ""
-        html = '<select multiple="1" name="%s:list" size="5" style="width: 100%%" > ' % self.criterion.getName()
+        html = '<select multiple="1" name="%s:list" id="%s" size="5"         style="width: 100%%" > ' % (self.criterion.getName(),
+                            self.criterion.getName())
         meta_types = []
         for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
             selected = ''

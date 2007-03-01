@@ -1,3 +1,4 @@
+from Acquisition import Implicit
 
 class StoreCriterion:
     def __init__(self, criterion, query):
@@ -14,3 +15,4 @@ class CatalogMetadataSetup:
         id = self.field.getColumnId()
         if not id in self.catalog.schema():
             self.catalog.addColumn(id)
+

@@ -22,6 +22,7 @@ from Products.SilvaMetadata.Index import createIndexId
 from Products.SilvaFind.query import Query
 from Products.SilvaFind.interfaces import ISilvaQuery
 from Products.SilvaFind.adapters.interfaces import ICriterionView
+from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
@@ -44,6 +45,17 @@ class SilvaFind(Query, Content, SimpleItem):
             '[Title is stored in metadata. This is a bug.]')
         Query.__init__(self)
         self.shownFields = PersistentMapping()
+        self.shownResultsFields = PersistentMapping()
+        # by default we only show fulltext search
+        # and a couple of resultfields
+        self.shownFields['fulltext'] = True 
+        self.shownResultsFields['link'] = True 
+        self.shownResultsFields['resultcount'] = True 
+        self.shownResultsFields['icon'] = True 
+        self.shownResultsFields['publicationdate'] = True 
+        self.shownResultsFields['textsnippet'] = True 
+        self.shownResultsFields['thumbnail'] = True 
+        self.shownResultsFields['breadcrumbs'] = True 
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')
@@ -76,12 +88,16 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
     def getPublicFieldViews(self):
         result = [view for view in self.getFieldViews()
-                    if self.isShown(view.getName())]
+                    if self.isCriterionShown(view.getName())]
         return result  
 
-    security.declareProtected(SilvaPermissions.View, 'isShown')
-    def isShown(self, fieldName):
+    security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
+    def isCriterionShown(self, fieldName):
         return self.shownFields.get(fieldName, False)
+
+    security.declareProtected(SilvaPermissions.View, 'isResultShown')
+    def isResultShown(self, fieldName):
+        return self.shownResultsFields.get(fieldName, False)
 
     security.declareProtected(SilvaPermissions.View, 'isFormNeeded')
     def isFormNeeded(self):
@@ -97,6 +113,22 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments['version_status'] = ['public']
         results = catalog.searchResults(searchArguments)
         return results
+
+
+    security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
+    def getResultFieldViews(self):
+        result = []
+        for field in self.service_find.getResultsSchema().getFields():
+            resultFieldView = zapi.getMultiAdapter((field, self), IResultView)
+            # wrapped to enable security checks
+            resultFieldView = resultFieldView.__of__(self)
+            result.append(resultFieldView)
+        return result  
+
+    def getPublicResultFieldViews(self):
+        result = [view for view in self.getResultFieldViews()
+                    if self.isResultShown(view.getName())]
+        return result  
 
     security.declareProtected(SilvaPermissions.View, 'getResultColumns')
     def getResultColumns(self):
@@ -121,6 +153,7 @@ class SilvaFind(Query, Content, SimpleItem):
         """
         self.storeCriterionValues(REQUEST)
         self.storeShownCriterion(REQUEST)
+        self.storeShownResult(REQUEST)
 
     #HELPERS
     def storeCriterionValues(self, REQUEST):
@@ -132,6 +165,12 @@ class SilvaFind(Query, Content, SimpleItem):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
+
+    def storeShownResult(self, REQUEST):
+        for field in self.getResultsSchema().getFields():
+            fieldName = field.getName()
+            self.shownResultsFields[fieldName] = REQUEST.get(
+                                            'show_result_'+fieldName, False)
 
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}

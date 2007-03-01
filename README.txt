@@ -1,15 +1,27 @@
-SilvaFind is a Silva extension to allow easy creation of search forms, both
-for use by authors in the SMI, and by users of the public site. Simple
-schemas can be defined to indicate which fields should be searchable.
+SilvaFind is a Silva extension to allow easy creation of search forms and
+result pages, both for use by authors in the SMI, and by users of the public site. 
+Simple schemas can be defined to indicate which fields should be searchable.
 
 Authors can add a 'Silva Find' object anywhere, and define which fields to
 make searchable by end users of the public site, and/or which fields to
-limit to a preset value.
+limit to a preset value. Authors also can choose which fields should be
+displayed in the search results.
+
 If you can't add the 'Silva Find' object in the SMI you should make sure it's
 checked in the 'addables' section. If it's not checked, check it and uncheck
 the inheritance checkbox
 (otherwise inheritance will overrule it and uncheck it again).
 
+By default all possible custom searchcriterion fields and resultfields are 
+available in the SMI. Besides that, the elements of all metadata sets are also
+available as resultfields. If these fields are indexed in the catalog, then they
+can also be used as searchcriterion fields. All available fields can be enabled
+/ disabled in the SMI.
+
+Besides this behaviour, SilvaFind also allows you to manually override the list
+of searchcriterions. This behavior is also intended for backwards
+compatibility, but can be used to add your own custom fields from within other
+products.
 
 For example the default global schema that SilvaFind installs
 (globalschema.py) looks as follows::
@@ -58,6 +70,10 @@ to roll your own::
         metadata field of a specific metadata set to be searched, using a
         date range.
 
+    PathCriterionField: allows the content that is to be searched, to be
+       restricted to be below a certain path. The path of the found children
+       will always start with the supplied path, which is a string starting from
+       the site root.
 
 Making your own is as simple as creating a different SearchSchema and
 ResultsSchema in your extension, and registering it in the install.py of

@@ -17,6 +17,8 @@ def install(root):
     # create the core views from filesystem
     add_fss_directory_view(root.service_views,
                            'SilvaFind', __file__, 'views')
+    add_fss_directory_view(root.service_resources, 
+                           'SilvaFind', __file__, 'resources')
     # also register views
     registerViews(root.service_view_registry)
 
@@ -32,6 +34,7 @@ def install(root):
 def uninstall(root):
     unregisterViews(root.service_view_registry)
     root.service_views.manage_delObjects(['SilvaFind'])
+    root.service_resources.manage_delObjects(['SilvaFind'])
     root.manage_delObjects(['service_find'])
     
 def is_installed(root):

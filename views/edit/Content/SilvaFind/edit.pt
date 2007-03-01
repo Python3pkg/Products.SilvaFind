@@ -42,6 +42,9 @@
       </td>
     </tr>
     <tr>
+      <th i18n:translate="" width="20">
+        show
+      </th>
       <th class="align-right"
         width="12%"
         i18n:translate="">
@@ -50,8 +53,75 @@
       <th i18n:translate="">
         content
       </th>
-      <th i18n:translate="">
+      <th width="25%"
+        i18n:translate="">
+        note
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tal:block tal:repeat="fieldView model/getFieldViews">
+    <tr tal:define="iterate repeat/fieldView/odd"
+        tal:attributes="class python:iterate and 'odd' or 'even'">
+      <td>
+         <input type="checkbox"
+                tal:condition="fieldView/canBeShown"
+                tal:attributes="name string:show_${fieldView/getName}:bool;
+                                checked python:model.isCriterionShown(fieldView.getName())"
+                />
+      </td>
+      <td>
+        <label tal:content="fieldView/getTitle" 
+               tal:attributes="for python:fieldView.getName().split('-')[-1]"
+               i18n:translate="">
+        A search object.
+        </label>
+      </td>
+      <td tal:content="structure fieldView/renderEditWidget">
+        A search object.
+      </td>
+      <td>
+        <tal:block content="structure fieldView/getDescription" i18n:translate="">
+          Element description
+        </tal:block>
+      </td>
+    </tr>
+    </tal:block>
+  </tbody>
+
+  <tfoot>
+    <tr class="controls">
+      <td class="align-right" colspan="4">
+         <input type="submit" value="save" class="button" />
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<table class="listing">
+  <thead>
+    <tal:block replace="nothing">
+      ______________ vein + title row ______________
+    </tal:block>
+    <tr>
+      <td class="top" colspan="4">
+        <h2>
+          <img tal:replace="structure python:view.render_icon(model)" />
+          <tal:block i18n:translate="">search results
+          &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
+        </h2>
+      </td>
+    </tr>
+    <tr>
+      <th i18n:translate="" width="20">
         show
+      </th>
+      <th class="align-right"
+        width="12%"
+        i18n:translate="">
+        element
+      </th>
+      <th i18n:translate="">
+        metadata id
       </th>
       <th width="25%"
         i18n:translate="">
@@ -60,25 +130,33 @@
     </tr>
   </thead>
   <tbody>
-    <tr tal:repeat="fieldView model/getFieldViews">
-      <td tal:content="fieldView/getTitle">
-        A search object.
-      </td>
-      <td tal:content="structure fieldView/renderEditWidget">
-        A search object.
-      </td>
+    <tal:block tal:repeat="resultView model/getResultFieldViews">
+    <tr tal:define="iterate repeat/resultView/odd"
+        tal:attributes="class python:iterate and 'odd' or 'even'">
       <td>
          <input type="checkbox"
-                tal:attributes="name string:show_${fieldView/getName}:bool;
-                                checked python:model.isShown(fieldView.getName())"
+                tal:attributes="name string:show_result_${resultView/getName}:bool;
+                                checked python:model.isResultShown(resultView.getName());
+                                id string:show_result_${resultView/getName}"
                 />
       </td>
+      <td> 
+        <label tal:content="resultView/getTitle" 
+               tal:attributes="for string:show_result_${resultView/getName}"
+               i18n:translate="">
+        A search object.
+        </label>
+      </td>
+      <td tal:content="resultView/getId">
+        A search object.
+      </td>
       <td>
-        <tal:block content="structure fieldView/getDescription" i18n:translate="">
+        <tal:block content="structure resultView/getDescription" i18n:translate="">
           Element description
         </tal:block>
       </td>
     </tr>
+    </tal:block>
   </tbody>
 
   <tfoot>

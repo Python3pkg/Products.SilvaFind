@@ -1,0 +1,109 @@
+<style type="text/css">
+/* stylesheet for silva find search and searchresult pages */
+.searchform {}
+
+.searchform input, select {
+    width:100%;
+    }
+.searchform select{
+    /* somehow select boxes were not styled */
+    background-color:#E8F7Ef;
+    border:1px solid #03956A;
+}
+.searchform-submit {
+    padding:0;
+    margin-left:1em;
+}
+
+.searchform-title {
+    padding-top:0.25em;
+}
+.searchform-title:after{
+    content:':';
+}
+
+.searchresults h2 {}
+
+.searchresult-header {
+    background: #C0D5CE;
+    border:1px solid #03956A;
+    margin-bottom: 0.5em; padding:0.5em;
+    height:2em;
+}
+span.searchresult-previous {
+    float:left;
+}
+
+span.searchresult-previous a:link {
+    text-decoration:none;
+}
+span.searchresult-previous a:visited {
+    text-decoration:none;
+}
+
+span.searchresult-info {
+    float:left; 
+    padding-left:1em;
+    margin-top:0.4em;
+}
+span.searchresult-next {
+    float:right;
+}
+
+span.searchresult-next a:link {
+    text-decoration:none;
+}
+span.searchresult-next a:visited {
+    text-decoration:none;
+}
+
+.searchresult-icon {}
+.searchresult-counter {}
+
+.searchresult-link {
+    font-weight:bold;
+}
+.searchresult-modified:before {
+    content:'(';
+}
+.searchresult-modified {
+    font-size:0.75em;
+    
+}
+.searchresult-modified:after{
+    content:')';
+}
+.searchresult-field{
+    display:block;
+    margin-left:2em;
+    padding-left:10em;
+    border-bottom:1px solid #03956A;
+}
+.searchresult-field-title{
+    font-style:italic;
+    margin-left:-10em;
+    float:left;
+}
+.searchresult-field-title:after{
+    content:':';
+}
+
+.searchresult-description{
+    margin-left:2em;
+}
+.searchresult-thumbnail{
+    margin-left:2em;
+    padding-top:0.25em;
+    padding-bottom:0.25em;
+}
+
+.searchresult-breadcrumb { 
+   margin-left:2em;
+   display:block;
+}
+
+.searchresult-nomatch {
+    padding:0.5em;
+    padding-top:1em;
+}
+</style>
