@@ -1,5 +1,7 @@
+SilvaFind README
+
 SilvaFind is a Silva extension to allow easy creation of search forms and
-result pages, both for use by authors in the SMI, and by users of the public site. 
+result pages, both for users of the public site and for authors in the SMI. 
 Simple schemas can be defined to indicate which fields should be searchable.
 
 Authors can add a 'Silva Find' object anywhere, and define which fields to
@@ -8,23 +10,22 @@ limit to a preset value. Authors also can choose which fields should be
 displayed in the search results.
 
 If you can't add the 'Silva Find' object in the SMI you should make sure it's
-checked in the 'addables' section. If it's not checked, check it and uncheck
-the inheritance checkbox
-(otherwise inheritance will overrule it and uncheck it again).
+checked in the 'addables' section of the publication. If Silva Find is not 
+checked, check it and uncheck the inheritance checkbox (otherwise inheritance 
+will overrule it and uncheck it again).
 
-By default all possible custom searchcriterion fields and resultfields are 
+By default all possible custom search criterion fields and result fields are 
 available in the SMI. Besides that, the elements of all metadata sets are also
-available as resultfields. If these fields are indexed in the catalog, then they
-can also be used as searchcriterion fields. All available fields can be enabled
-/ disabled in the SMI.
+available as result fields. If these fields are indexed in the catalog, they
+can also be used as search criterion fields. All available fields can be 
+enabled/disabled in the SMI.
 
-Besides this behaviour, SilvaFind also allows you to manually override the list
-of searchcriterions. This behavior is also intended for backwards
-compatibility, but can be used to add your own custom fields from within other
-products.
+Besides this behavior, SilvaFind also allows you to manually override the list
+of search criteria. This behavior is also intended for backwards compatibility,
+but can be used to add your own custom fields from within other products.
 
 For example the default global schema that SilvaFind installs
-(globalschema.py) looks as follows::
+(globalschema.py) looks as follows:
 
     from Products.Silva.i18n import translate as _
 
@@ -49,9 +50,9 @@ For example the default global schema that SilvaFind installs
         ResultField('get_title', _('Title')),
         ])
 
-The resultschema defines what fields get shown in the list of results, by
+The result schema defines what fields get shown in the list of results, by
 default as columns in a results table. There are currently 3 types of
-resultfields (plain vanilla, metatype and metadata), and it is not hard to
+result fields (plain vanilla, metatype and metadata), and it is not hard to
 make your own. See schema.py for how that is done.
 
 The following SearchField types exist for now, and of course it is possible
@@ -78,10 +79,10 @@ to roll your own::
 Making your own is as simple as creating a different SearchSchema and
 ResultsSchema in your extension, and registering it in the install.py of
 your extension. You can replace the global default search schema as
-follows, assuming myVeryOwnSearchSchema is a valid SearchSchema object::
+follows, assuming myOwnSearchSchema is a valid SearchSchema object:
 
     def register_search_schema(root):
-        root.service_find.search_schema = myVeryOwnSearchSchema
+        root.service_find.search_schema = myOwnSearchSchema
         root.service_find.manage_delObjects(['default'])
         SilvaFind.manage_addSilvaFind(
             root.service_find, 'default', 'Default search')
@@ -92,9 +93,9 @@ follows, assuming myVeryOwnSearchSchema is a valid SearchSchema object::
         default._p_changed = True
 
 If your extension defines its own metadata-set, making the fields in
-that set searchable by putting them in your schema is trivially easy::
+that set searchable by putting them in your schema is easy:
 
-    myVeryOwnSearchSchema = SearchSchema([
+    myOwnSearchSchema = SearchSchema([
 
         ...
 
@@ -106,7 +107,7 @@ that set searchable by putting them in your schema is trivially easy::
         ])
 
 For a good example of how to customize and use SilvaFind from your own
-extension, see SilvaDLCMS, which you can find here:
+extension, see the Silva DLCMS, which you can find here:
 
 svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
 
