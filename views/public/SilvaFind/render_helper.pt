@@ -28,8 +28,7 @@
           <td tal:content="structure fieldView/renderPublicWidget">
             a search object
           </td>
-          <td tal:condition="not:repeat/fieldView/end"
-            tal:content="fieldView/getDescription">
+          <td tal:content="fieldView/getDescription">
             field description
           </td>
         </tr>
@@ -44,6 +43,7 @@
               i18n:attributes="value"
             />
           </td>
+          <td></td>
         </tr>
       </tbody>
     </table>  
@@ -94,7 +94,8 @@
   </span>
   </div>
 
-  <ul style="margin:2em;margin-left:-1em;list-style-type:none;">
+  <ul style="margin:2em;margin-left:-1em;list-style-type:none;"
+    tal:condition="batch">
     <li tal:repeat="item batch">
     <tal:block define="ix repeat/item/index;
       fields python: model.getPublicResultFieldViews()"
