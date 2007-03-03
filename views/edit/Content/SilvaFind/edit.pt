@@ -118,7 +118,7 @@
         element
       </th>
       <th i18n:translate="">
-        metadata id
+        metadata set and field id
       </th>
       <th width="25%"
         i18n:translate="">
@@ -142,15 +142,15 @@
         <label tal:content="resultView/getTitle" 
           tal:attributes="for string:show_result_${resultView/getName}"
           i18n:translate="">
-        A search object.
+          a search object
         </label>
       </td>
       <td tal:content="resultView/getId">
-        A search object.
+        a search object
       </td>
       <td>
         <tal:block content="structure resultView/getDescription" i18n:translate="">
-          Element description
+          element description
         </tal:block>
       </td>
     </tr>

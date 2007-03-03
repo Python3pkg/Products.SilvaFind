@@ -20,7 +20,7 @@ globalSearchFields= [
 globalResultsFields = [
     ResultCountField('',        _(u'ResultCount')),
     IconResultField('',         _(u'Icon'), 
-                                _(u'Shows icon corresponding to content type')),
+                                _(u'Display the icon of the content type.')),
     LinkResultField('',         _(u'Link')),
     PublicationDateResultField('', _(u'Publication Date')),
     FullTextResultField('',     _(u'Text snippet'),),
