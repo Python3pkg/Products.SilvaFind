@@ -1,19 +1,19 @@
-<tal:block
-  define="
-    model request/ghost_model | request/model;
-    public options/public | nothing;
-    title_method python: test(public, 'get_title', 'get_title_editable');
-    append_to_url options/append_to_url | string:edit/tab_edit;
-    root_url model/get_root_url
-    " 
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="silva">
+<tal:block define="
+  model request/ghost_model | request/model;
+  public options/public | nothing;
+  title_method python: test(public, 'get_title', 'get_title_editable');
+  append_to_url options/append_to_url | string:edit/tab_edit;
+  root_url model/get_root_url
+  " 
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  i18n:domain="silva">
+
 <tal:block replace="structure model/@@set_nocache" />
 
-    <h2 class="heading"
-      tal:content="model/get_title">
-        Title
-    </h2>
+<h2 class="heading"
+  tal:content="model/get_title">
+  title
+</h2>
     
   <div class="searchform" tal:condition="model/isFormNeeded">
     <form tal:attributes="action model/absolute_url">
@@ -23,92 +23,97 @@
             <td valign="top" class="searchform-title"  
                 tal:content="fieldView/getTitle"
                 i18n:translate="">
-                A search object.
+                a search object
             </td>
             <td tal:content="structure fieldView/renderPublicWidget">
-              A search object.
+              a search object
             </td>
             <td tal:condition="not:repeat/fieldView/end"/>
             <td tal:condition="repeat/fieldView/end">
-                <input type="submit" 
-                       value="Search" 
-                       class="searchform-submit" 
-                       i18n:attributes="value" />
+              <input type="submit" 
+                value="Search" 
+                class="searchform-submit" 
+                i18n:attributes="value"
+              />
             </td>
           </tr>
         </tbody>
       </table>  
     </form>
   </div>
-  <div tal:define="results python:model.searchResults(request);
-                   columnTitles model/getResultsColumnTitles;
-                   batch python:template.getBatch(results);"
-       class="searchresults">
+  <div class="searchresults"
+    tal:define="
+      results python:model.searchResults(request);
+      columnTitles model/getResultsColumnTitles;
+      batch python:template.getBatch(results);
+  ">
 
-  <h2 class="heading" i18n:translate=""> Search Results </h2>
+  <h3 class="heading" i18n:translate="">Search Results</h3>
 
-  <div class="searchresult-header" tal:condition="batch/end" metal:define-macro="searchinfo">
-        <span class="searchresult-previous">
-          <tal:block condition="request/previous_batch_url | nothing">
-            <a href="previousbatch" accesskey="p"
-               title="See the previous result listing: alt-p"
-               tal:attributes="href request/previous_batch_url"
-               i18n:attributes="title">
-            <img alt="Previous" 
-                 tal:attributes="src string:$root_url/globals/left.gif"/>
-                <tal:block i18n:translate="">Previous</tal:block></a>
-          </tal:block>
-        </span>
-        <span i18n:translate="" class="searchresult-info">
-          Showing results
-          <tal:block replace="batch/start" i18n:name="batch_start" />
-          to
-          <tal:block replace="batch/end" i18n:name="batch_end" />
-          of 
-          <tal:block replace="python: len(results)" i18n:name="total" />.
-        </span>
-        <span class="searchresult-next">
-          <tal:block condition="request/next_batch_url | nothing">
-            <a href="nextbatch" accesskey="n"
-               title="See the next result listing: alt-n"
-               tal:attributes="href request/next_batch_url"
-               i18n:attributes="title">
-               <tal:block i18n:translate="">Next</tal:block>
-            <img alt="Next" 
-                 tal:attributes="src string:$root_url/globals/right.gif" />
-            </a>
-          </tal:block>
-        </span>
+  <div class="searchresult-header" 
+    metal:define-macro="searchinfo"
+    tal:condition="batch/end">
+    <span class="searchresult-previous">
+      <tal:block condition="request/previous_batch_url | nothing">
+        <a href="previousbatch" accesskey="p"
+           title="See the previous result listing: alt-p"
+           tal:attributes="href request/previous_batch_url"
+           i18n:attributes="title">
+        <img alt="Previous" 
+          tal:attributes="src string:$root_url/globals/left.gif"/>
+        <tal:block i18n:translate="">Previous</tal:block></a>
+      </tal:block>
+    </span>
+    <span i18n:translate="" class="searchresult-info">
+      Showing results
+      <tal:block replace="batch/start" i18n:name="batch_start" />
+      to
+      <tal:block replace="batch/end" i18n:name="batch_end" />
+      of 
+      <tal:block replace="python: len(results)" i18n:name="total" />.
+    </span>
+    <span class="searchresult-next">
+      <tal:block condition="request/next_batch_url | nothing">
+        <a href="nextbatch" accesskey="n"
+           title="See the next result listing: alt-n"
+           tal:attributes="href request/next_batch_url"
+           i18n:attributes="title">
+           <tal:block i18n:translate="">Next</tal:block>
+        <img alt="Next" 
+             tal:attributes="src string:$root_url/globals/right.gif" />
+        </a>
+      </tal:block>
+    </span>
     </div>
 
     <ul style="margin:2em;margin-left:-1em;list-style-type:none;">
-        <li tal:repeat="item batch">
-        <tal:block define="ix repeat/item/index;
-          fields python: model.getPublicResultFieldViews()"
-          condition="fields">
-        <div style="margin-top:1em;" class="searchresult">
-        <tal:block tal:repeat="field fields">
-        <span tal:condition="python:field.getName() == 'resultcount'"
-              class="searchresult-counter"
-              tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
-        />
-            <tal:block tal:condition="python:field.getName() != 'resultcount'"
-                       tal:define="result python:field.render(context, item)">
-                <span tal:condition="python:same_type(result, [])"
-                      tal:repeat="item result"
-                      tal:replace="structure item"/>
-                <span tal:condition="python:not same_type(result, [])"
-                      tal:replace="structure result"/>
-            </tal:block>
+      <li tal:repeat="item batch">
+      <tal:block define="ix repeat/item/index;
+        fields python: model.getPublicResultFieldViews()"
+        condition="fields">
+      <div style="margin-top:1em;" class="searchresult">
+      <tal:block tal:repeat="field fields">
+      <span tal:condition="python:field.getName() == 'resultcount'"
+        class="searchresult-counter"
+        tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
+      />
+        <tal:block tal:condition="python:field.getName() != 'resultcount'"
+          tal:define="result python:field.render(context, item)">
+            <span tal:condition="python:same_type(result, [])"
+              tal:repeat="item result"
+              tal:replace="structure item" />
+            <span tal:condition="python:not same_type(result, [])"
+              tal:replace="structure result" />
         </tal:block>
-        </div>
-        </tal:block>
-        </li>
+      </tal:block>
+      </div>
+      </tal:block>
+      </li>
     </ul>
     <div metal:use-macro="here/render_helper/macros/searchinfo"/>
     <p class="searchresult-nomatch searchresult-header"
-       tal:condition="not:batch/end">
-    No documents matched your search.
+      tal:condition="not:batch/end">
+      No documents matched your search.
     </p>
     <br/>
 </div>
