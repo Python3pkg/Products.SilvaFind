@@ -50,7 +50,7 @@ class FullTextCriterionView(Implicit):
         if value is None:
             value = ""
         html = '''
-        <input type="text" name="%s" id="%s" value="%s" size="20" style="width: 100%%" /> 
+        <input type="text" name="%s" id="%s" value="%s" size="20" class="store" /> 
         '''
         return html % (self.criterion.getName(),
                        self.criterion.getName(),
@@ -83,7 +83,7 @@ class FullTextCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'getDescription')
     def getDescription(self):
-        return 'The full text of the content.'
+        return 'Search the full text of the content.'
         
     security.declareProtected(SilvaPermissions.View,
         'getName')
