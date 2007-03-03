@@ -20,10 +20,10 @@
       <table>
         <tbody>
           <tr tal:repeat="fieldView model/getPublicFieldViews">
-            <td valign="top" class="searchform-title"  
-                tal:content="fieldView/getTitle"
-                i18n:translate="">
-                a search object
+            <td valign="top" class="searchform-title"
+              tal:content="fieldView/getTitle"
+              i18n:translate="">
+              a search object
             </td>
             <td tal:content="structure fieldView/renderPublicWidget">
               a search object
@@ -64,7 +64,7 @@
         <tal:block i18n:translate="">Previous</tal:block></a>
       </tal:block>
     </span>
-    <span i18n:translate="" class="searchresult-info">
+    <span class="searchresult-info" i18n:translate="">
       Showing results
       <tal:block replace="batch/start" i18n:name="batch_start" />
       to
@@ -75,12 +75,12 @@
     <span class="searchresult-next">
       <tal:block condition="request/next_batch_url | nothing">
         <a href="nextbatch" accesskey="n"
-           title="See the next result listing: alt-n"
-           tal:attributes="href request/next_batch_url"
-           i18n:attributes="title">
-           <tal:block i18n:translate="">Next</tal:block>
-        <img alt="Next" 
-             tal:attributes="src string:$root_url/globals/right.gif" />
+          title="See the next result listing: alt-n"
+          tal:attributes="href request/next_batch_url"
+          i18n:attributes="title">
+          <tal:block i18n:translate="">Next</tal:block>
+          <img alt="Next" 
+            tal:attributes="src string:$root_url/globals/right.gif" />
         </a>
       </tal:block>
     </span>
@@ -91,28 +91,29 @@
       <tal:block define="ix repeat/item/index;
         fields python: model.getPublicResultFieldViews()"
         condition="fields">
-      <div style="margin-top:1em;" class="searchresult">
-      <tal:block tal:repeat="field fields">
-      <span tal:condition="python:field.getName() == 'resultcount'"
-        class="searchresult-counter"
-        tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
-      />
-        <tal:block tal:condition="python:field.getName() != 'resultcount'"
-          tal:define="result python:field.render(context, item)">
-            <span tal:condition="python:same_type(result, [])"
-              tal:repeat="item result"
-              tal:replace="structure item" />
-            <span tal:condition="python:not same_type(result, [])"
-              tal:replace="structure result" />
-        </tal:block>
-      </tal:block>
-      </div>
+        <div style="margin-top:1em;" class="searchresult">
+          <tal:block tal:repeat="field fields">
+            <span tal:condition="python:field.getName() == 'resultcount'"
+              class="searchresult-counter"
+              tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
+            />
+            <tal:block tal:condition="python:field.getName() != 'resultcount'"
+              tal:define="result python:field.render(context, item)">
+              <span tal:condition="python:same_type(result, [])"
+                tal:repeat="item result"
+                tal:replace="structure item" />
+              <span tal:condition="python:not same_type(result, [])"
+                tal:replace="structure result" />
+            </tal:block>
+          </tal:block>
+        </div>
       </tal:block>
       </li>
     </ul>
     <div metal:use-macro="here/render_helper/macros/searchinfo"/>
     <p class="searchresult-nomatch searchresult-header"
-      tal:condition="not:batch/end">
+      tal:condition="not:batch/end"
+      i18n:translate="">
       No documents matched your search.
     </p>
     <br/>
