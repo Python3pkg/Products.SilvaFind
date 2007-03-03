@@ -17,10 +17,10 @@
     
 <div class="searchform" tal:condition="model/isFormNeeded">
   <form tal:attributes="action model/absolute_url">
-    <table>
+    <table class="silvatable plain">
       <tbody>
         <tr tal:repeat="fieldView model/getPublicFieldViews">
-          <td valign="top" class="searchform-title"
+          <td class="searchform-title"
             tal:content="fieldView/getTitle"
             i18n:translate="">
             a search object
@@ -28,11 +28,19 @@
           <td tal:content="structure fieldView/renderPublicWidget">
             a search object
           </td>
-          <td tal:condition="not:repeat/fieldView/end"/>
-          <td tal:condition="repeat/fieldView/end">
-            <input type="submit" 
+          <td tal:condition="not:repeat/fieldView/end"
+            tal:content="fieldView/getDescription">
+            field description
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <input class="button searchform-submit"
+              type="submit" 
               value="Search" 
-              class="searchform-submit" 
+              accesskey="s"
+              title="access key: alt-s"
               i18n:attributes="value"
             />
           </td>
@@ -114,7 +122,7 @@
     <p class="searchresult-nomatch searchresult-header"
       tal:condition="not:batch/end"
       i18n:translate="">
-      No documents matched your search.
+      No items matched your search.
     </p>
   </div>
 </tal:block>
