@@ -100,12 +100,12 @@
       fields python: model.getPublicResultFieldViews()"
       condition="fields">
       <div style="margin-top:1em;" class="searchresult">
-        <tal:block tal:repeat="field fields">
+        <tal:block repeat="field fields">
           <span tal:condition="python:field.getName() == 'resultcount'"
             class="searchresult-counter"
             tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
           />
-          <tal:block tal:condition="python:field.getName() != 'resultcount'"
+          <tal:block condition="python:field.getName() != 'resultcount'"
             tal:define="result python:field.render(context, item)">
             <span tal:condition="python:same_type(result, [])"
               tal:repeat="item result"
