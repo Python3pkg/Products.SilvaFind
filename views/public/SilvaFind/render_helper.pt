@@ -49,6 +49,7 @@
     </table>  
   </form>
 </div>
+
 <div class="searchresults"
   tal:define="
     results python:model.searchResults(request);
@@ -97,28 +98,30 @@
 <ul style="margin:2em;margin-left:-1em;list-style-type:none;"
   tal:condition="batch">
   <li tal:repeat="item batch">
-  <tal:block define="ix repeat/item/index;
-    fields python: model.getPublicResultFieldViews()"
-    condition="fields">
-    <div style="margin-top:1em;" class="searchresult">
-      <tal:block repeat="field fields">
-        <span tal:condition="python:field.getName() == 'resultcount'"
-          class="searchresult-counter"
-          tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')"
-        />
-        <tal:block condition="python:field.getName() != 'resultcount'"
-          tal:define="result python:field.render(context, item)">
-          <span tal:condition="python:same_type(result, [])"
-            tal:repeat="item result"
-            tal:replace="structure item" />
-          <span tal:condition="python:not same_type(result, [])"
-            tal:replace="structure result" />
+    <tal:block define="ix repeat/item/index;
+      fields python: model.getPublicResultFieldViews()"
+      condition="fields">
+      <div style="margin-top:1em;" class="searchresult">
+        <tal:block repeat="field fields">
+          <span tal:condition="python:field.getName() == 'resultcount'"
+            class="searchresult-counter"
+            tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')">
+            count
+          </span>
+          <tal:block condition="python:field.getName() != 'resultcount'"
+            tal:define="result python:field.render(context, item)">
+            <span tal:condition="python:same_type(result, [])"
+              tal:repeat="item result"
+              tal:replace="structure item" />
+            <span tal:condition="python:not same_type(result, [])"
+              tal:replace="structure result" />
+          </tal:block>
         </tal:block>
-      </tal:block>
-    </div>
-  </tal:block>
+      </div>
+    </tal:block>
   </li>
 </ul>
+
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
   <p class="searchresult-nomatch searchresult-header"
     tal:condition="not:batch/end"
@@ -126,4 +129,5 @@
     No items matched your search.
   </p>
 </div>
+
 </tal:block>
