@@ -68,8 +68,13 @@
          title="See the previous result listing: alt-p"
          tal:attributes="href request/previous_batch_url"
          i18n:attributes="title">
-      <img alt="Previous" 
-        tal:attributes="src string:$root_url/globals/left.gif"/>
+      <img alt="Previous"
+        tal:define="image here/globals/left.gif"
+        tal:attributes="
+          src image/absolute_url;
+          width image/width;
+          height image/height;
+        "/>
       <tal:block i18n:translate="">Previous</tal:block></a>
     </tal:block>
   </span>
@@ -89,7 +94,12 @@
         i18n:attributes="title">
         <tal:block i18n:translate="">Next</tal:block>
         <img alt="Next" 
-          tal:attributes="src string:$root_url/globals/right.gif" />
+          tal:define="image here/globals/right.gif"
+          tal:attributes="
+            src image/absolute_url;
+            width image/width;
+            height image/height;
+        "/>
       </a>
     </tal:block>
   </span>
