@@ -52,8 +52,18 @@ span.searchresult-next {
 
 div.searchresults ul {
   list-style-type:none;
+  margin-right:0.5em;
   margin-bottom:1.5em;
   margin-left:-1em;
+}
+
+div.searchresult {
+  margin-top:1em;
+}
+
+.searchresult-ranking {
+  float:right;
+  font-size:0.95em;
 }
 
 .searchresult-icon {}
@@ -66,8 +76,7 @@ div.searchresults ul {
   content:'(';
 }
 .searchresult-modified {
-  font-size:0.85em;
-  
+  font-size:0.85em;  
 }
 .searchresult-modified:after {
   content:')';

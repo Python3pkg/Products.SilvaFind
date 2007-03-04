@@ -112,15 +112,25 @@
     <tal:block define="ix repeat/item/index;
       fields python: model.getPublicResultFieldViews()"
       condition="fields">
-      <div style="margin-top:1em;" class="searchresult">
+      <div class="searchresult">
+        <span class="searchresult-ranking">
+          <img alt="Rank"
+            tal:define="image here/globals/ranking.gif"
+            tal:attributes="
+              src image/absolute_url;
+              width image/width;
+              height image/height;
+            "/>
+          92%
+        </span>
         <tal:block repeat="field fields">
-          <span tal:condition="python:field.getName() == 'resultcount'"
-            class="searchresult-counter"
+          <span class="searchresult-counter"
+            tal:condition="python:field.getName() == 'resultcount'"
             tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')">
             count
           </span>
-          <tal:block condition="python:field.getName() != 'resultcount'"
-            tal:define="result python:field.render(context, item)">
+          <tal:block define="result python:field.render(context, item)"
+            condition="python:field.getName() != 'resultcount'">
             <span tal:condition="python:same_type(result, [])"
               tal:repeat="item result"
               tal:replace="structure item" />
