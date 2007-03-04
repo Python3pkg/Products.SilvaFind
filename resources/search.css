@@ -1,4 +1,3 @@
-<style type="text/css">
 /* stylesheet for silva find search and searchresult pages */
 .searchform {}
 
@@ -53,7 +52,7 @@ span.searchresult-next {
 
 div.searchresults ul {
   list-style-type:none;
-  margin-bottom:1em;
+  margin-bottom:1.5em;
   margin-left:-1em;
 }
 
@@ -106,4 +105,3 @@ div.searchresults ul {
   padding:0.5em;
   padding-top:1em;
 }
-</style>
