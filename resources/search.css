@@ -1,53 +1,54 @@
+<style type="text/css">
 /* stylesheet for silva find search and searchresult pages */
 .searchform {}
 
 .searchform input, select {
-    width:93%;
+  width:93%;
 }
 .searchform select{
-    /* somehow select boxes were not styled */
-    background-color:#e8f7ef;
-    border:1px solid #03956a;
+  /* somehow select boxes were not styled */
+  background-color:#e8f7ef;
+  border:1px solid #03956a;
 }
 div.searchform input.searchform-submit {
-    width:auto;
+  width:auto;
 }
 
 .searchform-title {
-    padding-top:0.25em;
+  padding-top:0.25em;
 }
 .searchform-title:after {
-    content:':';
+  content:':';
 }
 
 .searchresults h3 {}
 
 .searchresult-header {
-    background: #c0d5ce;
-    border:1px solid #03956a;
-    margin-bottom: 0.5em;
-    padding:0.5em;
-    height:2em;
+  background: #c0d5ce;
+  border:1px solid #03956a;
+  margin-bottom: 0.5em;
+  padding:0.5em;
+  height:2em;
 }
 span.searchresult-previous {
-    float:left;
+  float:left;
 }
 
 div.searchresult-header a:link {
-    text-decoration:none;
+  text-decoration:none;
 }
 div.searchresult-header a:visited {
-    text-decoration:none;
+  text-decoration:none;
 }
 div.searchresult-header a:hover {
-    text-decoration:underline;
+  text-decoration:underline;
 }
 
 span.searchresult-info {
-    float:left; 
+  float:left; 
 }
 span.searchresult-next {
-    float:right;
+  float:right;
 }
 
 div.searchresults ul {
@@ -60,40 +61,40 @@ div.searchresults ul {
 .searchresult-counter {}
 
 .searchresult-link {
-    font-weight:bold;
+  font-weight:bold;
 }
 .searchresult-modified:before {
-    content:'(';
+  content:'(';
 }
 .searchresult-modified {
-    font-size:0.85em;
-    
+  font-size:0.85em;
+  
 }
 .searchresult-modified:after {
-    content:')';
+  content:')';
 }
 .searchresult-field {
-    display:block;
-    margin-left:2em;
-    padding-left:10em;
-    border-bottom:1px solid #03956a;
+  display:block;
+  margin-left:2em;
+  padding-left:10em;
+  border-bottom:1px solid #03956a;
 }
 .searchresult-field-title {
-    font-style:italic;
-    margin-left:-10em;
-    float:left;
+  font-style:italic;
+  margin-left:-10em;
+  float:left;
 }
 .searchresult-field-title:after {
-    content:':';
+  content:':';
 }
 
 .searchresult-description {
-    margin-left:2em;
+  margin-left:2em;
 }
 .searchresult-thumbnail {
-    margin-left:2em;
-    padding-top:0.25em;
-    padding-bottom:0.25em;
+  margin-left:2em;
+  padding-top:0.25em;
+  padding-bottom:0.25em;
 }
 
 .searchresult-breadcrumb { 
@@ -102,6 +103,7 @@ div.searchresults ul {
 }
 
 .searchresult-nomatch {
-    padding:0.5em;
-    padding-top:1em;
+  padding:0.5em;
+  padding-top:1em;
 }
+</style>
