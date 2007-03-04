@@ -79,6 +79,8 @@
     </tal:block>
   </span>
   <span class="searchresult-info" i18n:translate="">
+    <img alt="spacer" width="16px" height="16px" border="0"
+      tal:attributes="src here/globals/pixel.gif/absolute_url" />
     Showing results
     <tal:block replace="batch/start" i18n:name="batch_start" />
     to
@@ -105,8 +107,7 @@
   </span>
 </div>
 
-<ul style="margin:2em;margin-left:-1em;list-style-type:none;"
-  tal:condition="batch">
+<ul tal:condition="batch">
   <li tal:repeat="item batch">
     <tal:block define="ix repeat/item/index;
       fields python: model.getPublicResultFieldViews()"

@@ -1,4 +1,3 @@
-<style type="text/css">
 /* stylesheet for silva find search and searchresult pages */
 .searchform {}
 
@@ -34,27 +33,27 @@ span.searchresult-previous {
     float:left;
 }
 
-span.searchresult-previous a:link {
+div.searchresult-header a:link {
     text-decoration:none;
 }
-span.searchresult-previous a:visited {
+div.searchresult-header a:visited {
     text-decoration:none;
+}
+div.searchresult-header a:hover {
+    text-decoration:underline;
 }
 
 span.searchresult-info {
     float:left; 
-    padding-left:1em;
-    margin-top:0.4em;
 }
 span.searchresult-next {
     float:right;
 }
 
-span.searchresult-next a:link {
-    text-decoration:none;
-}
-span.searchresult-next a:visited {
-    text-decoration:none;
+div.searchresults ul {
+  list-style-type:none;
+  margin-bottom:1em;
+  margin-left:-1em;
 }
 
 .searchresult-icon {}
@@ -106,4 +105,3 @@ span.searchresult-next a:visited {
     padding:0.5em;
     padding-top:1em;
 }
-</style>
