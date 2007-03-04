@@ -120,8 +120,8 @@
               src image/absolute_url;
               width image/width;
               height image/height;
-            "/>
-          92%
+          "/>
+          <tal:block replace="string:92%">92%</tal:block>
         </span>
         <tal:block repeat="field fields">
           <span class="searchresult-counter"
