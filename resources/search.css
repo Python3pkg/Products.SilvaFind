@@ -17,7 +17,7 @@ div.searchform input.searchform-submit {
 .searchform-title {
     padding-top:0.25em;
 }
-.searchform-title:after{
+.searchform-title:after {
     content:':';
 }
 
@@ -26,7 +26,8 @@ div.searchform input.searchform-submit {
 .searchresult-header {
     background: #c0d5ce;
     border:1px solid #03956a;
-    margin-bottom: 0.5em; padding:0.5em;
+    margin-bottom: 0.5em;
+    padding:0.5em;
     height:2em;
 }
 span.searchresult-previous {
@@ -66,31 +67,31 @@ span.searchresult-next a:visited {
     content:'(';
 }
 .searchresult-modified {
-    font-size:0.75em;
+    font-size:0.85em;
     
 }
-.searchresult-modified:after{
+.searchresult-modified:after {
     content:')';
 }
-.searchresult-field{
+.searchresult-field {
     display:block;
     margin-left:2em;
     padding-left:10em;
     border-bottom:1px solid #03956a;
 }
-.searchresult-field-title{
+.searchresult-field-title {
     font-style:italic;
     margin-left:-10em;
     float:left;
 }
-.searchresult-field-title:after{
+.searchresult-field-title:after {
     content:':';
 }
 
-.searchresult-description{
+.searchresult-description {
     margin-left:2em;
 }
-.searchresult-thumbnail{
+.searchresult-thumbnail {
     margin-left:2em;
     padding-top:0.25em;
     padding-bottom:0.25em;
