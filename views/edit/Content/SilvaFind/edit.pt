@@ -42,7 +42,7 @@
       </td>
     </tr>
     <tr>
-      <th i18n:translate="" width="2%">show</th>
+      <th i18n:translate="" width="2%"></th>
       <th class="align-right"
         width="12%"
         i18n:translate="">
@@ -86,32 +86,25 @@
       </td>
     </tr>
     </tal:block>
-  </tbody>
-
-  <tfoot>
     <tr class="controls">
       <td class="align-right" colspan="4">
          <input type="submit" value="save" class="button" accesskey="s" title="access key: alt-s" i18n:attributes="value;title" />
       </td>
     </tr>
-  </tfoot>
-</table>
-<table class="listing">
-  <thead>
-    <tal:block replace="nothing">
-      ______________ vein + title row ______________
-    </tal:block>
     <tr>
-      <td class="top" colspan="4">
-        <h2>
-          <img tal:replace="structure python:view.render_icon(model)" />
+      <td class="divider" colspan="4" style="background: rgb(197, 212, 202) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+      </td>
+    </tr> 
+    <tr class="top-controls">
+      <td colspan="4">
+        <h3>
           <tal:block i18n:translate="">search results
           &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
-        </h2>
+        </h3>
       </td>
     </tr>
     <tr>
-      <th i18n:translate="" width="2%">show</th>
+      <th i18n:translate="" width="2%"></th>
       <th class="align-right"
         width="12%"
         i18n:translate="">
@@ -125,12 +118,10 @@
         note
       </th>
     </tr>
-  </thead>
-  <tbody>
     <tal:block tal:repeat="resultView model/getResultFieldViews">
     <tr tal:define="iterate repeat/resultView/odd"
         tal:attributes="class python:iterate and 'odd' or 'even'">
-      <td class="align-center">
+      <td>
          <input type="checkbox"
             tal:attributes="
               name string:show_result_${resultView/getName}:bool;
@@ -158,6 +149,12 @@
   </tbody>
 
   <tfoot>
+    <tr>
+      <th colspan="4">
+        <metal:plug use-macro="view/macro_select_all/macros/select_all" />
+        &nbsp;Show the content of the checked fields in the search results.
+      </th>
+    </tr>
     <tr class="controls">
       <td class="align-right" colspan="4">
          <input type="submit" value="save" class="button" title="access key: alt-s" i18n:attributes="value;title" />
