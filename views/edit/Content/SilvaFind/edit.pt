@@ -36,9 +36,17 @@
       <td class="top" colspan="4">
         <h2>
           <img tal:replace="structure python:view.render_icon(model)" />
-          <tal:block i18n:translate="">search content
+          <tal:block i18n:translate="">silva find
           &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
         </h2>
+      </td>
+    </tr>
+    <tr class="top-controls">
+      <td colspan="4">
+        <h3>
+          <tal:block i18n:translate="">search content for
+          &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
+        </h3>
       </td>
     </tr>
     <tr>
@@ -94,11 +102,11 @@
     <tr>
       <td class="divider" colspan="4" style="background: rgb(197, 212, 202) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
       </td>
-    </tr> 
+    </tr>
     <tr class="top-controls">
       <td colspan="4">
         <h3>
-          <tal:block i18n:translate="">search results
+          <tal:block i18n:translate="">search results for
           &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
         </h3>
       </td>
