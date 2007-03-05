@@ -4,7 +4,7 @@
   title_method python: test(public, 'get_title', 'get_title_editable');
   append_to_url options/append_to_url | string:edit/tab_edit;
   root_url model/get_root_url
-  " 
+  "
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   i18n:domain="silva">
 
@@ -14,7 +14,7 @@
   tal:content="model/get_title">
   title
 </h2>
-    
+
 <div class="searchform" tal:condition="model/isFormNeeded">
   <form tal:attributes="action model/absolute_url">
     <table class="silvatable plain">
@@ -36,8 +36,8 @@
           <td></td>
           <td>
             <input class="button searchform-submit"
-              type="submit" 
-              value="Search" 
+              type="submit"
+              value="Search"
               accesskey="s"
               title="access key: alt-s"
               i18n:attributes="value"
@@ -46,7 +46,7 @@
           <td></td>
         </tr>
       </tbody>
-    </table>  
+    </table>
   </form>
 </div>
 
@@ -61,7 +61,7 @@
 
 <h3 class="heading" i18n:translate="">Search Results</h3>
 
-<div class="searchresult-header" 
+<div class="searchresult-header"
   metal:define-macro="searchinfo"
   tal:condition="batch/end">
   <span class="searchresult-previous">
@@ -81,13 +81,13 @@
     </tal:block>
   </span>
   <span class="searchresult-info" i18n:translate="">
-    <img alt="spacer" width="16px" height="16px" border="0"
+    <img alt="spacer" width="16" height="16" border="0"
       tal:attributes="src here/globals/pixel.gif/absolute_url" />
     Showing results
     <tal:block replace="batch/start" i18n:name="batch_start" />
     to
     <tal:block replace="batch/end" i18n:name="batch_end" />
-    of 
+    of
     <tal:block replace="python: len(results)" i18n:name="total" />.
   </span>
   <span class="searchresult-next">
@@ -97,7 +97,7 @@
         tal:attributes="href request/next_batch_url"
         i18n:attributes="title">
         <tal:block i18n:translate="">Next</tal:block>
-        <img alt="Next" 
+        <img alt="Next"
           tal:define="image here/globals/right.gif"
           tal:attributes="
             src image/absolute_url;
@@ -144,4 +144,3 @@
 </div>
 </tal:block>
 </tal:block>
-
