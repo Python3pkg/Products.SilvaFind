@@ -6,6 +6,7 @@ from Products.SilvaFind.schema import ResultField, FullTextResultField
 from Products.SilvaFind.schema import ThumbnailResultField                               
 from Products.SilvaFind.schema import ResultCountField
 from Products.SilvaFind.schema import MetadataResultField
+from Products.SilvaFind.schema import RankingResultField
 
 from Products.SilvaFind.schema import FullTextCriterionField
 from Products.SilvaFind.schema import MetatypeCriterionField
@@ -18,7 +19,10 @@ globalSearchFields= [
     ]
    
 globalResultsFields = [
-    ResultCountField('',        _(u'ResultCount')),
+    RankingResultField('',      _(u'Ranking'),
+                                _(u'full text result ranking')),
+    ResultCountField('',        _(u'ResultCount'),
+                                _(u'search result count')),
     IconResultField('',         _(u'Icon'), 
                                 _(u'Display the icon of the content type.')),
     LinkResultField('',         _(u'Link')),

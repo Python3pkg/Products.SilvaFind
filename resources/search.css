@@ -94,9 +94,15 @@ div.searchresult {
   content:':';
 }
 
-.searchresult-description {
+.searchresult-snippet{
   margin-left:2em;
 }
+.searchresult-snippet-hilite{
+}
+
+.searchresult-ranking{
+}
+
 .searchresult-thumbnail {
   margin-left:2em;
   padding-top:0.25em;

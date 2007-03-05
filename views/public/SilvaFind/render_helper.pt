@@ -50,6 +50,8 @@
   </form>
 </div>
 
+<tal:block tal:condition="request/form/keys">
+
 <div class="searchresults"
   tal:define="
     results python:model.searchResults(request);
@@ -113,16 +115,6 @@
       fields python: model.getPublicResultFieldViews()"
       condition="fields">
       <div class="searchresult">
-        <span class="searchresult-ranking">
-          <img alt="Rank"
-            tal:define="image here/globals/ranking.gif"
-            tal:attributes="
-              src image/absolute_url;
-              width image/width;
-              height image/height;
-          "/>
-          <tal:block replace="string:92%">92%</tal:block>
-        </span>
         <tal:block repeat="field fields">
           <span class="searchresult-counter"
             tal:condition="python:field.getName() == 'resultcount'"
@@ -150,5 +142,6 @@
     No items matched your search.
   </p>
 </div>
-
 </tal:block>
+</tal:block>
+

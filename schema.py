@@ -115,6 +115,30 @@ class MetatypeResultField(ResultField):
         return context.render_icon_by_meta_type(
             getattr(the_object, 'meta_type'))    
 
+class RankingResultField(ResultField):
+    implements(IResultField)
+    description='full text result ranking'
+
+    def render(self, context, item):
+        catalog = context.service_catalog
+        index = catalog.Indexes['fulltext']
+        query = context.REQUEST.form.get('fulltext')
+        if not query:
+            return 
+        batch_start =  int(context.REQUEST.form.get('batch_start',0))
+        batch_end = batch_start + 25
+        rankings = index.query(query, batch_end)[0]
+        if not rankings:
+            return
+        highest = rankings[0][1]/100.0
+        RID = item.getRID()
+        sitepath = '/'.join(context.get_root().getPhysicalPath())
+        img = '<img alt="Rank" src="%s/globals/ranking.gif"/>' % sitepath
+        for ranking in rankings[batch_start:]:
+            if ranking[0] == RID:
+                return '<span class="searchresult-ranking">%s %.1f%%</span>' % (
+                            img, (ranking[1] / highest))
+
 class ResultCountField(ResultField):
     implements(IResultField)
     description='search result count'
@@ -263,8 +287,8 @@ class FullTextResultField(ResultField):
                 if term.endswith('"'):
                     term = term[:-1]
                 text = text.replace(' %s ' % term.lower() , 
-                                    ' <strong>%s</strong> ' % term.lower())
-        return '<div class="searchresult-description">%s</div>' % text.strip()
+                                    ' <strong class="search-result-snippet-hilite">%s</strong> ' % term.lower())
+        return '<div class="searchresult-snippet">%s</div>' % text.strip()
         
             
 
