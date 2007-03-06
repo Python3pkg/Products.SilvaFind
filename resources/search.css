@@ -16,6 +16,7 @@ div.searchform input.searchform-submit {
 .searchform-title {
   padding-top:0.25em;
 }
+
 .searchform-title:after {
   content:':';
 }
@@ -65,7 +66,10 @@ div.searchresult {
 }
 
 .searchresult-icon {}
-.searchresult-counter {}
+
+.searchresult-counter {
+    margin-left:-1ex;
+}
 
 .searchresult-link {
   font-weight:bold;
@@ -90,9 +94,12 @@ div.searchresult {
   margin-left:-10em;
   font-style:italic;
 }
+
+/*
 .searchresult-field-title:after {
   content:':';
 }
+*/
 
 .searchresult-snippet{
   margin-left:2em;

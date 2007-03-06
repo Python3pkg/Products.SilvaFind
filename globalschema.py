@@ -7,14 +7,17 @@ from Products.SilvaFind.schema import ThumbnailResultField
 from Products.SilvaFind.schema import ResultCountField
 from Products.SilvaFind.schema import MetadataResultField
 from Products.SilvaFind.schema import RankingResultField
+from Products.SilvaFind.schema import AutomaticMetaDataResultField
 
 from Products.SilvaFind.schema import FullTextCriterionField
 from Products.SilvaFind.schema import MetatypeCriterionField
 from Products.SilvaFind.schema import PathCriterionField
+from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
 
 globalSearchFields= [
     MetatypeCriterionField(),
     FullTextCriterionField(),
+    AutomaticMetaDataCriterionField(),
     PathCriterionField(),
     ]
    
@@ -29,5 +32,6 @@ globalResultsFields = [
     PublicationDateResultField('', _(u'Publication Date')),
     FullTextResultField('',     _(u'Text snippet'),),
     ThumbnailResultField('',    _(u'Thumbnail')),
+    AutomaticMetaDataResultField(),
     BreadcrumbsResultField('',  _(u'Breadcrumbs')),
     ]

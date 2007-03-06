@@ -158,8 +158,8 @@
 
   <tfoot>
     <tr>
-      <th colspan="4">
-        <metal:plug use-macro="view/macro_select_all/macros/select_all" />
+      <th colspan="4" tal:define="select_id string:show_result_">
+        <metal:plug use-macro="view/macro_select_all/macros/select_all"/>
         &nbsp;Show the content of the checked fields in the search results.
       </th>
     </tr>

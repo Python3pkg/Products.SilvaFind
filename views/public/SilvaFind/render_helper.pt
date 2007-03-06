@@ -8,8 +8,6 @@
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   i18n:domain="silva">
 
-<tal:block replace="structure model/@@set_nocache" />
-
 <h2 class="heading"
   tal:content="model/get_title">
   title
@@ -117,8 +115,10 @@
       <div class="searchresult">
         <tal:block repeat="field fields">
           <span class="searchresult-counter"
+            tal:define="num python:str(batch.start + ix)"
             tal:condition="python:field.getName() == 'resultcount'"
-            tal:content="structure python: ('%2s.' % (batch.start + ix)).replace(' ','&nbsp;')">
+            tal:attributes="style python:'padding-left:%sex' % (3-len(num))"
+            tal:content="string:${num}.">
             count
           </span>
           <tal:block define="result python:field.render(context, item)"

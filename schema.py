@@ -73,7 +73,20 @@ class PathCriterionField:
     
     def getName(self):
         return "path"
+
+class AutomaticMetaDataCriterionField(object):
+    """This class is a marker to put in the schemalist.
+    This class will automaticly be replaced in the list 
+    with all possible metadata values
+    """
+    pass
     
+class AutomaticMetaDataResultField(object):
+    """This class is a marker to put in the schemalist.
+    This class will automaticly be replaced in the list 
+    with all possible metadata values
+    """
+    pass
 class ResultField(object):
     implements(IResultField)
     

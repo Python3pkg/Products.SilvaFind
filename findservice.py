@@ -17,6 +17,8 @@ from Products.SilvaFind.schema import MetadataResultField
 from Products.SilvaFind.schema import MetadataCriterionField
 from Products.SilvaFind.schema import DateRangeMetadataCriterionField
 from Products.SilvaFind.schema import IntegerRangeMetadataCriterionField
+from Products.SilvaFind.schema import AutomaticMetaDataResultField
+from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
 
 class FindService(Folder.Folder):
     """Find Service
@@ -45,14 +47,35 @@ class FindService(Folder.Folder):
     def getSearchSchema(self):
         if not self.search_schema is None:
             return self.search_schema
-        metadata_fields = self._createMetadataCriterionFields()
-        return SearchSchema(globalSearchFields + metadata_fields)
+        amd = [obj for obj in globalSearchFields if isinstance(
+                obj, AutomaticMetaDataCriterionField)]
+        if amd:
+            metadata_fields = self._createMetadataCriterionFields()
+            amd = amd[0]
+            index = globalSearchFields.index(amd)
+            fields = (globalSearchFields[:index] 
+                        + metadata_fields +
+                        globalSearchFields[index:])
+            fields.remove(amd)
+        else:
+            fields = globalSearchFields
+        return SearchSchema(fields)
 
     def getResultsSchema(self):
         if not self.result_schema is None:
             return self.result_schema
-        metadata_fields = self._createMetadataResultFields()
-        fields = globalResultsFields[:-3] + metadata_fields + globalResultsFields[-3:]
+        amd = [obj for obj in globalResultsFields if isinstance(
+                obj, AutomaticMetaDataResultField)]
+        if amd:
+            metadata_fields = self._createMetadataResultFields()
+            amd = amd[0]
+            index = globalResultsFields.index(amd)
+            fields = (globalResultsFields[:index] 
+                        + metadata_fields +
+                        globalResultsFields[index:])
+            fields.remove(amd)
+        else:
+            fields = globalResultsFields
         return ResultsSchema(fields)
 
     def _createMetadataResultFields(self):

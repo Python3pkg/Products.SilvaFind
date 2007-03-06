@@ -45,7 +45,7 @@ class BaseMetadataCriterion:
         'getDescription')
     def getDescription(self):
         element = self._getMetadataElement()
-        return element.description
+        return element.Description()
     
 InitializeClass(BaseMetadataCriterion)
 

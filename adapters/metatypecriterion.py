@@ -16,7 +16,7 @@ class StoreMetatypeCriterion(StoreCriterion):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
         criterion_value = REQUEST.get(field_name, None)
-        if criterion_value is None:
+        if not criterion_value: 
             return
         self.query.setCriterionValue(field_name, criterion_value)
 
@@ -49,10 +49,13 @@ class MetatypeCriterionView(Implicit):
         'renderWidget')
     def renderWidget(self, value):
         if value is None:
-            value = ""
+            value = ''
         html = '<select multiple="1" name="%s:list" id="%s" size="5" class="store"> ' % (self.criterion.getName(),
                             self.criterion.getName())
-        meta_types = []
+        if not value or value == ['']:
+            meta_types = ['<option value="" selected="true">Select one or more types:</option>']
+        else:
+            meta_types = ['<option value="">Select one or more types:</option>']
         for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
             selected = ''
             if meta_type in value:
@@ -76,6 +79,8 @@ class MetatypeCriterionView(Implicit):
                 value = values
         else:
             value = self.getStoredValue()
+        if value == ['']:
+            value = None
         return value
         
     getIndexValue = getValue
