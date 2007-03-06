@@ -50,6 +50,7 @@ class SilvaFind(Query, Content, SimpleItem):
         # and a couple of resultfields
         self.shownFields['fulltext'] = True 
         self.shownResultsFields['link'] = True 
+        self.shownResultsFields['ranking'] = True 
         self.shownResultsFields['resultcount'] = True 
         self.shownResultsFields['icon'] = True 
         self.shownResultsFields['publicationdate'] = True 
