@@ -138,6 +138,7 @@ class RankingResultField(ResultField):
         query = context.REQUEST.form.get('fulltext')
         if not query:
             return 
+        query = unicode(query, 'utf8')
         batch_start =  int(context.REQUEST.form.get('batch_start',0))
         batch_end = batch_start + 25
         rankings = index.query(query, batch_end)[0]
@@ -197,7 +198,7 @@ class ThumbnailResultField(ResultField):
         if object.thumbnail_image is None:
             return
 
-        url = item.silva_object_url
+        url = item.getURL()
         img = object.thumbnail_image.tag()
         anchor = '<a href="%s">%s</a>' % (url, img)
         return '<div class="searchresult-thumbnail">%s</div>' % anchor
@@ -228,6 +229,12 @@ class FullTextResultField(ResultField):
             # searchterm is not specified,
             # return the first 20 words
             text = ' '.join(fulltext[:maxwords])
+            if object.meta_type == 'Silva Document Version':
+                realtext = ' '.join(object.fulltext())
+                # replace multiple whitespace characters with one space
+                realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
+                realtext = realtext[len(object.get_title()):]
+                text = ' '.join(realtext.split()[:maxwords])
             if len(fulltext) > maxwords:
                 text += ' ' + ellipsis
         else:
@@ -292,15 +299,44 @@ class FullTextResultField(ResultField):
                     if highestpos < len(fulltext)-1:
                         text[-1] += ' %s' % ellipsis
             
-            text = ' %s ' % ' '.join(text)
-            # do some hiliting
+            # do some hiliting, use original text
+            # (with punctuation) if this is a silva document
+            text = ' '.join(text)
+            if object.meta_type == 'Silva Document Version':
+                realtext = ' '.join(object.fulltext())
+                # replace multiple whitespace characters with one space
+                realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
+                realtext = realtext[len(object.get_title()):]
+                textparts = text.split(ellipsis)
+                new = []
+                for textpart in textparts:
+                    if textpart == '':
+                        new.append('')
+                        continue
+                    textpart = textpart.strip()
+                    find = textpart.replace(' ', '[^a-zA-Z0-9]+')
+                    textexpr = re.compile(find, re.IGNORECASE)
+                    text = textexpr.findall(realtext)
+                    if text:
+                        text = text[0]
+                    else:
+                        # somehow we can't find a match in original text
+                        # use the one from the catalog
+                        text = textpart
+                    new.append(text)
+                text = ellipsis.join(new)
+
+                
             for term in searchterms:
                 if term.startswith('"'):
                     term = term[1:]
                 if term.endswith('"'):
                     term = term[:-1]
-                text = text.replace(' %s ' % term.lower() , 
-                                    ' <strong class="search-result-snippet-hilite">%s</strong> ' % term.lower())
+                text = ' ' + text
+                regexp = re.compile('([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(),
+                                    re.IGNORECASE)
+                sub = '\g<1><strong class="search-result-snippet-hilite">\g<2></strong>\g<3>'
+                text = regexp.sub(sub, text)
         return '<div class="searchresult-snippet">%s</div>' % text.strip()
         
             
