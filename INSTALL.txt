@@ -5,7 +5,7 @@ Dependencies:
 -------------
 
   * required:
-    SilvaFind 0.2 depends on Silva-1.6 or later.
+    SilvaFind 1.0 depends on Silva-1.6 or later.
   * optional:
     SilvaMetadata
 
