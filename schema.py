@@ -167,6 +167,9 @@ class LinkResultField(ResultField):
     def render(self, context, item):
         url = item.silva_object_url
         title = item.getObject().get_title_or_id()
+        ellipsis = '&#8230;'
+        if len(title) > 50:
+            title = title[:50] + ellipsis
         return '<a href="%s" class="searchresult-link">%s</a>' % (url, title)
     
 class PublicationDateResultField(ResultField):
