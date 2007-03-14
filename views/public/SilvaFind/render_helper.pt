@@ -52,7 +52,9 @@
 
 <div class="searchresults"
   tal:define="
-    results python:model.searchResults(request);
+    resultparts python:model.searchResultsWithDescription(request);
+    results python:resultparts[0];
+    msg python:resultparts[1];
     columnTitles model/getResultsColumnTitles;
     batch python:template.getBatch(results);
 ">
@@ -136,11 +138,12 @@
 </ul>
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
-  <p class="searchresult-nomatch searchresult-header"
-    tal:condition="not:batch/end"
-    i18n:translate="">
-    No items matched your search.
-  </p>
+
+<p class="searchresult-nomatch searchresult-header"
+tal:condition="not:batch/end"
+tal:content="msg"/>
+
 </div>
+
 </tal:block>
 </tal:block>

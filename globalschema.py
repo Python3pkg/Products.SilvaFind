@@ -1,7 +1,7 @@
 from Products.Silva.i18n import translate as _
 
 from Products.SilvaFind.schema import IconResultField, LinkResultField
-from Products.SilvaFind.schema import PublicationDateResultField, BreadcrumbsResultField
+from Products.SilvaFind.schema import DateResultField, BreadcrumbsResultField
 from Products.SilvaFind.schema import ResultField, FullTextResultField 
 from Products.SilvaFind.schema import ThumbnailResultField                               
 from Products.SilvaFind.schema import ResultCountField
@@ -29,7 +29,7 @@ globalResultsFields = [
     IconResultField('',         _(u'Icon'), 
                                 _(u'Display the icon of the content type.')),
     LinkResultField('',         _(u'Link')),
-    PublicationDateResultField('', _(u'Publication Date')),
+    DateResultField('', _(u'Date')),
     FullTextResultField('',     _(u'Text snippet'),),
     ThumbnailResultField('',    _(u'Thumbnail')),
     AutomaticMetaDataResultField(),

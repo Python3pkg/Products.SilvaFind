@@ -4,6 +4,7 @@ from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.PersistentMapping import PersistentMapping
+from Products.ZCTextIndex.ParseTree import ParseError
 
 # zope3
 from zope.interface import implements
@@ -53,7 +54,7 @@ class SilvaFind(Query, Content, SimpleItem):
         self.shownResultsFields['ranking'] = True 
         self.shownResultsFields['resultcount'] = True 
         self.shownResultsFields['icon'] = True 
-        self.shownResultsFields['publicationdate'] = True 
+        self.shownResultsFields['date'] = True 
         self.shownResultsFields['textsnippet'] = True 
         self.shownResultsFields['thumbnail'] = True 
         self.shownResultsFields['breadcrumbs'] = True 
@@ -112,9 +113,32 @@ class SilvaFind(Query, Content, SimpleItem):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         searchArguments['version_status'] = ['public']
-        results = catalog.searchResults(searchArguments)
+        query = searchArguments.get('fulltext')
+
+        try:
+            results = catalog.searchResults(searchArguments)
+        except ParseError, err:
+            results = []
+
         return results
 
+    security.declareProtected(SilvaPermissions.View,
+                             'searchResultsWithDescription')
+    def searchResultsWithDescription(self, REQUEST={}):
+        catalog = self.get_root().service_catalog
+        searchArguments = self.getCatalogSearchArguments(REQUEST)
+        searchArguments['version_status'] = ['public']
+        query = searchArguments.get('fulltext')
+
+        try:
+            results = catalog.searchResults(searchArguments)
+        except ParseError, err:
+            return ([], _('Search query contains only common or reserved words.'))
+
+        if not results:
+            return ([], _('No items matched your search.'))
+
+        return (results, '')
 
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):

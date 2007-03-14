@@ -1,6 +1,7 @@
 import re
 
 from zope.interface import implements
+from Products.ZCTextIndex.ParseTree import ParseError
 
 from Products.Silva.ViewCode import ViewCode
 from Products.Silva.interfaces import IVersion
@@ -141,7 +142,10 @@ class RankingResultField(ResultField):
         query = unicode(query, 'utf8')
         batch_start =  int(context.REQUEST.form.get('batch_start',0))
         batch_end = batch_start + 25
-        rankings = index.query(query, batch_end)[0]
+        try:
+            rankings = index.query(query, batch_end)[0]
+        except ParseError: 
+            return
         if not rankings:
             return
         highest = rankings[0][1]/100.0
@@ -172,7 +176,7 @@ class LinkResultField(ResultField):
             title = title[:50] + ellipsis
         return '<a href="%s" class="searchresult-link">%s</a>' % (url, title)
     
-class PublicationDateResultField(ResultField):
+class DateResultField(ResultField):
     implements(IResultField)
 
     def render(self, context, item):
@@ -184,7 +188,7 @@ class PublicationDateResultField(ResultField):
             date = object.get_modification_datetime()
         datestr = date.strftime('%d %b %Y %H:%M').lower()
         
-        return '<span class="searchresult-modified">%s</span>' % datestr
+        return '<span class="searchresult-date">%s</span>' % datestr
     
 class ThumbnailResultField(ResultField):
      implements(IResultField)
@@ -219,6 +223,7 @@ class FullTextResultField(ResultField):
         searchterm = unicode(item.REQUEST.form.get('fulltext', ''), 'utf8')
         catalog = context.service_catalog
         fulltext = catalog.getIndexDataForRID(item.getRID()).get('fulltext', [])
+        fulltextstr = ' '.join(fulltext)
         
         if not fulltext:
             # no fulltext available, probably an image
@@ -228,6 +233,7 @@ class FullTextResultField(ResultField):
         fulltext = fulltext[len(object.get_title().split()):]
         
         searchterms = searchterm.split()
+        
         if not searchterms:
             # searchterm is not specified,
             # return the first 20 words
@@ -245,7 +251,18 @@ class FullTextResultField(ResultField):
             text = []
             lowestpos = len(fulltext)
             highestpos = 0
+            
             for term in searchterms:
+                
+                if '?' in term or '*' in term:
+                    termq = term.replace('?', '.')
+                    termq = termq.replace('*', '.[^\ ]*')
+                    term_found = re.compile(termq).findall(fulltextstr)
+                    if term_found:
+                        searchterms.remove(term)
+                        term = term_found[0]
+                        searchterms.append(term)
+                    
                 if not term in fulltext:
                     # term matched probably something in the title
                     # return the first n words:

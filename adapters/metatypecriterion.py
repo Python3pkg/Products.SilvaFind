@@ -6,6 +6,7 @@ from Acquisition import Implicit
 
 # Silva
 from Products.Silva import SilvaPermissions
+from Products.Silva.i18n import translate as _
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
@@ -50,17 +51,22 @@ class MetatypeCriterionView(Implicit):
     def renderWidget(self, value):
         if value is None:
             value = ''
+        select_all_text = _('All Types')
         html = '<select multiple="1" name="%s:list" id="%s" size="5" class="store"> ' % (self.criterion.getName(),
                             self.criterion.getName())
+        selected = ''
         if not value or value == ['']:
-            meta_types = ['<option value="" selected="true">Select one or more types:</option>']
-        else:
-            meta_types = ['<option value="">Select one or more types:</option>']
+            selected = ' selected="true"'
+        meta_types = ['<option value=""%s>%s</option>' % (selected,
+                                                          select_all_text)]
         for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
             selected = ''
             if meta_type in value:
                 selected = ' selected="true"'
-            meta_types.append('<option value="%s"%s>%s</option>' % (meta_type, selected, meta_type))
+            name = meta_type.replace('Silva ', '')
+            meta_types.append('<option value="%s"%s>%s</option>' % (meta_type,
+                                                                    selected, 
+                                                                    name))
         html += '\n'.join(meta_types) 
         html += '</select>'
         return html 
@@ -105,7 +111,7 @@ class MetatypeCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'getDescription')
     def getDescription(self):
-        return 'Search for the selected content types. If none are selected all types will be searched.'
+        return _('Search for the selected content types.')
 
 InitializeClass(MetatypeCriterionView)
 

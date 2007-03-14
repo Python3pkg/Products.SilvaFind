@@ -74,13 +74,13 @@ div.searchresult {
 .searchresult-link {
   font-weight:bold;
 }
-.searchresult-modified:before {
+.searchresult-date:before {
   content:'(';
 }
-.searchresult-modified {
+.searchresult-date{
   font-size:0.85em;  
 }
-.searchresult-modified:after {
+.searchresult-date:after {
   content:')';
 }
 .searchresult-field {
