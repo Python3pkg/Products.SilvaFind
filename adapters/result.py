@@ -15,22 +15,22 @@ class ResultView(Implicit):
         self.result = result
         self.query = query
     
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'getTitle')
     def getTitle(self):
         return self.result.getColumnTitle().lower()
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'getId')
     def getId(self):
         return self.result.getColumnId()
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):
         return self.result.getName()
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'getDescription')
     def getDescription(self):
         return self.result.description

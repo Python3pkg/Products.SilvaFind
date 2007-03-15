@@ -104,7 +104,13 @@ div.searchresult {
 .searchresult-snippet{
   margin-left:2em;
 }
+
+.searchresult-snippet .error {
+  color:red;
+}
+
 .searchresult-snippet-hilite{
+
 }
 
 .searchresult-ranking{

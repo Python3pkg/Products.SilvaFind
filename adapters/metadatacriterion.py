@@ -64,13 +64,13 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
+    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
         element = self._getMetadataElement()

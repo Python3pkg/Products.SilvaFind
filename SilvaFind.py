@@ -1,7 +1,7 @@
 # Zope
 from OFS.SimpleItem import SimpleItem
 from Globals import InitializeClass
-from AccessControl import ClassSecurityInfo
+from AccessControl import ClassSecurityInfo, getSecurityManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.PersistentMapping import PersistentMapping
 from Products.ZCTextIndex.ParseTree import ParseError
@@ -110,17 +110,8 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'searchResults')
     def searchResults(self, REQUEST={}):
-        catalog = self.get_root().service_catalog
-        searchArguments = self.getCatalogSearchArguments(REQUEST)
-        searchArguments['version_status'] = ['public']
-        query = searchArguments.get('fulltext')
-
-        try:
-            results = catalog.searchResults(searchArguments)
-        except ParseError, err:
-            results = []
-
-        return results
+        # this is here for backwards compatibility
+        return self.searchResultsWithDescription(REQUEST)[0]
 
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
@@ -137,6 +128,14 @@ class SilvaFind(Query, Content, SimpleItem):
 
         if not results:
             return ([], _('No items matched your search.'))
+        
+        # XXX the searchresults could have textsnippets of documents that the user
+        # is not supposed to see. Instead of filtering these objects out (bad performance)
+        # or filtering them out in the getBatch method (screws up resultcount) it is checked
+        # by the fulltext searchresult schema
+
+        # security_manager = getSecurityManager()
+        # results = [b for b in results if security_manager.checkPermission('View', b.getObject())]
 
         return (results, '')
 

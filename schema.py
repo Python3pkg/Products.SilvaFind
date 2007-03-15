@@ -1,6 +1,8 @@
 import re
 
 from zope.interface import implements
+from AccessControl import ClassSecurityInfo, getSecurityManager
+
 from Products.ZCTextIndex.ParseTree import ParseError
 
 from Products.Silva.ViewCode import ViewCode
@@ -169,7 +171,11 @@ class ResultCountField(ResultField):
 class LinkResultField(ResultField):
     implements(IResultField)
     def render(self, context, item):
-        url = item.silva_object_url
+        object = item.getObject()
+        if object.meta_type == 'Silva Document Version':
+            url = object.aq_parent.absolute_url()
+        else:
+            url = object.absolute_url()
         title = item.getObject().get_title_or_id()
         ellipsis = '&#8230;'
         if len(title) > 50:
@@ -218,6 +224,10 @@ class FullTextResultField(ResultField):
 
     def render(self, context, item):
         object = item.getObject()
+        security_manager = getSecurityManager()
+        if not security_manager.checkPermission('View', object):
+            not_allowed = _("You don't have the right permissions to view this.")
+            return '<div class="searchresult-snippet"><span class="error">%s</span></div>' % not_allowed
         ellipsis = '&#8230;'
         maxwords = 40
         searchterm = unicode(item.REQUEST.form.get('fulltext', ''), 'utf8')

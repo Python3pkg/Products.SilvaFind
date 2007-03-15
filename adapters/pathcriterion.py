@@ -18,10 +18,29 @@ class StorePathCriterion(StoreCriterion):
         criterion_value = REQUEST.get(field_name, None)
         if criterion_value is None:
             return
-        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        sitepath = get_site_path(self.query)
         criterion_value = (sitepath + '/' + criterion_value).replace('//', '/')
         self.query.setCriterionValue(field_name, criterion_value)
 
+def get_site_path(context):
+    ppath = list(context.getPhysicalPath())
+    vpath = context.virtual_url_path().split('/')
+    # remove the siteroot part of the path from the vpath
+    # if present
+    for path in context.get_root().getPhysicalPath():
+        if vpath[0] == path:
+            vpath.pop(0)
+    vpath.reverse()
+    # remove the virtual path entries from the physical
+    # path to find the root of the virtual site
+    for path in vpath:
+        if ppath[-1] == path:
+            ppath.pop()
+        else:
+            break
+    return '/'.join(ppath)
+    
+    
 class PathCriterionView(Implicit):
     
     security = ClassSecurityInfo()
@@ -39,16 +58,16 @@ class PathCriterionView(Implicit):
         'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue() or ''
-        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        sitepath = get_site_path(self.query)
         if value.startswith(sitepath):
             value = value[len(sitepath):]
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST) or ''
-        sitepath = '/'.join(self.query.get_root().getPhysicalPath())
+        sitepath = get_site_path(self.query)
         if value.startswith(sitepath):
             value = value[len(sitepath):]
         return self.renderWidget(value)

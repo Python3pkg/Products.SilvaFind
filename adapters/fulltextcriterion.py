@@ -38,7 +38,7 @@ class FullTextCriterionView(Implicit):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
