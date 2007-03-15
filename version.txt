@@ -1,1 +1,1 @@
-SilvaFind 1.0 svn unreleased
+SilvaFind 0.1.2b
