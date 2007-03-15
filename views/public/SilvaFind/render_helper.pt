@@ -112,7 +112,8 @@
 <ul tal:condition="batch">
   <li tal:repeat="item batch">
     <tal:block define="ix repeat/item/index;
-      fields python: model.getPublicResultFieldViews()"
+      fields python: model.getPublicResultFieldViews();
+      allowed python:model.isViewableForUser(item)"
       condition="fields">
       <div class="searchresult">
         <tal:block repeat="field fields">
@@ -123,8 +124,11 @@
             tal:content="string:${num}.">
             count
           </span>
+          <span class="searchresult-notallowed"
+                tal:condition="python:not allowed and field.getName() == 'link'"
+                i18n:translate="">You don't have the right permissions to view this result.</span>
           <tal:block define="result python:field.render(context, item)"
-            condition="python:field.getName() != 'resultcount'">
+            condition="python:allowed and field.getName() != 'resultcount'">
             <span tal:condition="python:same_type(result, [])"
               tal:repeat="item result"
               tal:replace="structure item" />

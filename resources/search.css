@@ -105,7 +105,7 @@ div.searchresult {
   margin-left:2em;
 }
 
-.searchresult-snippet .error {
+.searchresult-notallowed {
   color:red;
 }
 

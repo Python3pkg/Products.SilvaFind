@@ -131,14 +131,16 @@ class SilvaFind(Query, Content, SimpleItem):
         
         # XXX the searchresults could have textsnippets of documents that the user
         # is not supposed to see. Instead of filtering these objects out (bad performance)
-        # or filtering them out in the getBatch method (screws up resultcount) it is checked
-        # by the fulltext searchresult schema
-
-        # security_manager = getSecurityManager()
-        # results = [b for b in results if security_manager.checkPermission('View', b.getObject())]
+        # or filtering them out in the getBatch method (screws up resultcount)
+        # it is now checked in the pagetemplate with the isViewableForUser
 
         return (results, '')
 
+    security.declareProtected(SilvaPermissions.View, 'isViewableForUser')
+    def isViewableForUser(self, brain):
+        security_manager = getSecurityManager()
+        return security_manager.checkPermission('View', brain.getObject())
+        
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):
         result = []
