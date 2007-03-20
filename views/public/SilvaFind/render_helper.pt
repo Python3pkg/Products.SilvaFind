@@ -56,14 +56,15 @@
     results python:resultparts[0];
     msg python:resultparts[1];
     columnTitles model/getResultsColumnTitles;
-    batch python:template.getBatch(results);
+    batch python:model.getBatch(results);
+    fields python:model.getPublicResultFieldViews();
 ">
 
 <h3 class="heading" i18n:translate="">Search Results</h3>
 
 <div class="searchresult-header"
   metal:define-macro="searchinfo"
-  tal:condition="batch/end">
+  tal:condition="python:batch.size < len(results)">
   <span class="searchresult-previous">
     <tal:block condition="request/previous_batch_url | nothing">
       <a href="previousbatch" accesskey="p"
@@ -87,8 +88,10 @@
     <tal:block replace="batch/start" i18n:name="batch_start" />
     to
     <tal:block replace="batch/end" i18n:name="batch_end" />
+    <tal:block tal:condition="python:'totalresultcount' in [f.getName() for f in fields]">
     of
-    <tal:block replace="python: len(results)" i18n:name="total" />.
+    <tal:block replace="batch/total" i18n:name="total" />
+    </tal:block>
   </span>
   <span class="searchresult-next">
     <tal:block condition="request/next_batch_url | nothing">
@@ -111,9 +114,7 @@
 
 <ul tal:condition="batch">
   <li tal:repeat="item batch">
-    <tal:block define="ix repeat/item/index;
-      fields python: model.getPublicResultFieldViews();
-      allowed python:model.isViewableForUser(item)"
+    <tal:block define="ix repeat/item/index;"
       condition="fields">
       <div class="searchresult">
         <tal:block repeat="field fields">
@@ -124,11 +125,8 @@
             tal:content="string:${num}.">
             count
           </span>
-          <span class="searchresult-notallowed"
-                tal:condition="python:not allowed and field.getName() == 'link'"
-                i18n:translate="">You don't have the right permissions to view this result.</span>
           <tal:block define="result python:field.render(context, item)"
-            condition="python:allowed and field.getName() != 'resultcount'">
+               condition="python:not field.getName() in ['resultcount', 'totalresultcount']">
             <span tal:condition="python:same_type(result, [])"
               tal:repeat="item result"
               tal:replace="structure item" />
@@ -142,7 +140,6 @@
 </ul>
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
-
 <p class="searchresult-nomatch searchresult-header"
 tal:condition="not:batch/end"
 tal:content="msg"/>

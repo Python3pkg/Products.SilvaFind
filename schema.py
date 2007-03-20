@@ -158,6 +158,20 @@ class RankingResultField(ResultField):
                 return '<span class="searchresult-ranking">%s %.1f%%</span>' % (
                             img, (ranking[1] / highest))
 
+class TotalResultCountField(ResultField):
+    implements(IResultField)
+    description='total search result number'
+    def render(self, context, item):
+        # the actual count is calculated in the pagetemplate
+        # this is only here, so it can be enabled / disabled
+        # in the smi.
+
+        # Please note that enabling that showing the total 
+        # number of search results might be a security risk
+        # since it can be figured out that certain objects
+        # were ommitted from the search
+        return
+
 class ResultCountField(ResultField):
     implements(IResultField)
     description='search result count'
@@ -234,8 +248,9 @@ class FullTextResultField(ResultField):
             # no fulltext available, probably an image
             return ''
 
-        # since fulltext always starts with title, lets remove that
-        fulltext = fulltext[len(object.get_title().split()):]
+        # since fulltext always starts with id and title, lets remove that
+        skip = len('%s %s' % (object.id, object.get_title()))
+        fulltext = fulltext[skip:]
         
         searchterms = searchterm.split()
         
@@ -258,10 +273,11 @@ class FullTextResultField(ResultField):
             highestpos = 0
             
             for term in searchterms:
+                term = re.escape(term)
                 
                 if '?' in term or '*' in term:
-                    termq = term.replace('?', '.')
-                    termq = termq.replace('*', '.[^\ ]*')
+                    termq = term.replace('\\?', '.')
+                    termq = termq.replace('\\*', '.[^\ ]*')
                     term_found = re.compile(termq).findall(fulltextstr)
                     if term_found:
                         searchterms.remove(term)
@@ -353,6 +369,7 @@ class FullTextResultField(ResultField):
 
                 
             for term in searchterms:
+                term = re.escape(term)
                 if term.startswith('"'):
                     term = term[1:]
                 if term.endswith('"'):

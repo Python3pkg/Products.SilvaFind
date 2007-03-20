@@ -5,6 +5,7 @@ from AccessControl import ClassSecurityInfo, getSecurityManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.PersistentMapping import PersistentMapping
 from Products.ZCTextIndex.ParseTree import ParseError
+from ZTUtils import Batch
 
 # zope3
 from zope.interface import implements
@@ -13,6 +14,7 @@ from zope.app import zapi
 # Silva
 from Products.Silva.Content import Content
 from Products.Silva.i18n import translate as _
+from zope.i18n import translate
 from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle
@@ -140,6 +142,70 @@ class SilvaFind(Query, Content, SimpleItem):
     def isViewableForUser(self, brain):
         security_manager = getSecurityManager()
         return security_manager.checkPermission('View', brain.getObject())
+
+    security.declareProtected(SilvaPermissions.View, 'getBatch')
+    def getBatch(self,results, size=20, orphan=2, overlap=0):
+        # Custom getabatch method to filter out unviewable objects.
+        # This may lead to performance problems because all objects 
+        # in the search results need to be accessed until the right
+        # number of objects are found.
+        # This behaviour also has the sideeffect that the total result 
+        # count might change as a user is viewing subsequent batches.
+        
+        REQ = self.REQUEST
+
+
+        try:
+            start_val = REQ.get('batch_start', '0')
+            start = int(start_val)
+            size = int(REQ.get('batch_size',size))
+        except ValueError:
+            start = 0
+
+        result_count = start + size
+        filtered_results = []
+        index = 0
+        for brain in results:
+            if self.isViewableForUser(brain):
+                filtered_results.append(brain)
+                result_count -= 1
+            if result_count == 0:
+                break
+            index += 1
+        results = filtered_results + results[index:]
+
+        batch = Batch(results, size, start, 0, orphan, overlap)
+        batch.total = len(results)
+
+        def getBatchLink(qs, new_start):
+            if new_start is not None:
+                if not qs:
+                    qs = 'batch_start=%d' % new_start
+                elif qs.startswith('batch_start='):
+                    qs = qs.replace('batch_start=%s' % start_val,
+                                    'batch_start=%d' % new_start)
+                elif qs.find('&batch_start=') != -1:
+                    qs = qs.replace('&batch_start=%s' % start_val,
+                                    '&batch_start=%d' % new_start)
+                else:
+                    qs = '%s&batch_start=%d' % (qs, new_start)
+
+                return qs
+
+        # create a new query string with the correct batch_start/end 
+        # for the next/previous batch
+
+        if batch.end < len(results):
+            qs = getBatchLink(REQ.QUERY_STRING, batch.end)
+            REQ.set('next_batch_url', '%s?%s' % (REQ.URL, qs))
+
+        if start > 0:
+            new_start = start - size
+            if new_start < 0: new_start = 0
+            qs = getBatchLink(REQ.QUERY_STRING, new_start)
+            REQ.set('previous_batch_url', '%s?%s' % (REQ.URL, qs))
+
+        return batch
         
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):
