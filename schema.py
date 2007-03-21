@@ -242,15 +242,18 @@ class FullTextResultField(ResultField):
         searchterm = unicode(item.REQUEST.form.get('fulltext', ''), 'utf8')
         catalog = context.service_catalog
         fulltext = catalog.getIndexDataForRID(item.getRID()).get('fulltext', [])
-        fulltextstr = ' '.join(fulltext)
         
         if not fulltext:
             # no fulltext available, probably an image
             return ''
 
         # since fulltext always starts with id and title, lets remove that
-        skip = len('%s %s' % (object.id, object.get_title()))
-        fulltext = fulltext[skip:]
+        idstring = object.id
+        if object.meta_type == 'Silva Document Version':
+            idstring = object.object().id
+        skipwords = len(('%s %s' % (idstring, object.get_title())).split(' '))
+        fulltext = fulltext[skipwords:]
+        fulltextstr = ' '.join(fulltext)
         
         searchterms = searchterm.split()
         
@@ -259,10 +262,9 @@ class FullTextResultField(ResultField):
             # return the first 20 words
             text = ' '.join(fulltext[:maxwords])
             if object.meta_type == 'Silva Document Version':
-                realtext = ' '.join(object.fulltext())
+                realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
-                realtext = realtext[len(object.get_title()):]
                 text = ' '.join(realtext.split()[:maxwords])
             if len(fulltext) > maxwords:
                 text += ' ' + ellipsis
@@ -272,17 +274,17 @@ class FullTextResultField(ResultField):
             lowestpos = len(fulltext)
             highestpos = 0
             
-            for term in searchterms:
-                term = re.escape(term)
+            for searchterm in searchterms:
+                term = re.escape(searchterm)
                 
                 if '?' in term or '*' in term:
                     termq = term.replace('\\?', '.')
                     termq = termq.replace('\\*', '.[^\ ]*')
                     term_found = re.compile(termq).findall(fulltextstr)
                     if term_found:
-                        searchterms.remove(term)
+                        searchterms.remove(searchterm)
                         term = term_found[0]
-                        searchterms.append(term)
+                        searchterms.append(term.strip())
                     
                 if not term in fulltext:
                     # term matched probably something in the title
@@ -344,10 +346,9 @@ class FullTextResultField(ResultField):
             # (with punctuation) if this is a silva document
             text = ' '.join(text)
             if object.meta_type == 'Silva Document Version':
-                realtext = ' '.join(object.fulltext())
+                realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
-                realtext = realtext[len(object.get_title()):]
                 textparts = text.split(ellipsis)
                 new = []
                 for textpart in textparts:
@@ -369,11 +370,11 @@ class FullTextResultField(ResultField):
 
                 
             for term in searchterms:
-                term = re.escape(term)
                 if term.startswith('"'):
                     term = term[1:]
                 if term.endswith('"'):
                     term = term[:-1]
+                term = re.escape(term)
                 text = ' ' + text
                 regexp = re.compile('([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(),
                                     re.IGNORECASE)

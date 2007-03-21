@@ -121,8 +121,9 @@ class SilvaFind(Query, Content, SimpleItem):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         searchArguments['version_status'] = ['public']
-        query = searchArguments.get('fulltext')
-
+        query = searchArguments.get('fulltext', '').strip()
+        if query and query[0] in ['?', '*']:
+            return ([], _('Search query can not start with wildcard character.'))
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
