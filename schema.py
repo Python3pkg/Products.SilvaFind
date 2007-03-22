@@ -274,6 +274,7 @@ class FullTextResultField(ResultField):
             lowestpos = len(fulltext)
             highestpos = 0
             
+            hilite_terms = []
             for searchterm in searchterms:
                 term = re.escape(searchterm)
                 
@@ -282,9 +283,14 @@ class FullTextResultField(ResultField):
                     termq = termq.replace('\\*', '.[^\ ]*')
                     term_found = re.compile(termq).findall(fulltextstr)
                     if term_found:
+                        hilite_terms += term_found
                         searchterms.remove(searchterm)
                         term = term_found[0]
                         searchterms.append(term.strip())
+                    else:
+                        hilite_terms.append(term)
+                else:
+                    hilite_terms.append(term)
                     
                 if not term in fulltext:
                     # term matched probably something in the title
@@ -368,16 +374,14 @@ class FullTextResultField(ResultField):
                     new.append(text)
                 text = ellipsis.join(new)
 
-                
-            for term in searchterms:
+            for term in hilite_terms:
                 if term.startswith('"'):
                     term = term[1:]
                 if term.endswith('"'):
                     term = term[:-1]
                 term = re.escape(term)
                 text = ' ' + text
-                regexp = re.compile('([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(),
-                                    re.IGNORECASE)
+                regexp = re.compile('([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(), re.IGNORECASE)
                 sub = '\g<1><strong class="search-result-snippet-hilite">\g<2></strong>\g<3>'
                 text = regexp.sub(sub, text)
         return '<div class="searchresult-snippet">%s</div>' % text.strip()

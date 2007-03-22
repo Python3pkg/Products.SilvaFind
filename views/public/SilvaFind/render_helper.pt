@@ -89,7 +89,7 @@
     to
     <tal:block replace="batch/end" i18n:name="batch_end" />
     <tal:block tal:condition="python:'totalresultcount' in [f.getName() for f in fields]">
-    of
+    of about
     <tal:block replace="batch/total" i18n:name="total" />
     </tal:block>
   </span>
