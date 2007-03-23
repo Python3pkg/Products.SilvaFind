@@ -437,7 +437,7 @@ class MetadataResultField(ResultField):
             # they don't have a decent type            
             #value = value.strftime('%d %b %Y %H:%M')
         cssid = "metadata-%s-%s" % (set, element)
-        result = [  '<span class="searchresult-field" id="%s">' % cssid,
+        result = [  '<span class="searchresult-field %s">' % cssid,
         
                     '<span class="searchresult-field-title">',
                     _(self.title),
