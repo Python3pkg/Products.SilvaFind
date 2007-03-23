@@ -26,7 +26,7 @@
       </tal:block>
       <td>
 
-<form action="manage_edit" method="POST">
+<form action="manage_edit" method="post">
 <table class="listing">
   <thead>
     <tal:block replace="nothing">
@@ -78,7 +78,7 @@
          " />
       </td>
       <td class="align-right">
-        <label tal:content="fieldView/getTitle" 
+        <label tal:content="fieldView/getTitle"
           tal:attributes="for python:fieldView.getName().split('-')[-1]"
           i18n:translate="">
           a search object
@@ -137,8 +137,8 @@
               id string:show_result_${resultView/getName};
           " />
       </td>
-      <td class="align-right"> 
-        <label tal:content="resultView/getTitle" 
+      <td class="align-right">
+        <label tal:content="resultView/getTitle"
           tal:attributes="for string:show_result_${resultView/getName}"
           i18n:translate="">
           a search object
@@ -175,9 +175,9 @@
       </td>
 
       <tal:block replace="nothing">
-        _____________________ right column _____________________ 
+        _____________________ right column _____________________
       </tal:block>
-      <td class="right">        
+      <td class="right">
         &nbsp;
       </td>
     </tr>
