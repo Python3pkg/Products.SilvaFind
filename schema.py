@@ -92,7 +92,10 @@ class AutomaticMetaDataResultField(object):
 class ResultField(object):
     implements(IResultField)
     
-    def __init__(self, id, title, description=''):
+    def __init__(self, id='', title='', description=''):
+        # XXX the empty default values can go in 1.2, but are needed
+        # for now, otherwise somehow the manage_services screen is
+        # broken.
         self.id = id
         self.title = title
         self.description = description
