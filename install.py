@@ -26,7 +26,8 @@ def install(root):
     root.manage_permission('Add Silva Finds',
                            ['Editor', 'ChiefEditor', 'Manager'])
 
-    root.service_metadata.addTypesMapping(('Silva Find', ), ('silva-content', 'silva-extra'))
+    root.service_metadata.addTypesMapping(
+        ('Silva Find', ), ('silva-content', 'silva-extra'))
 
     setupService(root)
     checkIndexes(root)
@@ -34,7 +35,12 @@ def install(root):
 def uninstall(root):
     unregisterViews(root.service_view_registry)
     root.service_views.manage_delObjects(['SilvaFind'])
-    root.service_resources.manage_delObjects(['SilvaFind'])
+    # XXX can't refresh a pre 1.0 installation without this, as those
+    # didn't have a resources dir
+    try:
+        root.service_resources.manage_delObjects(['SilvaFind'])
+    except:
+        pass
     root.manage_delObjects(['service_find'])
     
 def is_installed(root):
