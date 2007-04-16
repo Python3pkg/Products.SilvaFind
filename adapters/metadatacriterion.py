@@ -136,7 +136,7 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
@@ -155,8 +155,20 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             value_lower = ''
             value_upper = ''
         widget = """
-        <input name="%(name)s_lower" value="%(lower)s" />&nbsp;-&nbsp;<input
-        name="%(name)s_upper" value="%(upper)s" /><br /><small>* only integers</small>
+        <table border="0">
+        <tr>
+            <td style="border:0;">between</td>
+            <td style="border:0;"><input name="%(name)s_lower" value="%(lower)s"/></td>
+        </tr>
+        <tr>
+            <td style="border:0;">and</td>
+            <td style="border:0;"><input name="%(name)s_upper" value="%(upper)s"/></td>
+        </tr>
+        <tr>
+            <td style="border:0;"></td>
+            <td style="border:0;"><small>* only integers</small></td>
+        </tr>
+        </table>
         """
         return widget % {'name':self.criterion.getName() , 'lower':value_lower, 'upper':value_upper}
 
@@ -246,7 +258,7 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
+    security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)

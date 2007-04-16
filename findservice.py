@@ -101,8 +101,10 @@ class FindService(Folder.Folder):
                 if not el.index_p:
                     continue
                 id = '%s:%s' % (set.id, el.id)
-                if el.index_type == 'DateIndex':
+                if el.field_type == 'DateTimeField':
                     field = DateRangeMetadataCriterionField(set.id, el.id)
+                elif el.field_type == 'IntegerField':
+                    field = IntegerRangeMetadataCriterionField(set.id, el.id)
                 else:
                     field = MetadataCriterionField(set.id, el.id)
                 fields.append(field)
