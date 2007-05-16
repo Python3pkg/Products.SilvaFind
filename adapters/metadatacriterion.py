@@ -67,9 +67,22 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST)
+        # we don't want to show widgets for stored values...
+        value = self.getStoredValue()
+        if value:
+            stored = True
+        else:
+            stored = False
+            value = self.getValue(self.query.REQUEST)
+        if stored:
+            return self.renderValue(value)
         return self.renderWidget(value)
 
+    security.declareProtected(SilvaPermissions.View,
+        'renderValue')
+    def renderValue(self, value):
+        return "<strong>%s</strong>" % value
+    
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
@@ -136,12 +149,6 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
-    def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST)
-        return self.renderWidget(value)
-
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
@@ -172,6 +179,25 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         """
         return widget % {'name':self.criterion.getName() , 'lower':value_lower, 'upper':value_upper}
 
+    security.declareProtected(SilvaPermissions.View,
+        'renderPublicWidget')
+    def renderPublicWidget(self):
+        # we don't want to show widgets for stored values...
+        value = self.getStoredValue()
+        if value[0] or value[1]:
+            stored = True
+        else:
+            stored = False
+            value = self.getValue(self.query.REQUEST)
+        if stored:
+            return self.renderValue(value)
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.View,
+        'renderValue')
+    def renderValue(self, value):
+        return "<strong>%s - %s</strong>" % value
+    
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
         field_name = self.criterion.getName()
@@ -258,12 +284,6 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
-    def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST)
-        return self.renderWidget(value)
-    
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
@@ -295,6 +315,25 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         return widget % {'name':self.criterion.getName(), 'begin':value_begin, 
                          'end':value_end, 
                          'idname':self.criterion.getName().split('-')[-1]}
+
+    security.declareProtected(SilvaPermissions.View,
+        'renderPublicWidget')
+    def renderPublicWidget(self):
+        # we don't want to show widgets for stored values...
+        value = self.getStoredValue()
+        if value[0] or value[1]:
+            stored = True
+        else:
+            stored = False
+            value = self.getValue(self.query.REQUEST)
+        if stored:
+            return self.renderValue(value)
+        return self.renderWidget(value)
+
+    security.declareProtected(SilvaPermissions.View,
+        'renderValue')
+    def renderValue(self, value):
+        return "<strong>%s - %s</strong>" % value
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
