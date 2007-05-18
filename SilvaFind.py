@@ -132,8 +132,9 @@ class SilvaFind(Query, Content, SimpleItem):
         if not results:
             return ([], _('No items matched your search.'))
         
-        # XXX the searchresults could have textsnippets of documents that the user
-        # is not supposed to see. Instead of filtering these objects out (bad performance)
+        # XXX the searchresults could have textsnippets of documents 
+        # that the user is not supposed to see. 
+        # Instead of filtering these objects out (bad performance)
         # or filtering them out in the getBatch method (screws up resultcount)
         # it is now checked in the pagetemplate with the isViewableForUser
 
@@ -274,6 +275,16 @@ class SilvaFind(Query, Content, SimpleItem):
                 value = ''
             searchArguments[queryPart.getIndexId()] = value
         return searchArguments
+
+    def to_xml(self, context):
+        """Render object to XML.
+        """
+        f = context.f
+        f.write('<silva_find id="%s">' % self.id)
+        f.write('</silva_find>')
+        
+         
+                         
 
 InitializeClass(SilvaFind)
 

@@ -89,7 +89,8 @@ class PathCriterionView(Implicit):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value:
-            value = unicode(value, 'UTF-8')
+            pass
+            # XXX pathindex does not work with unicode, so do not try
         else:
             value = self.getStoredValue()
         if value is None:
