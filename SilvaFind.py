@@ -44,8 +44,7 @@ class SilvaFind(Query, Content, SimpleItem):
     implements(ISilvaQuery)
 
     def __init__(self, id):
-        Content.__init__(self, id,
-            '[Title is stored in metadata. This is a bug.]')
+        Content.__init__(self, id)
         Query.__init__(self)
         self.shownFields = PersistentMapping()
         self.shownResultsFields = PersistentMapping()
