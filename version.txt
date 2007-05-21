@@ -1,1 +1,1 @@
-SilvaFind 1.2 (unreleased)
+SilvaFind 1.1.1
