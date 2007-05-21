@@ -1,0 +1,6 @@
+1.1.1
+
+  Bugs Fixed:
+
+    - Getting path criterion value from request failed because
+      pathsinthe catalog can't have unicode characters.
