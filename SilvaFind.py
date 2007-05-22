@@ -44,7 +44,11 @@ class SilvaFind(Query, Content, SimpleItem):
     implements(ISilvaQuery)
 
     def __init__(self, id):
-        Content.__init__(self, id)
+        try:
+            Content.__init__(self, id)
+        except TypeError, err:
+            # some compatibility for older silvas
+            Content.__init__(self, id, 'dummy title for silva < 2.0')
         Query.__init__(self)
         self.shownFields = PersistentMapping()
         self.shownResultsFields = PersistentMapping()
