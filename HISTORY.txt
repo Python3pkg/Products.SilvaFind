@@ -3,4 +3,4 @@
   Bugs Fixed:
 
     - Getting path criterion value from request failed because
-      pathsinthe catalog can't have unicode characters.
+      paths in the catalog can't have unicode characters.
