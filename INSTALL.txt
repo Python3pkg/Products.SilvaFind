@@ -46,21 +46,18 @@ Installation instructions:
     
     Now the Silva Find result pages should include the search stylesheet.
     
-    
   * Customization
     
     If you want to modify the search.css, you can copy its selectors and change
     the head_inject to call yourSearch.css. Don't modify the search.css on the
     file system in service_resources, as it should be overwritten in an upgrade.
     
-    
   * Silva Layout extension users
     
     If you're using the new Five-based Silva Layout you'll need to add
     the above link tag to your main and possibly other templates.
-    
-    
-    Creating a head_inject manually
+        
+  * Creating a head_inject manually
     
     You can skip installing the layout templates and create a page template
     called 'head_inject' in your Silva root with the following code:
