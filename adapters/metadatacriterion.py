@@ -208,17 +208,17 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             try:
                 value_lower = int(value_lower)
             except:
-                value_lower = ''
+                value_lower = 0
         if value_upper:
             try:
                 value_upper = int(value_upper)
             except:
-                value_upper = ''
+                value_upper = 0
         if stored_lower:
-            if not(value_lower) or value_lower < stored_lower:
+            if (not value_lower) or (value_lower < stored_lower):
                 value_lower = stored_lower
         if stored_upper:
-            if not(value_upper) or value_upper > stored_upper:
+            if (not value_upper) or (value_upper > stored_upper):
                 value_upper = stored_upper
         return value_lower, value_upper
    
@@ -235,6 +235,7 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             return value
     
     def constructQuery(self, value_lower, value_upper):
+        import pdb; pdb.set_trace()
         if not value_lower:
             if not value_upper:
                 return None

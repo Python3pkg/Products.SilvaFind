@@ -1,0 +1,183 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SilvaFind trunk"
+"POT-Creation-Date: Tue Jun  5 16:56:51 2007\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Silva Translators <eric+i18n@infrae.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generated-By: zope/app/translation_files/extract.py\n"
+
+#: /SilvaFind.py:129
+msgid "Search query can not start with wildcard character."
+msgstr ""
+
+#: /SilvaFind.py:133
+msgid "Search query contains only common or reserved words."
+msgstr ""
+
+#: /SilvaFind.py:136
+msgid "No items matched your search."
+msgstr ""
+
+#: /SilvaFind.py:36
+msgid ""
+"This a special document that can show a list of content\n"
+"       items resulting from a search with specific values for criteria\n"
+"       or a form to enter search criteria before getting results."
+msgstr ""
+
+#: /adapters/metatypecriterion.py:114
+msgid "Search for the selected content types."
+msgstr ""
+
+#: /adapters/metatypecriterion.py:54
+msgid "All Types"
+msgstr ""
+
+#: /globalschema.py:26
+msgid "Ranking"
+msgstr ""
+
+#: /globalschema.py:27
+msgid "full text result ranking"
+msgstr ""
+
+#: /globalschema.py:28
+msgid "TotalResultCount"
+msgstr ""
+
+#: /globalschema.py:29
+msgid "Show total number of results"
+msgstr ""
+
+#: /globalschema.py:30
+msgid "ResultCount"
+msgstr ""
+
+#: /globalschema.py:31
+msgid "search result count"
+msgstr ""
+
+#: /globalschema.py:32
+msgid "Icon"
+msgstr ""
+
+#: /globalschema.py:33
+msgid "Display the icon of the content type."
+msgstr ""
+
+#: /globalschema.py:34
+msgid "Link"
+msgstr ""
+
+#: /globalschema.py:35
+msgid "Date"
+msgstr ""
+
+#: /globalschema.py:36
+msgid "Text snippet"
+msgstr ""
+
+#: /globalschema.py:37
+msgid "Thumbnail"
+msgstr ""
+
+#: /globalschema.py:39
+msgid "Breadcrumbs"
+msgstr ""
+
+#: /schema.py:218
+msgid "Shows thumbnails for images"
+msgstr ""
+
+#: /schema.py:239
+msgid "Add text snippets from content"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:110
+msgid "search results for &#xab;${title_or_id}&#xbb;"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:121
+msgid "metadata set and field id"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:40
+msgid "silva find &#xab;${title_or_id}&#xbb;"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:48
+msgid "search content for &#xab;${title_or_id}&#xbb;"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:54
+#: /views/edit/Content/SilvaFind/edit.pt:116
+msgid "element"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:59
+msgid "content"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:62
+#: /views/edit/Content/SilvaFind/edit.pt:124
+msgid "note"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:99
+#: /views/edit/Content/SilvaFind/edit.pt:168
+msgid "access key: alt-s"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/edit.pt:99
+#: /views/edit/Content/SilvaFind/edit.pt:168
+msgid "save"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/get_tabs.py:17
+msgid "edit"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/get_tabs.py:18
+msgid "preview"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/get_tabs.py:19
+msgid "properties"
+msgstr ""
+
+#: /views/edit/Content/SilvaFind/get_tabs.py:20
+msgid "access"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:102
+msgid "Next"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:36
+msgid "Search"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:63
+msgid "Search Results"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:70
+msgid "See the previous result listing: alt-p"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:81
+msgid "Previous"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:93
+msgid "<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> Showing results ${batch_start} to ${batch_end} of about ${total}"
+msgstr ""
+
+#: /views/public/SilvaFind/render_helper.pt:98
+msgid "See the next result listing: alt-n"
+msgstr ""
+
