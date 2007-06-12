@@ -162,7 +162,7 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             value_lower = ''
             value_upper = ''
         widget = """
-        <table border="0">
+        <table class="silvatable plain">
         <tr>
             <td style="border:0;">between</td>
             <td style="border:0;"><input name="%(name)s_lower" value="%(lower)s"/></td>
@@ -298,7 +298,7 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
             value_begin = ''
             value_end = ''
         widget = """
-        <table border="0">
+        <table class="silvatable plain">
         <tr>
             <td style="border:0;">from</td>
             <td style="border:0;"><input name="%(name)s_begin" id="%(idname)s" value="%(begin)s"/></td>
