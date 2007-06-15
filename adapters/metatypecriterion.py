@@ -52,7 +52,7 @@ class MetatypeCriterionView(Implicit):
         if value is None:
             value = ''
         select_all_text = _('All Types')
-        html = '<select multiple="1" name="%s:list" id="%s" size="5" class="store"> ' % (self.criterion.getName(),
+        html = '<select multiple="1" name="%s:list" id="%s" size="5"> ' % (self.criterion.getName(),
                             self.criterion.getName())
         selected = ''
         if not value or value == ['']:

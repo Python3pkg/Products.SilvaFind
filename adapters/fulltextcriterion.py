@@ -50,7 +50,7 @@ class FullTextCriterionView(Implicit):
         if value is None:
             value = ""
         html = '''
-        <input type="text" name="%s" id="%s" value="%s" size="20" class="store" /> 
+        <input type="text" name="%s" id="%s" value="%s" size="20" /> 
         '''
         return html % (self.criterion.getName(),
                        self.criterion.getName(),
