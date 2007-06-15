@@ -235,7 +235,6 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             return value
     
     def constructQuery(self, value_lower, value_upper):
-        import pdb; pdb.set_trace()
         if not value_lower:
             if not value_upper:
                 return None
