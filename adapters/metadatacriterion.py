@@ -134,9 +134,10 @@ class StoreMetadataCriterion(StoreCriterion):
         set_values = REQUEST.get(set_name, None)
         if set_values is None:
             return
-        criterion_value = unicode(set_values.get(field_name, None), 'UTF-8')
+        criterion_value = set_values.get(field_name, None)
         if criterion_value is None:
             return
+        criterion_value = unicode(criterion_value, 'UTF-8')
         self.query.setCriterionValue(self.criterion.getName(), criterion_value)
 
 class IntegerRangeMetadataCriterionView(MetadataCriterionView):
