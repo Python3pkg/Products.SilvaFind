@@ -29,7 +29,6 @@ from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
-
 icon='www/find.png'
 
 class SilvaFind(Query, Content, SimpleItem):
@@ -127,6 +126,7 @@ class SilvaFind(Query, Content, SimpleItem):
         query = searchArguments.get('fulltext', '').strip()
         if query and query[0] in ['?', '*']:
             return ([], _('Search query can not start with wildcard character.'))
+        LOG('searchArgs',INFO,searchArguments)
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
@@ -272,11 +272,12 @@ class SilvaFind(Query, Content, SimpleItem):
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
-            queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
-            value = queryPart.getIndexValue(REQUEST)
-            if value is None:
-                value = ''
-            searchArguments[queryPart.getIndexId()] = value
+            if self.shownFields[field.getName()] or field.getName() == 'path':
+                queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
+                value = queryPart.getIndexValue(REQUEST)
+                if value is None:
+                    value = ''
+                searchArguments[queryPart.getIndexId()] = value
         return searchArguments
 
     def to_xml(self, context):
