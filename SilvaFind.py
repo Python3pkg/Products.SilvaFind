@@ -29,7 +29,7 @@ from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
-icon='www/find.png'
+icon = 'www/find.png'
 
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""This a special document that can show a list of content
@@ -122,15 +122,25 @@ class SilvaFind(Query, Content, SimpleItem):
     def searchResultsWithDescription(self, REQUEST={}):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
+        queryEmpty = True
+        for q in searchArguments.values():
+            if q.strip():
+                queryEmpty = False
+                break
         searchArguments['version_status'] = ['public']
         query = searchArguments.get('fulltext', '').strip()
         if query and query[0] in ['?', '*']:
-            return ([], _('Search query can not start with wildcard character.'))
-        LOG('searchArgs',INFO,searchArguments)
+            return ([], _('Search query can not start '
+                            'with wildcard character.'))
+        if queryEmpty:
+            return ([], '')
+            return ([], _("You searched for an empty string "
+                            "which returned no results!"))
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
-            return ([], _('Search query contains only common or reserved words.'))
+            return ([], _('Search query contains only common '
+                            'or reserved words.'))
 
         if not results:
             return ([], _('No items matched your search.'))
@@ -272,7 +282,8 @@ class SilvaFind(Query, Content, SimpleItem):
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
-            if self.shownFields[field.getName()] or field.getName() == 'path':
+            if (self.shownFields.has_key(field.getName()) 
+                    or field.getName() == 'path'):
                 queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
                 value = queryPart.getIndexValue(REQUEST)
                 if value is None:

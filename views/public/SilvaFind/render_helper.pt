@@ -60,7 +60,8 @@
     fields python:model.getPublicResultFieldViews();
 ">
 
-<h3 class="heading" i18n:translate="">Search Results</h3>
+<h3 class="heading" i18n:translate=""
+  tal:condition="results">Search Results</h3>
 
 <div class="searchresult-header"
   metal:define-macro="searchinfo"
@@ -141,7 +142,7 @@
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
 <p class="searchresult-nomatch searchresult-header"
-tal:condition="not:batch/end"
+tal:condition="python:msg and not batch.end"
 tal:content="msg"/>
 
 </div>
