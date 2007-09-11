@@ -4,6 +4,7 @@ Changes:
     - Empty searches show nothing instead of everything.
 
  Bugs Fixed:
+    - Removed hardcoded Silva Document checks in favor of IVersion interfaces.
     - KeyError for meta_type when doing empty searches
     - SilvaFind search was searching on all "search content" fields, and
       ignoring the checkboxes

@@ -6,6 +6,7 @@ from Products.ZCTextIndex.ParseTree import ParseError
 
 from Products.Silva.ViewCode import ViewCode
 from Products.Silva.interfaces import IVersion
+from Products.Silva.interfaces import IPublishable
 from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
@@ -188,7 +189,7 @@ class LinkResultField(ResultField):
     implements(IResultField)
     def render(self, context, item):
         object = item.getObject()
-        if object.meta_type == 'Silva Document Version':
+        if IVersion.providedBy(object):
             url = object.aq_parent.absolute_url()
         else:
             url = object.absolute_url()
@@ -204,7 +205,7 @@ class DateResultField(ResultField):
     def render(self, context, item):
         object = item.getObject()
         date = None
-        if object.meta_type == 'Silva Document Version':
+        if IPublishable.providedBy(object):
             date = object.publication_datetime()
         if date == None:
             date = object.get_modification_datetime()
@@ -252,7 +253,7 @@ class FullTextResultField(ResultField):
 
         # since fulltext always starts with id and title, lets remove that
         idstring = object.id
-        if object.meta_type == 'Silva Document Version':
+        if IVersion.providedBy(object):
             idstring = object.object().id
         skipwords = len(('%s %s' % (idstring, object.get_title())).split(' '))
         fulltext = fulltext[skipwords:]
@@ -264,7 +265,7 @@ class FullTextResultField(ResultField):
             # searchterm is not specified,
             # return the first 20 words
             text = ' '.join(fulltext[:maxwords])
-            if object.meta_type == 'Silva Document Version':
+            if IVersion.providedBy(object):
                 realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
@@ -354,7 +355,7 @@ class FullTextResultField(ResultField):
             # do some hiliting, use original text
             # (with punctuation) if this is a silva document
             text = ' '.join(text)
-            if object.meta_type == 'Silva Document Version':
+            if IVersion.providedBy(object):
                 realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
