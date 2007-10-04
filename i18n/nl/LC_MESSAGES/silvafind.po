@@ -1,18 +1,25 @@
+# Dutch translation for silva-find
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the silva-find package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: SilvaFind trunk"
+"Project-Id-Version: silva-find\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: Thu Oct  4 13:39:15 2007\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2007-09-25 13:23+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Silva Translators <eric+i18n@infrae.com>\n"
+"Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generated-By: zope/app/translation_files/extract.py\n"
+"X-Launchpad-Export-Date: 2007-10-04 09:38+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: /SilvaFind.py:133
 msgid "Search query can not start with wildcard character."
-msgstr ""
+msgstr "Zoekopdracht mag niet met een joker beginnen."
 
 #: /SilvaFind.py:137
 msgid "You searched for an empty string which returned no results!"
@@ -20,11 +27,11 @@ msgstr ""
 
 #: /SilvaFind.py:142
 msgid "Search query contains only common or reserved words."
-msgstr ""
+msgstr "Zoekopdracht bevat alleen algemene of gereserveerde woorden."
 
 #: /SilvaFind.py:146
 msgid "No items matched your search."
-msgstr ""
+msgstr "Geen items gevonden."
 
 #: /SilvaFind.py:35
 msgid ""
@@ -32,156 +39,171 @@ msgid ""
 "       items resulting from a search with specific values for criteria\n"
 "       or a form to enter search criteria before getting results."
 msgstr ""
+"Dit is een speciaal document dat een lijst van content items kan weergeven "
+"die het resultaat zijn van een zoekopdracht met specifieke waarden voor "
+"criteria of een formulier om zoek-criteria in te voeren alvorens resultaten "
+"te verkrijgen."
 
 #: /adapters/metatypecriterion.py:114
 msgid "Search for the selected content types."
-msgstr ""
+msgstr "Zoeken naar de geselecteerde contenttypen"
 
 #: /adapters/metatypecriterion.py:54
 msgid "All Types"
-msgstr ""
+msgstr "Alle soorten"
 
 #: /globalschema.py:26
 msgid "Ranking"
-msgstr ""
+msgstr "Score"
 
 #: /globalschema.py:27
 msgid "full text result ranking"
-msgstr ""
+msgstr "volledige tekst resultaatscore"
 
 #: /globalschema.py:28
+#, fuzzy
 msgid "TotalResultCount"
-msgstr ""
+msgstr "TotalResultCount"
 
 #: /globalschema.py:29
 msgid "Show total number of results"
-msgstr ""
+msgstr "Laat het totale aantal resultaten zien"
 
 #: /globalschema.py:30
+#, fuzzy
 msgid "ResultCount"
-msgstr ""
+msgstr "ResultCount"
 
 #: /globalschema.py:31
 msgid "search result count"
-msgstr ""
+msgstr "aantal zoekresultaten"
 
 #: /globalschema.py:32
 msgid "Icon"
-msgstr ""
+msgstr "Icoon"
 
 #: /globalschema.py:33
 msgid "Display the icon of the content type."
-msgstr ""
+msgstr "Icoon van het contenttype weergeven."
 
 #: /globalschema.py:34
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: /globalschema.py:35
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: /globalschema.py:36
 msgid "Text snippet"
-msgstr ""
+msgstr "Tekstfragment"
 
 #: /globalschema.py:37
+#, fuzzy
 msgid "Thumbnail"
-msgstr ""
+msgstr "Thumbnail"
 
 #: /globalschema.py:39
+#, fuzzy
 msgid "Breadcrumbs"
-msgstr ""
+msgstr "Breadcrumbs"
 
 #: /schema.py:219
 msgid "Shows thumbnails for images"
-msgstr ""
+msgstr "Laat thumbnails van afbeeldingen zien"
 
 #: /schema.py:240
 msgid "Add text snippets from content"
-msgstr ""
+msgstr "Tekstfragmenten van inhoud toevoegen."
 
 #: /views/edit/Content/SilvaFind/edit.pt:110
 msgid "search results for &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "zoekresultaten voor &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:121
+#, fuzzy
 msgid "metadata set and field id"
-msgstr ""
+msgstr "metadataset en veld-id"
 
 #: /views/edit/Content/SilvaFind/edit.pt:40
+#, fuzzy
 msgid "silva find &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "silva find &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:48
+#, fuzzy
 msgid "search content for &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "zoek inhoud voor &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:54
 #: /views/edit/Content/SilvaFind/edit.pt:116
 msgid "element"
-msgstr ""
+msgstr "element"
 
 #: /views/edit/Content/SilvaFind/edit.pt:59
 msgid "content"
-msgstr ""
+msgstr "inhoud"
 
 #: /views/edit/Content/SilvaFind/edit.pt:62
 #: /views/edit/Content/SilvaFind/edit.pt:124
 msgid "note"
-msgstr ""
+msgstr "opmerking"
 
 #: /views/edit/Content/SilvaFind/edit.pt:99
 #: /views/edit/Content/SilvaFind/edit.pt:168
 msgid "access key: alt-s"
-msgstr ""
+msgstr "sneltoets: alt-s"
 
 #: /views/edit/Content/SilvaFind/edit.pt:99
 #: /views/edit/Content/SilvaFind/edit.pt:168
 msgid "save"
-msgstr ""
+msgstr "opslaan"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:17
 msgid "edit"
-msgstr ""
+msgstr "bewerken"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:18
 msgid "preview"
-msgstr ""
+msgstr "voorbeeld"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:19
 msgid "properties"
-msgstr ""
+msgstr "eigenschappen"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:20
 msgid "access"
-msgstr ""
+msgstr "toegang"
 
 #: /views/public/SilvaFind/render_helper.pt:103
 msgid "Next"
-msgstr ""
+msgstr "Volgende"
 
 #: /views/public/SilvaFind/render_helper.pt:36
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: /views/public/SilvaFind/render_helper.pt:63
 msgid "Search Results"
-msgstr ""
+msgstr "Zoekresultaten"
 
 #: /views/public/SilvaFind/render_helper.pt:71
 msgid "See the previous result listing: alt-p"
-msgstr ""
+msgstr "Vorige resultaatlijst bekijken: alt-p"
 
 #: /views/public/SilvaFind/render_helper.pt:82
 msgid "Previous"
-msgstr ""
+msgstr "Vorige"
 
 #: /views/public/SilvaFind/render_helper.pt:94
-msgid "<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> Showing results ${batch_start} to ${batch_end} of about ${total}"
+#, fuzzy
+msgid ""
+"<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
+"Showing results ${batch_start} to ${batch_end} of about ${total}"
 msgstr ""
+"<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
+"Resultaten van ${batch_start} tot ${batch_end} van +/- ${total}"
 
 #: /views/public/SilvaFind/render_helper.pt:99
 msgid "See the next result listing: alt-n"
-msgstr ""
-
+msgstr "Volgende resultaatlijst bekijken: alt-n"
