@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SilvaFind trunk"
-"POT-Creation-Date: Thu Oct  4 13:39:15 2007\n"
+"POT-Creation-Date: Tue Oct  9 15:02:44 2007\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Silva Translators <eric+i18n@infrae.com>\n"

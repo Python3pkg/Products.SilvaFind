@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: silva-find\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Thu Oct  4 13:39:15 2007\n"
-"PO-Revision-Date: 2007-10-01 11:07+0000\n"
+"POT-Creation-Date: Tue Oct  9 15:02:44 2007\n"
+"PO-Revision-Date: 2007-10-09 12:21+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-10-04 09:38+0000\n"
+"X-Launchpad-Export-Date: 2007-10-09 12:58+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /SilvaFind.py:133
@@ -27,7 +27,7 @@ msgstr ""
 
 #: /SilvaFind.py:142
 msgid "Search query contains only common or reserved words."
-msgstr "Die Suchanfrage enhält nur allgemeine oder reservierte Wörter."
+msgstr "Die Suchanfrage enthält nur allgemeine oder reservierte Wörter."
 
 #: /SilvaFind.py:146
 msgid "No items matched your search."
@@ -35,11 +35,17 @@ msgstr ""
 "Es wurden keine mit Ihrer Suchanfrage übereinstimmenden Dokumente gefunden."
 
 #: /SilvaFind.py:35
+#, fuzzy
 msgid ""
 "This a special document that can show a list of content\n"
 "       items resulting from a search with specific values for criteria\n"
 "       or a form to enter search criteria before getting results."
 msgstr ""
+"Dies ist ein spezielles Dokument welches eine Inhaltsliste\n"
+"       Elemente aus einer Suche mit speziellen Werten für Suchkriterien\n"
+"       oder eine Maske für die Eingabe von Suchkriterien vor der "
+"Ergebnisanzeige\n"
+"beinhalten kann."
 
 #: /adapters/metatypecriterion.py:114
 msgid "Search for the selected content types."
@@ -75,7 +81,7 @@ msgstr "Anzahl der Suchergebnisse"
 
 #: /globalschema.py:32
 msgid "Icon"
-msgstr "Icon"
+msgstr "Symbol"
 
 #: /globalschema.py:33
 msgid "Display the icon of the content type."
@@ -91,11 +97,11 @@ msgstr "Datum"
 
 #: /globalschema.py:36
 msgid "Text snippet"
-msgstr "Testausschnitt"
+msgstr "Textausschnitt"
 
 #: /globalschema.py:37
 msgid "Thumbnail"
-msgstr "Bildvorschau"
+msgstr "Vorschaubild"
 
 #: /globalschema.py:39
 msgid "Breadcrumbs"
@@ -111,7 +117,7 @@ msgstr "Füge Textausschnitte vom Inhalt hinzu"
 
 #: /views/edit/Content/SilvaFind/edit.pt:110
 msgid "search results for &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "Suchergebnisse für &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:121
 msgid "metadata set and field id"
@@ -119,11 +125,11 @@ msgstr "Metadaten-Set und Feld-ID"
 
 #: /views/edit/Content/SilvaFind/edit.pt:40
 msgid "silva find &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "Silva Find &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:48
 msgid "search content for &#xab;${title_or_id}&#xbb;"
-msgstr ""
+msgstr "Durchsuche Inhalte nach &#xab;${title_or_id}&#xbb;"
 
 #: /views/edit/Content/SilvaFind/edit.pt:54
 #: /views/edit/Content/SilvaFind/edit.pt:116
@@ -137,12 +143,12 @@ msgstr "Inhalt"
 #: /views/edit/Content/SilvaFind/edit.pt:62
 #: /views/edit/Content/SilvaFind/edit.pt:124
 msgid "note"
-msgstr "Notiz"
+msgstr "Anmerkung"
 
 #: /views/edit/Content/SilvaFind/edit.pt:99
 #: /views/edit/Content/SilvaFind/edit.pt:168
 msgid "access key: alt-s"
-msgstr ""
+msgstr "Tastenkombination: Alt-S"
 
 #: /views/edit/Content/SilvaFind/edit.pt:99
 #: /views/edit/Content/SilvaFind/edit.pt:168
@@ -175,7 +181,7 @@ msgstr "Suchen"
 
 #: /views/public/SilvaFind/render_helper.pt:63
 msgid "Search Results"
-msgstr "Ergebnisse"
+msgstr "Suchergebnisse"
 
 #: /views/public/SilvaFind/render_helper.pt:71
 msgid "See the previous result listing: alt-p"
@@ -183,14 +189,16 @@ msgstr "Um die vorherigen Ergebnisse anzuzeigen: Alt-P"
 
 #: /views/public/SilvaFind/render_helper.pt:82
 msgid "Previous"
-msgstr "vorherige"
+msgstr "Vorherige"
 
 #: /views/public/SilvaFind/render_helper.pt:94
 msgid ""
 "<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
 "Showing results ${batch_start} to ${batch_end} of about ${total}"
 msgstr ""
+"<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
+"Ergebnisse ${batch_start} bis ${batch_end} von insgesamt ${total}"
 
 #: /views/public/SilvaFind/render_helper.pt:99
 msgid "See the next result listing: alt-n"
-msgstr ""
+msgstr "Zeige die nächste Ergebnisliste: Alt-N"
