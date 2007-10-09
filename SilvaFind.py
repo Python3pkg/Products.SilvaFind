@@ -134,8 +134,6 @@ class SilvaFind(Query, Content, SimpleItem):
                             'with wildcard character.'))
         if queryEmpty:
             return ([], '')
-            return ([], _("You searched for an empty string "
-                            "which returned no results!"))
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
