@@ -79,7 +79,6 @@
       </td>
       <td class="align-right">
         <label tal:content="fieldView/getTitle"
-          tal:attributes="for python:fieldView.getName().split('-')[-1]"
           i18n:translate="">
           a search object
         </label>

@@ -14,7 +14,6 @@ from zope.app import zapi
 # Silva
 from Products.Silva.Content import Content
 from Products.Silva.i18n import translate as _
-from zope.i18n import translate
 from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle

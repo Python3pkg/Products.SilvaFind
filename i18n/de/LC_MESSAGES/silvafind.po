@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: silva-find\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Oct  9 15:02:44 2007\n"
+"POT-Creation-Date: Tue Oct  9 18:03:55 2007\n"
 "PO-Revision-Date: 2007-10-09 12:21+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,24 +17,20 @@ msgstr ""
 "X-Launchpad-Export-Date: 2007-10-09 12:58+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: /SilvaFind.py:133
+#: /SilvaFind.py:132
 msgid "Search query can not start with wildcard character."
 msgstr "Eine Suchanfrage darf nicht mit einem Wildcard-Symbol beginnen."
 
-#: /SilvaFind.py:137
-msgid "You searched for an empty string which returned no results!"
-msgstr ""
-
-#: /SilvaFind.py:142
+#: /SilvaFind.py:139
 msgid "Search query contains only common or reserved words."
 msgstr "Die Suchanfrage enthält nur allgemeine oder reservierte Wörter."
 
-#: /SilvaFind.py:146
+#: /SilvaFind.py:143
 msgid "No items matched your search."
 msgstr ""
 "Es wurden keine mit Ihrer Suchanfrage übereinstimmenden Dokumente gefunden."
 
-#: /SilvaFind.py:35
+#: /SilvaFind.py:34
 #, fuzzy
 msgid ""
 "This a special document that can show a list of content\n"
@@ -47,6 +43,34 @@ msgstr ""
 "Ergebnisanzeige\n"
 "beinhalten kann."
 
+#: /adapters/fulltextcriterion.py:79
+msgid "full text"
+msgstr ""
+
+#: /adapters/fulltextcriterion.py:87
+msgid "Search the full text."
+msgstr ""
+
+#: /adapters/metadatacriterion.py:186
+msgid "between"
+msgstr ""
+
+#: /adapters/metadatacriterion.py:187
+msgid "and"
+msgstr ""
+
+#: /adapters/metadatacriterion.py:188
+msgid "only integers"
+msgstr ""
+
+#: /adapters/metadatacriterion.py:326
+msgid "from"
+msgstr ""
+
+#: /adapters/metadatacriterion.py:327
+msgid "to"
+msgstr ""
+
 #: /adapters/metatypecriterion.py:114
 msgid "Search for the selected content types."
 msgstr "Suche nach den ausgewählten Inhaltstypen."
@@ -55,11 +79,19 @@ msgstr "Suche nach den ausgewählten Inhaltstypen."
 msgid "All Types"
 msgstr "Alle Typen"
 
+#: /adapters/pathcriterion.py:110
+msgid "below path"
+msgstr ""
+
+#: /adapters/pathcriterion.py:123
+msgid "Only search below this location (a path from the site root)."
+msgstr ""
+
 #: /globalschema.py:26
 msgid "Ranking"
 msgstr "Rang"
 
-#: /globalschema.py:27
+#: /globalschema.py:27 /schema.py:139
 msgid "full text result ranking"
 msgstr "Volltext Ergebnis-Rangliste"
 
@@ -75,7 +107,7 @@ msgstr "Zeige gesamte Anzahl der Ergebnisse"
 msgid "ResultCount"
 msgstr "Anzahl der Ergebnisse"
 
-#: /globalschema.py:31
+#: /globalschema.py:31 /schema.py:181
 msgid "search result count"
 msgstr "Anzahl der Suchergebnisse"
 
@@ -107,6 +139,10 @@ msgstr "Vorschaubild"
 msgid "Breadcrumbs"
 msgstr "Navigationspfade"
 
+#: /schema.py:167
+msgid "total search result number"
+msgstr ""
+
 #: /schema.py:219
 msgid "Shows thumbnails for images"
 msgstr "Zeige Vorschau für Bilder"
@@ -114,6 +150,22 @@ msgstr "Zeige Vorschau für Bilder"
 #: /schema.py:240
 msgid "Add text snippets from content"
 msgstr "Füge Textausschnitte vom Inhalt hinzu"
+
+#: /schema.py:420
+msgid "(metadata field)"
+msgstr ""
+
+#: /schema.py:66
+msgid "fulltext"
+msgstr ""
+
+#: /schema.py:72
+msgid "meta_type"
+msgstr ""
+
+#: /schema.py:78
+msgid "path"
+msgstr ""
 
 #: /views/edit/Content/SilvaFind/edit.pt:110
 msgid "search results for &#xab;${title_or_id}&#xbb;"

@@ -8,6 +8,7 @@ from DateTime import DateTime
 # Silva
 from Products.Silva import SilvaPermissions
 from Products.SilvaMetadata.Index import createIndexId
+from Products.Silva.i18n import translate as _
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
@@ -165,20 +166,26 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         widget = """
         <table class="silvatable plain">
         <tr>
-            <td style="border:0;">between</td>
+            <td style="border:0;">%(between)s</td>
             <td style="border:0;"><input name="%(name)s_lower" value="%(lower)s"/></td>
         </tr>
         <tr>
-            <td style="border:0;">and</td>
+            <td style="border:0;">%(and)s</td>
             <td style="border:0;"><input name="%(name)s_upper" value="%(upper)s"/></td>
         </tr>
         <tr>
             <td style="border:0;"></td>
-            <td style="border:0;"><small>* only integers</small></td>
+            <td style="border:0;"><small>* %(intg)s</small></td>
         </tr>
         </table>
         """
-        return widget % {'name':self.criterion.getName() , 'lower':value_lower, 'upper':value_upper}
+        return widget % {
+            'name':self.criterion.getName() ,
+            'lower':value_lower,
+            'upper':value_upper,
+            'between': _('between'),
+            'and': _('and'),
+            'intg': _('only integers'),}
 
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
@@ -300,11 +307,11 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         widget = """
         <table class="silvatable plain">
         <tr>
-            <td style="border:0;">from</td>
+            <td style="border:0;">%(from)s</td>
             <td style="border:0;"><input name="%(name)s_begin" id="%(idname)s" value="%(begin)s"/></td>
         </tr>
         <tr>
-            <td style="border:0;">to</td>
+            <td style="border:0;">%(to)s</td>
             <td style="border:0;"><input name="%(name)s_end" value="%(end)s"/></td>
         </tr>
         <tr>
@@ -315,7 +322,9 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         """
         return widget % {'name':self.criterion.getName(), 'begin':value_begin, 
                          'end':value_end, 
-                         'idname':self.criterion.getName().split('-')[-1]}
+                         'idname':self.criterion.getName().split('-')[-1],
+                         'from': _('from'),
+                         'to': _('to'),}
 
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')

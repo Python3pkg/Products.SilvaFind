@@ -63,19 +63,19 @@ class FullTextCriterionField:
     implements(IFullTextCriterionField)
 
     def getName(self):
-        return "fulltext"
+        return _("fulltext")
 
 class MetatypeCriterionField:
     implements(IMetatypeCriterionField)
     
     def getName(self):
-        return "meta_type"
+        return _("meta_type")
     
 class PathCriterionField:
     implements(IPathCriterionField)
     
     def getName(self):
-        return "path"
+        return _("path")
 
 class AutomaticMetaDataCriterionField(object):
     """This class is a marker to put in the schemalist.
@@ -136,7 +136,7 @@ class MetatypeResultField(ResultField):
 
 class RankingResultField(ResultField):
     implements(IResultField)
-    description='full text result ranking'
+    description=_('full text result ranking')
 
     def render(self, context, item):
         catalog = context.service_catalog
@@ -164,7 +164,7 @@ class RankingResultField(ResultField):
 
 class TotalResultCountField(ResultField):
     implements(IResultField)
-    description='total search result number'
+    description=_('total search result number')
     def render(self, context, item):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
@@ -178,7 +178,7 @@ class TotalResultCountField(ResultField):
 
 class ResultCountField(ResultField):
     implements(IResultField)
-    description='search result count'
+    description=_('search result count')
     def render(self, context, item):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
@@ -417,7 +417,7 @@ class IconResultField(ResultField):
 class MetadataResultField(ResultField):
     implements(IResultField)
 
-    description = '(metadata field)'
+    description = _('(metadata field)')
 
     def setMetadataElement(self, el):
         self.element = el

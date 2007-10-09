@@ -6,6 +6,7 @@ from Acquisition import Implicit
 
 # Silva
 from Products.Silva import SilvaPermissions
+from Products.Silva.i18n import translate as _
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
@@ -75,7 +76,7 @@ class FullTextCriterionView(Implicit):
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
-        return 'full text'
+        return _('full text')
         
     def getIndexId(self):
         return 'fulltext'
@@ -83,7 +84,7 @@ class FullTextCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'getDescription')
     def getDescription(self):
-        return 'Search the full text.'
+        return _('Search the full text.')
         
     security.declareProtected(SilvaPermissions.View,
         'getName')

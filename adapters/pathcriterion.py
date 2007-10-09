@@ -6,6 +6,7 @@ from Acquisition import Implicit
 
 # Silva
 from Products.Silva import SilvaPermissions
+from Products.Silva.i18n import translate as _
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
@@ -106,7 +107,7 @@ class PathCriterionView(Implicit):
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
-        return 'below path'
+        return _('below path')
         
     def getIndexId(self):
         return 'path'
@@ -119,7 +120,7 @@ class PathCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'getDescription')
     def getDescription(self):
-        return 'Only search below this location (a path from the site root).'
+        return _('Only search below this location (a path from the site root).')
 
 InitializeClass(PathCriterionView)
 
