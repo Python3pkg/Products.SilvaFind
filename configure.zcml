@@ -7,4 +7,6 @@
 
   <include package=".adapters" /> 
 
+  <i18n:registerTranslations directory="i18n" />
+
 </configure>

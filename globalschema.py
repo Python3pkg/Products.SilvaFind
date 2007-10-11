@@ -1,4 +1,4 @@
-from Products.Silva.i18n import translate as _
+from Products.SilvaFind.i18n import translate as _
 
 from Products.SilvaFind.schema import IconResultField, LinkResultField
 from Products.SilvaFind.schema import DateResultField, BreadcrumbsResultField

@@ -8,7 +8,7 @@ from DateTime import DateTime
 # Silva
 from Products.Silva import SilvaPermissions
 from Products.SilvaMetadata.Index import createIndexId
-from Products.Silva.i18n import translate as _
+from Products.SilvaFind.i18n import translate as _
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion

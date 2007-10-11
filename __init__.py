@@ -1,6 +1,10 @@
 #Silva
 from Products.Silva.fssite import registerDirectory
 
+from AccessControl import allow_module
+
+allow_module('Products.SilvaFind.i18n')
+
 def initialize(context):
     from Products.Silva.ExtensionRegistry import extensionRegistry
     import SilvaFind

@@ -13,7 +13,7 @@ from zope.app import zapi
 
 # Silva
 from Products.Silva.Content import Content
-from Products.Silva.i18n import translate as _
+from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle

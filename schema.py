@@ -14,7 +14,7 @@ from Products.SilvaFind.interfaces import IFullTextCriterionField
 from Products.SilvaFind.interfaces import IPathCriterionField
 from Products.SilvaFind.interfaces import IResultField
 from Products.SilvaFind.interfaces import IMetatypeCriterionField
-from Products.Silva.i18n import translate as _
+from Products.SilvaFind.i18n import translate as _
 
 class Schema:
     def __init__(self, fields):
