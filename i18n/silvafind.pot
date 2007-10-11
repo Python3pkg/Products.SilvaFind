@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SilvaFind trunk"
-"POT-Creation-Date: Tue Oct  9 18:04:45 2007\n"
+"POT-Creation-Date: Thu Oct 11 12:39:07 2007\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Silva Translators <eric+i18n@infrae.com>\n"
@@ -155,11 +155,11 @@ msgstr ""
 msgid "path"
 msgstr ""
 
-#: /views/edit/Content/SilvaFind/edit.pt:110
+#: /views/edit/Content/SilvaFind/edit.pt:109
 msgid "search results for &#xab;${title_or_id}&#xbb;"
 msgstr ""
 
-#: /views/edit/Content/SilvaFind/edit.pt:121
+#: /views/edit/Content/SilvaFind/edit.pt:120
 msgid "metadata set and field id"
 msgstr ""
 
@@ -172,7 +172,7 @@ msgid "search content for &#xab;${title_or_id}&#xbb;"
 msgstr ""
 
 #: /views/edit/Content/SilvaFind/edit.pt:54
-#: /views/edit/Content/SilvaFind/edit.pt:116
+#: /views/edit/Content/SilvaFind/edit.pt:115
 msgid "element"
 msgstr ""
 
@@ -181,17 +181,17 @@ msgid "content"
 msgstr ""
 
 #: /views/edit/Content/SilvaFind/edit.pt:62
-#: /views/edit/Content/SilvaFind/edit.pt:124
+#: /views/edit/Content/SilvaFind/edit.pt:123
 msgid "note"
 msgstr ""
 
-#: /views/edit/Content/SilvaFind/edit.pt:99
-#: /views/edit/Content/SilvaFind/edit.pt:168
+#: /views/edit/Content/SilvaFind/edit.pt:98
+#: /views/edit/Content/SilvaFind/edit.pt:167
 msgid "access key: alt-s"
 msgstr ""
 
-#: /views/edit/Content/SilvaFind/edit.pt:99
-#: /views/edit/Content/SilvaFind/edit.pt:168
+#: /views/edit/Content/SilvaFind/edit.pt:98
+#: /views/edit/Content/SilvaFind/edit.pt:167
 msgid "save"
 msgstr ""
 
