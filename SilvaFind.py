@@ -122,8 +122,8 @@ class SilvaFind(Query, Content, SimpleItem):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
-        for q in searchArguments.values():
-            if q.strip():
+        for key, value in searchArguments.items():
+            if value.strip() and key != 'path':
                 queryEmpty = False
                 break
         searchArguments['version_status'] = ['public']
