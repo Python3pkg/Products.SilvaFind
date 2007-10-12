@@ -82,18 +82,18 @@
       <tal:block i18n:translate="">Previous</tal:block></a>
     </tal:block>
   </span>
-  <span class="searchresult-info" i18n:translate="">
     <img alt="spacer" width="16" height="16" border="0"
       tal:attributes="src here/globals/pixel.gif/absolute_url" />
+    <span class="searchresult-info" i18n:translate="">
     Showing results
     <tal:block replace="batch/start" i18n:name="batch_start" />
     to
     <tal:block replace="batch/end" i18n:name="batch_end" />
-    <tal:block tal:condition="python:'totalresultcount' in [f.getName() for f in fields]">
+    </span>
+    <span tal:condition="python:'totalresultcount' in [f.getName() for f in fields]" i18n:translate="">
     of about
     <tal:block replace="batch/total" i18n:name="total" />
-    </tal:block>
-  </span>
+    </span>
   <span class="searchresult-next">
     <tal:block condition="request/next_batch_url | nothing">
       <a href="nextbatch" accesskey="n"
