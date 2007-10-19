@@ -3,7 +3,7 @@
   public options/public | nothing;
   title_method python: test(public, 'get_title', 'get_title_editable');
   append_to_url options/append_to_url | string:edit/tab_edit;
-  root_url model/get_root_url
+  root_url model/get_root_url ; global has_results python:False
   "
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   i18n:domain="silvafind">
@@ -117,7 +117,7 @@
   <li tal:repeat="item batch">
     <tal:block define="ix repeat/item/index;"
       condition="fields">
-      <div class="searchresult">
+      <div class="searchresult" tal:define="global has_results python:True">
         <tal:block repeat="field fields">
           <span class="searchresult-counter"
             tal:define="num python:str(batch.start + ix)"
@@ -142,7 +142,7 @@
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
 <p class="searchresult-nomatch searchresult-header"
-tal:condition="python:msg and not batch.end"
+tal:condition="python:msg and not has_results"
 tal:content="msg"/>
 
 </div>
