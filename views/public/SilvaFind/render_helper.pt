@@ -3,7 +3,7 @@
   public options/public | nothing;
   title_method python: test(public, 'get_title', 'get_title_editable');
   append_to_url options/append_to_url | string:edit/tab_edit;
-  root_url model/get_root_url ; global has_results python:False
+  root_url model/get_root_url
   "
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   i18n:domain="silvafind">
@@ -61,11 +61,14 @@
 ">
 
 <h3 class="heading" i18n:translate=""
-  tal:condition="results">Search Results</h3>
+  tal:condition="python:len(batch)">Search Results</h3>
 
 <div class="searchresult-header"
   metal:define-macro="searchinfo"
   tal:condition="python:batch.size < len(results)">
+  <table width="100%">
+  <tr>
+  <td align="left">
   <span class="searchresult-previous">
     <tal:block condition="request/previous_batch_url | nothing">
       <a href="previousbatch" accesskey="p"
@@ -82,8 +85,8 @@
       <tal:block i18n:translate="">Previous</tal:block></a>
     </tal:block>
   </span>
-    <img alt="spacer" width="16" height="16" border="0"
-      tal:attributes="src here/globals/pixel.gif/absolute_url" />
+  </td>
+  <td align="left" >
     <span class="searchresult-info" i18n:translate="">
     Showing results
     <tal:block replace="batch/start" i18n:name="batch_start" />
@@ -94,6 +97,8 @@
     of about
     <tal:block replace="batch/total" i18n:name="total" />
     </span>
+  </td>
+  <td align="right">
   <span class="searchresult-next">
     <tal:block condition="request/next_batch_url | nothing">
       <a href="nextbatch" accesskey="n"
@@ -111,13 +116,15 @@
       </a>
     </tal:block>
   </span>
+  </td></tr>
+  </table>
 </div>
 
 <ul tal:condition="batch">
   <li tal:repeat="item batch">
     <tal:block define="ix repeat/item/index;"
       condition="fields">
-      <div class="searchresult" tal:define="global has_results python:True">
+      <div class="searchresult">
         <tal:block repeat="field fields">
           <span class="searchresult-counter"
             tal:define="num python:str(batch.start + ix)"
@@ -142,9 +149,12 @@
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
 <p class="searchresult-nomatch searchresult-header"
-tal:condition="python:msg and not has_results"
-tal:content="msg"/>
-
+tal:condition="python:not len(batch)">
+<tal:block condition="msg" content="msg"/>
+<tal:block condition="not:msg" i18n:translate="">
+No items matched your search.
+</tal:block>
+</p>
 </div>
 
 </tal:block>

@@ -31,8 +31,9 @@ div.searchform input.searchform-submit {
   border:1px solid #03956a;
   background: #c0d5ce;
 }
-span.searchresult-previous {
-  float:left;
+
+.searchresult-header span{
+  font-size:11px;
 }
 
 div.searchresult-header a:link {
@@ -45,14 +46,7 @@ div.searchresult-header a:hover {
   text-decoration:underline;
 }
 
-span.searchresult-info {
-  float:left; 
-}
-span.searchresult-next {
-  float:right;
-}
-
-div.searchresults ul {
+body div#content div.searchresults ul li {
   list-style-type:none;
   margin:0.5em 0.5em 1.5em -1em;
 }
@@ -131,4 +125,5 @@ div.searchresult {
 .searchresult-nomatch {
   padding:0.5em;
   padding-top:1em;
+  text-align:center;
 }
