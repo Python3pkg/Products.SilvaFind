@@ -63,12 +63,11 @@
 <h3 class="heading" i18n:translate=""
   tal:condition="python:len(batch)">Search Results</h3>
 
-<div class="searchresult-header"
-  metal:define-macro="searchinfo"
+<metal:block define-macro="searchinfo"
   tal:condition="python:batch.size < len(results)">
-  <table width="100%">
+<table class="searchresult-header" width="100%">
   <tr>
-  <td align="left">
+  <td align="left" width="20%">
   <span class="searchresult-previous">
     <tal:block condition="request/previous_batch_url | nothing">
       <a href="previousbatch" accesskey="p"
@@ -86,7 +85,7 @@
     </tal:block>
   </span>
   </td>
-  <td align="left" >
+  <td align="center">
     <span class="searchresult-info" i18n:translate="">
     Showing results
     <tal:block replace="batch/start" i18n:name="batch_start" />
@@ -98,7 +97,7 @@
     <tal:block replace="batch/total" i18n:name="total" />
     </span>
   </td>
-  <td align="right">
+  <td align="right" width="20%">
   <span class="searchresult-next">
     <tal:block condition="request/next_batch_url | nothing">
       <a href="nextbatch" accesskey="n"
@@ -117,8 +116,8 @@
     </tal:block>
   </span>
   </td></tr>
-  </table>
-</div>
+</table>
+</metal:block>
 
 <ul tal:condition="batch">
   <li tal:repeat="item batch">
