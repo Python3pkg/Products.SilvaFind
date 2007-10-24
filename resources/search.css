@@ -25,14 +25,12 @@ div.searchform input.searchform-submit {
 .searchresults h3 {}
 
 .searchresult-header {
-  height:2em;
-  margin-bottom: 0.5em;
-  padding:0.5em;
-  border:1px solid #03956a;
-  background: #c0d5ce;
+  margin: 0.5em 0;
+  padding:0 0.5em;
+  border:1px solid #797983;
 }
 
-.searchresult-header span{
+.searchresult-header span {
   font-size:11px;
 }
 
@@ -82,7 +80,7 @@ div.searchresult {
   display:block;
   margin-left:2em;
   padding-left:10em;
-  border-bottom:1px solid #03956a;
+  border-bottom:1px solid #797983;
 }
 .searchresult-field-title {
   float:left;
