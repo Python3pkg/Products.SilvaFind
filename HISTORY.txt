@@ -1,6 +1,9 @@
 1.1.2 (unreleased)
 
 Changes:
+    - Changed the line and border colors in the public view from green to gray 
+      and removed a green background so it's less likely that the SilvaFind 
+      colors will conflict with a user's site design. 
     - Empty searches show nothing instead of everything.
 
  Bugs Fixed:
