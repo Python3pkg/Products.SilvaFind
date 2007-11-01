@@ -6,8 +6,8 @@
 }
 .searchform select{
   /* somehow select boxes were not styled */
-  border:1px solid #03956a;
-  background-color:#e8f7ef;
+  border:1px solid #787980;
+  background-color:#f4f5f6;
   font-size: 100%; /* FF needs this */
 }
 div.searchform input.searchform-submit {
