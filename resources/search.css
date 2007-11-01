@@ -1,7 +1,7 @@
 /* stylesheet for silva find search and searchresult pages */
 .searchform {}
 
-.searchform input, select {
+.searchform input, select, textarea {
   width:93%;
 }
 .searchform select{
