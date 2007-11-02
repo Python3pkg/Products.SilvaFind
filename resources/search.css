@@ -6,13 +6,6 @@
   !width: 94%; /* IE7 hack */
 }
 
-.searchform select {
-  /* somehow select boxes are not styled */
-  border:1px solid #787980;
-  background-color:#f4f5f6;
-  font-size: 100%; /* FF needs this */
-}
-
 div.searchform input.searchform-submit {
   width:auto;
 }
