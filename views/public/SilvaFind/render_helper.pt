@@ -26,7 +26,8 @@
           <td tal:content="structure fieldView/renderPublicWidget">
             a search object
           </td>
-          <td tal:content="structure fieldView/getDescription">
+          <td class="searchform-description"
+            tal:content="structure fieldView/getDescription">
             field description
           </td>
         </tr>
