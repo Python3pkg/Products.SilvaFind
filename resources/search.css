@@ -26,6 +26,7 @@ div.searchform input.searchform-submit {
 }
 
 .searchform-description {
+  padding-top:0.25em;
   padding-left:0.5em;
 }
 
