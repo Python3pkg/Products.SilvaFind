@@ -123,7 +123,11 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
         for key, value in searchArguments.items():
-            if value.strip() and key != 'path':
+            if key in ['path', 'meta_type']:
+                # these fields do not count as a real search query
+                # they are always there to filter unwanted results
+                continue
+            if type(value) is unicode and value.strip():
                 queryEmpty = False
                 break
         searchArguments['version_status'] = ['public']
