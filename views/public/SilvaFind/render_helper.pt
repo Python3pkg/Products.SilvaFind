@@ -149,7 +149,7 @@
 
 <div metal:use-macro="here/render_helper/macros/searchinfo"/>
 <p class="searchresult-nomatch searchresult-header"
-tal:condition="python:not len(batch)">
+tal:condition="python:not len(batch) and msg != 'empty'">
 <tal:block condition="msg" content="msg"/>
 <tal:block condition="not:msg" i18n:translate="">
 No items matched your search.
