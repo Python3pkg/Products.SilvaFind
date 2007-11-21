@@ -48,6 +48,7 @@ class MetatypeCriterionView(Implicit):
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
+
     def renderWidget(self, value):
         if value is None:
             value = ''
@@ -59,7 +60,7 @@ class MetatypeCriterionView(Implicit):
             selected = ' selected="true"'
         meta_types = ['<option value=""%s>%s</option>' % (selected,
                                                           select_all_text)]
-        for meta_type in self.query.REQUEST.model.service_catalog.uniqueValuesFor(self.getIndexId()):
+        for meta_type in self.getAvailableMetaTypes():
             selected = ''
             if meta_type in value:
                 selected = ' selected="true"'
@@ -91,6 +92,10 @@ class MetatypeCriterionView(Implicit):
         
     getIndexValue = getValue
     
+    def getAvailableMetaTypes(self):
+        return self.query.REQUEST.model.service_catalog.uniqueValuesFor(
+                self.getIndexId())
+
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
