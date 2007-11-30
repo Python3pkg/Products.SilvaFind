@@ -79,10 +79,7 @@ class MetatypeCriterionView(Implicit):
             if type(value) != type([]):
                 value = unicode(value, 'UTF-8')
             else:
-                values = []
-                for vl in value:
-                    values.append(unicode(vl, 'UTF-8'))
-                value = values
+                value = [unicode(vl, 'UTF-8') for vl in value]
         else:
             value = self.getStoredValue()
         if value == ['']:
