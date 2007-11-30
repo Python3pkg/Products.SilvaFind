@@ -1,38 +1,41 @@
 /* stylesheet for silva find search and searchresult pages */
 .searchform {}
 
-.searchform input, select {
-  width:93%;
+.searchform input, .searchform select, .searchform textarea {
+  width: 99%;
+  !width: 94%; /* IE7 hack */
 }
-.searchform select{
-  /* somehow select boxes were not styled */
-  border:1px solid #03956a;
-  background-color:#e8f7ef;
-  font-size: 100%; /* FF needs this */
-}
+
 div.searchform input.searchform-submit {
   width:auto;
 }
 
 .searchform-title {
+  width: 20%;
   padding-top:0.25em;
+  padding-right:0.3em;
 }
 
 .searchform-title:after {
   content:':';
 }
 
+.searchform-description {
+  width: 35%;
+  padding-top:0.25em;
+  padding-left:0.5em;
+}
+
 .searchresults h3 {}
 
 .searchresult-header {
-  height:2em;
-  margin-bottom: 0.5em;
-  padding:0.5em;
-  border:1px solid #03956a;
-  background: #c0d5ce;
+  margin: 0.5em 0;
+  padding:0 0.3em;
+  border:1px solid #898a8b;
 }
-span.searchresult-previous {
-  float:left;
+
+.searchresult-header span {
+  font-size:11px;
 }
 
 div.searchresult-header a:link {
@@ -45,14 +48,7 @@ div.searchresult-header a:hover {
   text-decoration:underline;
 }
 
-span.searchresult-info {
-  float:left; 
-}
-span.searchresult-next {
-  float:right;
-}
-
-div.searchresults ul {
+body div#content div.searchresults ul li {
   list-style-type:none;
   margin:0.5em 0.5em 1.5em -1em;
 }
@@ -88,7 +84,7 @@ div.searchresult {
   display:block;
   margin-left:2em;
   padding-left:10em;
-  border-bottom:1px solid #03956a;
+  border-bottom:1px solid #898a8b;
 }
 .searchresult-field-title {
   float:left;
@@ -131,4 +127,5 @@ div.searchresult {
 .searchresult-nomatch {
   padding:0.5em;
   padding-top:1em;
+  text-align:center;
 }

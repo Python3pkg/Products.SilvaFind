@@ -122,8 +122,12 @@ class SilvaFind(Query, Content, SimpleItem):
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
-        for q in searchArguments.values():
-            if q.strip():
+        for key, value in searchArguments.items():
+            if key in ['path', 'meta_type']:
+                # these fields do not count as a real search query
+                # they are always there to filter unwanted results
+                continue
+            if type(value) is unicode and value.strip():
                 queryEmpty = False
                 break
         searchArguments['version_status'] = ['public']
@@ -132,7 +136,7 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('Search query can not start '
                             'with wildcard character.'))
         if queryEmpty:
-            return ([], '')
+            return ([], 'empty')
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:

@@ -265,7 +265,7 @@ class FullTextResultField(ResultField):
             # searchterm is not specified,
             # return the first 20 words
             text = ' '.join(fulltext[:maxwords])
-            if IVersion.providedBy(object):
+            if IVersion.providedBy(object) and hasattr(object, 'fulltext'):
                 realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
@@ -355,7 +355,7 @@ class FullTextResultField(ResultField):
             # do some hiliting, use original text
             # (with punctuation) if this is a silva document
             text = ' '.join(text)
-            if IVersion.providedBy(object):
+            if IVersion.providedBy(object) and hasattr(object, 'fulltext'):
                 realtext = ' '.join(object.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
@@ -385,8 +385,11 @@ class FullTextResultField(ResultField):
                     term = term[:-1]
                 term = re.escape(term)
                 text = ' ' + text
-                regexp = re.compile('([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(), re.IGNORECASE)
-                sub = '\g<1><strong class="search-result-snippet-hilite">\g<2></strong>\g<3>'
+                regexp = re.compile(
+                    '([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(), 
+                    re.IGNORECASE)
+                sub = ('\g<1><strong class="search-result-snippet-hilite">'
+                       '\g<2></strong>\g<3>')
                 text = regexp.sub(sub, text)
         return '<div class="searchresult-snippet">%s</div>' % text.strip()
         

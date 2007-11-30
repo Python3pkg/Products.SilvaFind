@@ -98,9 +98,14 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
         set_name = self.criterion.getMetadataSet()
         field_name = self.criterion.getMetadataId()
         set_values = REQUEST.get(set_name, None)
-        if set_values:
-            value = set_values.get(field_name, None)
-        if value:
+        if set_values is None:
+            return
+        value = set_values.get(field_name, None)
+        if value is None:
+            return
+        if type(value) == list:
+            value = [unicode(item, "UTF-8") for item in value]
+        elif type(value) == str:
             value = unicode(value, 'UTF-8')
         return value
         
@@ -138,7 +143,13 @@ class StoreMetadataCriterion(StoreCriterion):
         criterion_value = set_values.get(field_name, None)
         if criterion_value is None:
             return
-        criterion_value = unicode(criterion_value, 'UTF-8')
+        if type(criterion_value) == list:
+            criterion_value = [
+                unicode(item, "UTF-8") for item in criterion_value]
+        elif type(criterion_value) == str:
+            criterion_value = unicode(criterion_value, 'UTF-8')
+        return criterion_value
+
         self.query.setCriterionValue(self.criterion.getName(), criterion_value)
 
 class IntegerRangeMetadataCriterionView(MetadataCriterionView):
