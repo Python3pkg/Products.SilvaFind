@@ -15,6 +15,7 @@ div.searchform input.searchform-submit {
   padding-top:0.25em;
   padding-right:0.3em;
 }
+
 .searchform-title:after {
   content:':';
 }

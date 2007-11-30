@@ -48,7 +48,6 @@ class MetatypeCriterionView(Implicit):
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
-
     def renderWidget(self, value):
         if value is None:
             value = ''
