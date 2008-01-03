@@ -123,7 +123,7 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
         for key, value in searchArguments.items():
-            if key in ['path', 'meta_type']:
+            if not REQUEST.form.has_key(key):
                 # these fields do not count as a real search query
                 # they are always there to filter unwanted results
                 continue

@@ -116,6 +116,11 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
+        if type(value) == list:
+            if len(value) > 1:
+                return value
+            if len(value) == 0 or value[0] == '':
+                return None
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
