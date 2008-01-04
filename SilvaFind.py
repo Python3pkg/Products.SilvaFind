@@ -130,6 +130,9 @@ class SilvaFind(Query, Content, SimpleItem):
             if type(value) is unicode and value.strip():
                 queryEmpty = False
                 break
+            elif type(value) is list:
+                queryEmpty = False
+                break
         searchArguments['version_status'] = ['public']
         query = searchArguments.get('fulltext', '').strip()
         if query and query[0] in ['?', '*']:

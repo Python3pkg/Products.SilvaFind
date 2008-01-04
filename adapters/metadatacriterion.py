@@ -82,6 +82,8 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
     security.declareProtected(SilvaPermissions.View,
         'renderValue')
     def renderValue(self, value):
+        if type(value) == list:
+            value = ", ".join(value)
         return "<strong>%s</strong>" % value
     
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
@@ -114,6 +116,11 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
+        if type(value) == list:
+            if len(value) > 1:
+                return value
+            if len(value) == 0 or value[0] == '':
+                return None
         return value
         
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -148,8 +155,6 @@ class StoreMetadataCriterion(StoreCriterion):
                 unicode(item, "UTF-8") for item in criterion_value]
         elif type(criterion_value) == str:
             criterion_value = unicode(criterion_value, 'UTF-8')
-        return criterion_value
-
         self.query.setCriterionValue(self.criterion.getName(), criterion_value)
 
 class IntegerRangeMetadataCriterionView(MetadataCriterionView):
