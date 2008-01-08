@@ -4,6 +4,10 @@ Changes:
 
     - i18n readied for Silva 2.0+
 
+1.1.1.2:
+
+Changes:
+
     - metatypecriterion allows for list values
 
     - Some code refactoring in MetatypeCriterionView, so it's easier
