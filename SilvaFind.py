@@ -31,9 +31,12 @@ from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 icon = 'www/find.png'
 
 class SilvaFind(Query, Content, SimpleItem):
-    __doc__ = _("""This a special document that can show a list of content
-       items resulting from a search with specific values for criteria
-       or a form to enter search criteria before getting results.""")
+    __doc__ = _("""Silva Find is a powerful search feature that allows easy 
+        creation of search forms and result pages. Users can add a Find
+        anywhere and define which fields to make searchable by site visitors
+        and/or which fields to limit to a preset value. Users also can
+        determine which fields should be displayed in the search results. All
+        metadata sets/fields are supported.""")
 
     security = ClassSecurityInfo()
 

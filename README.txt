@@ -1,13 +1,13 @@
 SilvaFind README
 
-SilvaFind is a Silva extension to allow easy creation of search forms and
-result pages, both for users of the public site and for authors in the SMI. 
+SilvaFind is a powerful search feature to allow easy creation of search forms
+and result pages, both for users of the public site and for authors in the SMI.
 Simple schemas can be defined to indicate which fields should be searchable.
 
-Authors can add a 'Silva Find' object anywhere, and define which fields to
+Authors can add a 'Silva Find' object anywhere and define which fields to
 make searchable by end users of the public site, and/or which fields to
-limit to a preset value. Authors also can choose which fields should be
-displayed in the search results.
+limit to a preset value. Authors also can determine which fields should be
+displayed in the search results. All metadata set/fields are supported.
 
 If you can't add the 'Silva Find' object in the SMI you should make sure it's
 checked in the 'addables' section of the publication. If Silva Find is not 
