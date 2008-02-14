@@ -25,7 +25,7 @@
       </tal:block>
       <td>
 
-<form action="manage_edit" method="post">
+<form name="silva_find_edit" action="manage_edit" method="post">
 <table class="listing">
   <thead>
     <tal:block replace="nothing">
