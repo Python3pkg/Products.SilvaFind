@@ -86,11 +86,14 @@ class MetatypeCriterionView(Implicit):
         else:
             value = self.getStoredValue()
         if value == ['']:
-            value = None
+            # return available metatypes from the edit view,
+            # it might be that an adapter is configured so 
+            # not all metatypes are allowed to be shown.
+            value = self.getAvailableMetaTypes()
         return value
-        
+
     getIndexValue = getValue
-    
+
     def getAvailableMetaTypes(self):
         return self.query.REQUEST.model.service_catalog.uniqueValuesFor(
                 self.getIndexId())
