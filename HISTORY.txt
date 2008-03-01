@@ -1,5 +1,14 @@
 1.1.3 (unreleased)
 
+ Changes:
+
+    - SilvaFind is now using Silva 2.0 zcml extension 
+      registration.  From this version forward this
+      product will not work in Silva 1.6 or lower
+
+    - changed product to work with Silva 2.1
+      zcml extension registration
+
  Bugs Fixed:
     - metatypecriterion used all types when no selection was
       made in SMI, it should have used all *available* types 

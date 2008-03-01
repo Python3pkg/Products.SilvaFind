@@ -28,8 +28,6 @@ from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
-icon = 'www/find.png'
-
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""Silva Find is a powerful search feature that allows easy 
         creation of search forms and result pages. Users can add a Find
