@@ -4,9 +4,10 @@ import SilvaFindTestCase
 from Products.SilvaFind.globalschema import globalSearchFields
     
 class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
+    
     def afterSetUp(self):
         self.add_query(self.root, 'query', 'Query')
-
+            
     def test_instance(self):
         self.failUnless('query' in self.root.objectIds())
 
