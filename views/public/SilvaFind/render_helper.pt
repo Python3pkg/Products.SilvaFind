@@ -34,7 +34,9 @@
         <tr>
           <td></td>
           <td>
-            <input class="button searchform-submit"
+            <input 
+              name="search_submit"
+              class="button searchform-submit"
               type="submit"
               value="Search"
               accesskey="s"

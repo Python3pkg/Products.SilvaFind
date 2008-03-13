@@ -12,10 +12,10 @@ class testSchema(TestCase):
         self.field1 = MetadataCriterionField('meta-set', 'field-id1')
         self.field2 = MetadataCriterionField('meta-set', 'field-id2')
         self.schema = SearchSchema([self.field1, self.field2])
-
+        
     def testInstanciation(self):
         self.failIf(self.schema is None)
-
+        
     def testAccessFields(self):
         self.assertEquals([self.field1, self.field2], self.schema.getFields())
 
