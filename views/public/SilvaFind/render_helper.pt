@@ -14,7 +14,7 @@
 </h2>
 
 <div class="searchform" tal:condition="model/isFormNeeded">
-  <form tal:attributes="action model/absolute_url">
+  <form name="search_form" tal:attributes="action model/absolute_url">
     <table class="silvatable plain">
       <tbody>
         <tr tal:repeat="fieldView model/getPublicFieldViews">
