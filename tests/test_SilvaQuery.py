@@ -23,12 +23,19 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
                     {'maintitle':'Title',
                      'shorttitle':'Short'})
         query._edit(request)
-
+        # content type    
         self.assertEquals(query.getFieldViews()[0].getStoredValue(), 'Olliphant')
+        # fulltext
         self.assertEquals(query.getFieldViews()[1].getStoredValue(), 'xyz')
+        # title
         self.assertEquals(query.getFieldViews()[2].getStoredValue(), 'Title')
+        # short title
         self.assertEquals(query.getFieldViews()[3].getStoredValue(), 'Short')
-        self.assertEquals(query.getFieldViews()[6].getStoredValue(), '/root/')
+        # keywords
+        # publication time
+        # expiration time
+        # below_path
+        self.assertEquals(query.getFieldViews()[7].getStoredValue(), '/root/')
         
     def test_search(self):
         document = self.add_document(self.root, 'doc', 'Document')
