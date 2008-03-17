@@ -69,6 +69,11 @@ def setupService(root):
     """
     if not 'service_find' in root.objectIds():
         findservice.manage_addFindService(root)
+
+    # we don't add a default silva find anymore, since this
+    # might be a security risc, and was not used anyway
+    return 
+
     SilvaFind.manage_addSilvaFind(root.service_find, 'default', 'Default search')
     default = root.service_find.default
     for field in root.service_find.getSearchSchema().getFields():
