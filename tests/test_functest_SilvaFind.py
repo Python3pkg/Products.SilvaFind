@@ -4,8 +4,33 @@ from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
 from Products.Silva.tests.SilvaBrowser import SilvaBrowser
 from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
 
+content = {
+    'the_great_figure': {
+        'id': 'the_great_figure',
+        'title': 'The Great Figure',
+        'file': 'the_great_figure.pdf',
+        'full_text': 'gold',
+        'short_title': '',
+        'keywords': 'williams',
+    },
+    'the_raven': {
+        'id': 'the_raven',
+        'title': 'The Raven',
+        'file': 'raven.txt',
+        'full_text': 'bleak',
+        'short_title': '',
+        'keywords': 'poe',
+    },
+    'the_second_coming': {
+        'id': 'the_second_coming',
+        'title': 'The Second Coming',
+        'file': 'the_second_coming.txt',
+        'full_text': 'Spiritus Mundi',
+        'short_title': '',
+        'keywords': 'yeats',
+    },
+}
 
-        
 class SilvaFindTestCase(SilvaFunctionalTestCase):
     """
         check if machine has pdftotext
@@ -18,36 +43,72 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         ids = sb.get_content_ids()
         self.failUnless('search_test' in ids)
         if pdf:
-            sb.make_content('Silva File', id='the_raven',
-                                      title='The Raven',
-                                      file='raven.txt')
-            sb.make_content('Silva File', id='second_coming',
-                                      title='The Second Coming',
-                                      file='the_second_coming.txt')
-            sb.make_content('Silva File', id='great_figure',
-                                          title='The Great Figure',
-                                          file='the_great_figure.pdf')
+            for text_name, text_attribute in content.iteritems():
+                sb.make_content('Silva File', id=text_attribute['id'],
+                                              title=text_attribute['title'],
+                                              file=text_attribute['file'])
             ids = sb.get_content_ids()
             self.failUnless('the_raven' in ids)
-            self.failUnless('second_coming' in ids)
-            self.failUnless('great_figure' in ids)
+            self.failUnless('the_second_coming' in ids)
+            self.failUnless('the_great_figure' in ids)
         else:
-            sb.make_content('Silva File', id='the_raven',
-                                      title='The Raven',
-                                      file='raven.txt')
-            sb.make_content('Silva File', id='second_coming',
-                                      title='The Second Coming',
-                                      file='the_second_coming.txt')
-            ids = sb.get_content_ids()
-            self.failUnless('the_raven' in ids)
-            self.failUnless('second_coming' in ids)
-        
-    def searching(self, sb, pdf=True):
-        if pdf:
+            for text_name, text_attribute in content.iteritems():
+                if text_attribute['id'] != 'the_great_figure':
+                    sb.make_content('Silva File', id=text_attribute['id'],
+                                                  title=text_attribute['title'],
+                                                  file=text_attribute['file'])
             
-        pass
-        
+                    ids = sb.get_content_ids()
+                    self.failUnless('the_raven' in ids)
+                    self.failUnless('second_coming' in ids)
+                else:
+                    continue
+
+    def modify_text_metadata(self, sb):
+        for text_name, text_attribute in content.iteritems():
+            sb.click_href_labeled(text_name)
+            sb.click_tab_named('properties')
+            sb.browser.getControl(name='silva-extra.keywords:record').value = text_attribute['keywords']
+            sb.browser.getControl(name='save_metadata:method', index=0).click()
+            self.failUnless(text_attribute['keywords'] in sb.browser.contents)
+            sb.click_href_labeled('edit')
+            sb.click_href_labeled('root')
+
+    def modify_interface(self, sb, keyword):
+        sb.click_href_labeled('search_test')
+        checkbox = sb.browser.getControl(name='meta_type:list')
+        form = sb.browser.getForm(index=0)
+        form.getControl(name='show_meta_type:bool').value = ['checked']
+        form.getControl(name='show_silva-content-maintitle:bool').value = ['checked']
+        form.getControl(name='show_silva-extra-keywords:bool').value = ['checked']
+        form.getControl(name='silva-extra.keywords:record').value = keyword
+        form.submit()
+        form = sb.browser.getForm(index=0)
+        self.assertEquals(form.getControl(name='show_meta_type:bool').value, True)
+        self.assertEquals(form.getControl(name='show_silva-content-maintitle:bool').value, True)
+        self.assertEquals(form.getControl(name='show_silva-extra-keywords:bool').value, True)
+        self.assertEquals(form.getControl(name='silva-extra.keywords:record').value, keyword)
+        sb.click_href_labeled('root')
     
+    def search(self, sb, text_id, title, full_text, pdf=True):
+        """ search terms
+            the_great_figure: gold
+            the_second_coming: falcon
+            the_raven: raven
+        """
+        sb.click_href_labeled('search_test')
+        sb.click_href_labeled('view public version')
+        if pdf:
+            link = sb.browser.getLink(title)
+            self.failUnless(link.text in sb.browser.contents)
+            sb.browser.getControl(name='fulltext').value = full_text
+            sb.browser.getControl(name='silva-content.maintitle:record').value = title
+            sb.click_button_labeled('Search')
+            self.failUnless(full_text in sb.browser.contents)
+        else:
+            print 'else'
+        sb.go('http://nohost/root/edit')
+
     def test_silvafind(self):
         sb = SilvaBrowser()
         status, url = sb.login('manager', 'secret', sb.smi_url())
@@ -63,12 +124,16 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
                   Please install pdftotext and restart the test to fully test SilvaFind
                   """
             self.content(sb, pdf=None)
-        sb.click_href_labeled('Search test')
-        self.failUnless('edit' in sb.browser.contents)
-        self.searching(sb)
-        status, url =sb.click_href_labeled('logout')
+        self.modify_text_metadata(sb)
+        for text_name, text_attribute in content.iteritems():
+            self.modify_interface(sb, text_attribute['keywords'])
+            self.search(sb, text_attribute['id'],
+                            text_attribute['title'],
+                            text_attribute['full_text'])
+        h2 = sb.get_listing_h2()
+        self.failUnless('Silva Root' in h2)
+        status, url = sb.click_href_labeled('logout')
         self.assertEquals(status, 401)
-        
 
 def test_suite():
     suite = unittest.TestSuite()
