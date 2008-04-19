@@ -22,7 +22,7 @@ def initialize(context):
         context.registerClass(
             findservice.FindService,
             constructors = (findservice.manage_addFindService,),
-            icon = "www/find.png",
+            icon = "www/find_service.png",
             container_filter = makeContainerFilter()
             )
     else:
