@@ -52,17 +52,17 @@ class MetatypeCriterionView(Implicit):
         if value is None:
             value = ''
         select_all_text = _('All Types')
-        html = '<select class="store" multiple="1" name="%s:list" id="%s" size="5"> ' % (self.criterion.getName(),
+        html = '<select class="store" multiple="multiple" name="%s:list" id="%s" size="5"> ' % (self.criterion.getName(),
                             self.criterion.getName())
         selected = ''
         if not value or value == ['']:
-            selected = ' selected="true"'
+            selected = ' selected="selected"'
         meta_types = ['<option value=""%s>%s</option>' % (selected,
                                                           select_all_text)]
         for meta_type in self.getAvailableMetaTypes():
             selected = ''
             if meta_type in value:
-                selected = ' selected="true"'
+                selected = ' selected="selected"'
             name = meta_type.replace('Silva ', '')
             meta_types.append('<option value="%s"%s>%s</option>' % (meta_type,
                                                                     selected, 
