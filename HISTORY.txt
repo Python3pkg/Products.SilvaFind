@@ -28,6 +28,9 @@ Changes:
 
     - i18n readied for Silva 2.0+
 
+    - changed product to work with Silva 2.1
+      zcml extension registration 
+
 1.1.1.2:
 
 Changes:
