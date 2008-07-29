@@ -1,4 +1,4 @@
-# Swedish translation for silva-find
+# French translation for silva-find
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the silva-find package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: silva-find\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-05-07 13:27+0000\n"
-"PO-Revision-Date: 2008-05-10 17:25+0000\n"
-"Last-Translator: Mikael Hamre <Unknown>\n"
-"Language-Team: Swedish <sv@li.org>\n"
+"PO-Revision-Date: 2008-06-11 11:45+0000\n"
+"Last-Translator: Sylvain Viollon <sylvain@infrae.com>\n"
+"Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,15 +20,18 @@ msgstr ""
 #: /SilvaFind.py:140
 msgid "Search query can not start with wildcard character."
 msgstr ""
+"La requête de recherche ne peut pas commencer par un caractère générique."
 
 #: /SilvaFind.py:147
 msgid "Search query contains only common or reserved words."
 msgstr ""
+"La requête  de recherche ne contient que des caractères génériques ou "
+"réservés."
 
 #: /SilvaFind.py:151
 #: /views/public/SilvaFind/render_helper.pt:156
 msgid "No items matched your search."
-msgstr "Inga objekt kunde matchas med din sökning."
+msgstr "Aucun élément ne correspond à votre recherche."
 
 #: /SilvaFind.py:32
 msgid ""
@@ -44,39 +47,39 @@ msgstr ""
 
 #: /adapters/fulltextcriterion.py:79
 msgid "full text"
-msgstr ""
+msgstr "text complet"
 
 #: /adapters/fulltextcriterion.py:87
 msgid "Search the full text."
-msgstr ""
+msgstr "Rechercher le texte complet."
 
 #: /adapters/metadatacriterion.py:202
 msgid "between"
-msgstr "mellan"
+msgstr "entre"
 
 #: /adapters/metadatacriterion.py:203
 msgid "and"
-msgstr "och"
+msgstr "et"
 
 #: /adapters/metadatacriterion.py:204
 msgid "only integers"
-msgstr ""
+msgstr "seulement des entiers"
 
 #: /adapters/metadatacriterion.py:342
 msgid "from"
-msgstr "från"
+msgstr "de"
 
 #: /adapters/metadatacriterion.py:343
 msgid "to"
-msgstr "till"
+msgstr "à"
 
 #: /adapters/metatypecriterion.py:121
 msgid "Search for the selected content types."
-msgstr "Sök efter den valda typen av material."
+msgstr "Recherche seulement les types d'éléments sélectionnés."
 
 #: /adapters/metatypecriterion.py:54
 msgid "All Types"
-msgstr "Alla typer"
+msgstr "Tous les types"
 
 #: /adapters/pathcriterion.py:110
 msgid "below path"
@@ -88,7 +91,7 @@ msgstr ""
 
 #: /globalschema.py:26
 msgid "Ranking"
-msgstr "Ranking"
+msgstr "Classement"
 
 #: /globalschema.py:27
 #: /schema.py:139
@@ -101,7 +104,7 @@ msgstr ""
 
 #: /globalschema.py:29
 msgid "Show total number of results"
-msgstr ""
+msgstr "Afficher le nombre de résultat"
 
 #: /globalschema.py:30
 msgid "ResultCount"
@@ -114,19 +117,19 @@ msgstr ""
 
 #: /globalschema.py:32
 msgid "Icon"
-msgstr "Ikon"
+msgstr "Icône"
 
 #: /globalschema.py:33
 msgid "Display the icon of the content type."
-msgstr ""
+msgstr "Affiche l'icône du type d'élément."
 
 #: /globalschema.py:34
 msgid "Link"
-msgstr "Länk"
+msgstr "Lien"
 
 #: /globalschema.py:35
 msgid "Date"
-msgstr "Datum"
+msgstr "Date"
 
 #: /globalschema.py:36
 msgid "Text snippet"
@@ -134,11 +137,11 @@ msgstr ""
 
 #: /globalschema.py:37
 msgid "Thumbnail"
-msgstr "Miniatyrbild"
+msgstr "Miniatures"
 
 #: /globalschema.py:39
 msgid "Breadcrumbs"
-msgstr "Brödsmulor"
+msgstr ""
 
 #: /schema.py:167
 msgid "total search result number"
@@ -146,7 +149,7 @@ msgstr ""
 
 #: /schema.py:219
 msgid "Shows thumbnails for images"
-msgstr ""
+msgstr "Afficher les miniatures pour les images"
 
 #: /schema.py:240
 msgid "Add text snippets from content"
@@ -162,11 +165,11 @@ msgstr ""
 
 #: /schema.py:72
 msgid "meta_type"
-msgstr ""
+msgstr "type d'élément"
 
 #: /schema.py:78
 msgid "path"
-msgstr "sökväg"
+msgstr "chemin"
 
 #: /views/edit/Content/SilvaFind/edit.pt:108
 msgid "search results for &#xab;${title_or_id}&#xbb;"
@@ -187,46 +190,46 @@ msgstr ""
 #: /views/edit/Content/SilvaFind/edit.pt:53
 #: /views/edit/Content/SilvaFind/edit.pt:114
 msgid "element"
-msgstr "element"
+msgstr "élément"
 
 #: /views/edit/Content/SilvaFind/edit.pt:58
 msgid "content"
-msgstr "innehåll"
+msgstr "contenu"
 
 #: /views/edit/Content/SilvaFind/edit.pt:61
 #: /views/edit/Content/SilvaFind/edit.pt:122
 msgid "note"
-msgstr "anteckning"
+msgstr "note"
 
 #: /views/edit/Content/SilvaFind/edit.pt:97
 #: /views/edit/Content/SilvaFind/edit.pt:166
 msgid "access key: alt-s"
-msgstr ""
+msgstr "raccourci: alt-s"
 
 #: /views/edit/Content/SilvaFind/edit.pt:97
 #: /views/edit/Content/SilvaFind/edit.pt:166
 msgid "save"
-msgstr "spara"
+msgstr "sauvegarder"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:17
 msgid "edit"
-msgstr "redigera"
+msgstr "modifier"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:18
 msgid "preview"
-msgstr "förhandsgranska"
+msgstr "aperçu"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:19
 msgid "properties"
-msgstr "egenskaper"
+msgstr "propriétés"
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:20
 msgid "access"
-msgstr "åtkomst"
+msgstr "accès"
 
 #: /views/public/SilvaFind/render_helper.pt:100
 msgid "of about ${total}"
-msgstr ""
+msgstr "sur un total de ${total}"
 
 #: /views/public/SilvaFind/render_helper.pt:106
 msgid "See the next result listing: alt-n"
@@ -234,15 +237,15 @@ msgstr ""
 
 #: /views/public/SilvaFind/render_helper.pt:110
 msgid "Next"
-msgstr "Nästa"
+msgstr "Suivant"
 
 #: /views/public/SilvaFind/render_helper.pt:37
 msgid "Search"
-msgstr "Sök"
+msgstr "Rechercher"
 
 #: /views/public/SilvaFind/render_helper.pt:66
 msgid "Search Results"
-msgstr "Sökresultat"
+msgstr "Résultats de la recherche"
 
 #: /views/public/SilvaFind/render_helper.pt:76
 msgid "See the previous result listing: alt-p"
@@ -250,7 +253,7 @@ msgstr ""
 
 #: /views/public/SilvaFind/render_helper.pt:87
 msgid "Previous"
-msgstr "Föregående"
+msgstr "Précédent"
 
 #: /views/public/SilvaFind/render_helper.pt:96
 msgid "Showing results ${batch_start} to ${batch_end}"

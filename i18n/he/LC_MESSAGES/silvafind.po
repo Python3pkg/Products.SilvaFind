@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: silva-find\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Wed May  7 14:58:46 2008\n"
+"POT-Creation-Date: 2008-05-07 13:27+0000\n"
 "PO-Revision-Date: 2008-04-14 10:37+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-05-07 12:52+0000\n"
+"X-Launchpad-Export-Date: 2008-07-29 09:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: /SilvaFind.py:140
@@ -25,7 +25,8 @@ msgstr "שאילתת החיפוש לא יכולה להתחיל עם תו-כל."
 msgid "Search query contains only common or reserved words."
 msgstr "שאילתת החיפוש מכילה מילים נפוצות או שמורות בלבד."
 
-#: /SilvaFind.py:151 /views/public/SilvaFind/render_helper.pt:156
+#: /SilvaFind.py:151
+#: /views/public/SilvaFind/render_helper.pt:156
 msgid "No items matched your search."
 msgstr "אין פריטים התואמים את חיפושך."
 
@@ -89,7 +90,8 @@ msgstr "חפש רק מתחת למיקום זה (נתיב משורש האתר)."
 msgid "Ranking"
 msgstr "דירוג"
 
-#: /globalschema.py:27 /schema.py:139
+#: /globalschema.py:27
+#: /schema.py:139
 msgid "full text result ranking"
 msgstr "דירוג תוצאות כל הטקסט"
 
@@ -105,7 +107,8 @@ msgstr "הצג את סך כל התוצאות"
 msgid "ResultCount"
 msgstr "מספר_התוצאות"
 
-#: /globalschema.py:31 /schema.py:181
+#: /globalschema.py:31
+#: /schema.py:181
 msgid "search result count"
 msgstr "ספירת תוצאות החיפוש"
 
@@ -252,12 +255,3 @@ msgstr "הקודם"
 #: /views/public/SilvaFind/render_helper.pt:96
 msgid "Showing results ${batch_start} to ${batch_end}"
 msgstr "מציג ${batch_start} תוצאות מתוך ${batch_end}"
-
-#~ msgid ""
-#~ "This a special document that can show a list of content\n"
-#~ "       items resulting from a search with specific values for criteria\n"
-#~ "       or a form to enter search criteria before getting results."
-#~ msgstr ""
-#~ "זהו מסמך מיוחד המסוגל להציג רשימת פרטי תוכן\n"
-#~ "       הנובעים מחיפושך אחר ערכים או קריטריונים מסויימים\n"
-#~ "       או טופס להזנת הקריטריונים לחיפוש לפני קבלת התוצאות."
