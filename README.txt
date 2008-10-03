@@ -1,16 +1,17 @@
-SilvaFind README
+SilvaFind
+=========
 
 SilvaFind is a powerful search feature to allow easy creation of search forms
 and result pages, both for users of the public site and for authors in the SMI.
 Simple schemas can be defined to indicate which fields should be searchable.
 
-Authors can add a 'Silva Find' object anywhere and define which fields to
+Authors can add a *Silva Find* object anywhere and define which fields to
 make searchable by end users of the public site, and/or which fields to
 limit to a preset value. Authors also can determine which fields should be
 displayed in the search results. All metadata set/fields are supported.
 
-If you can't add the 'Silva Find' object in the SMI you should make sure it's
-checked in the 'addables' section of the publication. If Silva Find is not 
+If you can't add the *Silva Find* object in the SMI you should make sure it's
+checked in the *addables* section of the publication. If Silva Find is not 
 checked, check it and uncheck the inheritance checkbox (otherwise inheritance 
 will overrule it and uncheck it again).
 
@@ -25,7 +26,7 @@ of search criteria. This behavior is also intended for backwards compatibility,
 but can be used to add your own custom fields from within other products.
 
 For example the default global schema that SilvaFind installs
-(globalschema.py) looks as follows:
+(``globalschema.py``) looks as follows::
 
     from Products.Silva.i18n import translate as _
 
@@ -56,30 +57,33 @@ result fields (plain vanilla, metatype and metadata), and it is not hard to
 make your own. See schema.py for how that is done.
 
 The following SearchField types exist for now, and of course it is possible
-to roll your own::
+to roll your own:
 
-    MetatypeCriterionField: allows the content that is to be searched, to be
-        restricted to certain (one or more) content types.
+``MetatypeCriterionField``
+     allows the content that is to be searched, to be restricted to
+     certain (one or more) content types.
 
-    FulltextCriterionField: allows the fulltext of the content item to be
-        searched.
+``FulltextCriterionField``
+     allows the fulltext of the content item to be searched.
 
-    MetadataCriterionField: allows a specific metadata field of a specific
-        metadata set to be searched.
+``MetadataCriterionField`` 
+     allows a specific metadata field of a specific metadata set to be
+     searched.
 
-    DateRangeMetadataCriterionField: allows a specific datetime based
-        metadata field of a specific metadata set to be searched, using a
-        date range.
+``DateRangeMetadataCriterionField``
+     allows a specific datetime based metadata field of a specific
+     metadata set to be searched, using a date range.
 
-    PathCriterionField: allows the content that is to be searched, to be
-       restricted to be below a certain path. The path of the found children
-       will always start with the supplied path, which is a string starting from
-       the site root.
+``PathCriterionField``
+     allows the content that is to be searched, to be restricted to be
+     below a certain path. The path of the found children will always
+     start with the supplied path, which is a string starting from the
+     site root.
 
 Making your own is as simple as creating a different SearchSchema and
 ResultsSchema in your extension, and registering it in the install.py of
 your extension. You can replace the global default search schema as
-follows, assuming myOwnSearchSchema is a valid SearchSchema object:
+follows, assuming myOwnSearchSchema is a valid SearchSchema object::
 
     def register_search_schema(root):
         root.service_find.search_schema = myOwnSearchSchema
@@ -93,7 +97,7 @@ follows, assuming myOwnSearchSchema is a valid SearchSchema object:
         default._p_changed = True
 
 If your extension defines its own metadata-set, making the fields in
-that set searchable by putting them in your schema is easy:
+that set searchable by putting them in your schema is easy::
 
     myOwnSearchSchema = SearchSchema([
 
@@ -107,8 +111,8 @@ that set searchable by putting them in your schema is easy:
         ])
 
 For a good example of how to customize and use SilvaFind from your own
-extension, see the Silva DLCMS, which you can find here:
+extension, see the Silva DLCMS, which you can find here::
 
-svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
+   svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
 
-and look at searchschema.py
+and look at ``searchschema.py``.
