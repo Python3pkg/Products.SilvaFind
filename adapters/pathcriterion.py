@@ -72,7 +72,7 @@ class PathCriterionView(Implicit):
         if value.startswith(sitepath):
             value = value[len(sitepath):]
         return self.renderWidget(value)
-
+        
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
