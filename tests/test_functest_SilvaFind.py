@@ -1,5 +1,6 @@
+import os
 import unittest
-
+from Products.Five.testbrowser import Browser
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
 from Products.Silva.tests.SilvaBrowser import SilvaBrowser
 from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
@@ -31,22 +32,33 @@ content = {
     },
 }
 
+
+
 class SilvaFindTestCase(SilvaFunctionalTestCase):
     """
         check if machine has pdftotext
         if pdftotext is present run all tests, if not leave out pdftotext tests.
         test search results of SilvaFind
     """
+
     def content(self, sb, pdf=True):
+        directory = os.path.dirname(__file__)
+        for text_name, text_attribute in content.iteritems():
+            file_handle = open(os.path.join(directory,
+                                            text_attribute['file']))
+            file_data = file_handle.read()
+            file_handle.seek(0)
+            self.root.manage_addProduct['Silva'].manage_addFile(
+                text_attribute['id'], text_attribute['title'], file_handle)
+            file_handle.close()
+
         sb.make_content('Silva Find', id='search_test',
                                       title='Search test')
+        
         ids = sb.get_content_ids()
         self.failUnless('search_test' in ids)
+
         if pdf:
-            for text_name, text_attribute in content.iteritems():
-                sb.make_content('Silva File', id=text_attribute['id'],
-                                              title=text_attribute['title'],
-                                              file=text_attribute['file'])
             ids = sb.get_content_ids()
             self.failUnless('the_raven' in ids)
             self.failUnless('the_second_coming' in ids)
