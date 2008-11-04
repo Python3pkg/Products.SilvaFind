@@ -44,7 +44,12 @@ class MetatypeCriterionView(Implicit):
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
-        return self.renderWidget(value)
+        select_all_text = _('All Types')
+        return {'value': value,
+                'name': self.criterion.getName(),
+                'meta_types': self.getAvailableMetaTypes(),
+                'field_type': self.__class__.__name__,
+                'select_all_text': select_all_text,}
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
@@ -82,8 +87,6 @@ class MetatypeCriterionView(Implicit):
                 value = [unicode(vl, 'UTF-8') for vl in value]
         else:
             value = self.getStoredValue()
-        if value == ['']:
-            value = None
         return value
         
     getIndexValue = getValue

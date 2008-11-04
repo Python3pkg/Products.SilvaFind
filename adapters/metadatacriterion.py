@@ -215,7 +215,24 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             value = self.getValue(self.query.REQUEST)
         if stored:
             return self.renderValue(value)
-        return self.renderWidget(value)
+
+        if value:
+            value_lower, value_upper = value
+            if value_lower == None:
+                value_lower = ''
+            if value_upper == None:
+                value_upper = ''
+        else:
+            value_lower = ''
+            value_upper = ''
+        
+        return {'name':self.criterion.getName(),
+                'field_type':self.__class__.__name__,
+                'lower':value_lower,
+                'upper':value_upper,
+                'between': _('between'),
+                'and': _('and'),
+                'intg': _('only integers'),}
 
     security.declareProtected(SilvaPermissions.View,
         'renderValue')
@@ -354,7 +371,24 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
             value = self.getValue(self.query.REQUEST)
         if stored:
             return self.renderValue(value)
-        return self.renderWidget(value)
+
+        if value:
+            value_begin, value_end = value
+            if value_begin == None:
+                value_begin = ''
+            if value_end == None:
+                value_end = ''
+        else:
+            value_begin = ''
+            value_end = ''
+        
+        return {'name': self.criterion.getName(),
+                'field_type': self.__class__.__name__,
+                'begin': value_begin,
+                'end': value_end, 
+                'idname': self.criterion.getName().split('-')[-1],
+                'from': _('from'),
+                'to': _('to'),}
 
     security.declareProtected(SilvaPermissions.View,
         'renderValue')

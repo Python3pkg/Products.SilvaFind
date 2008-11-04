@@ -43,8 +43,10 @@ class FullTextCriterionView(Implicit):
         'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
-        return self.renderWidget(value)
-
+        return {'name': self.criterion.getName(),
+                'field_type': self.__class__.__name__,         
+                'value': value,}
+        
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
