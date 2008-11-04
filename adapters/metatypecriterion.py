@@ -56,12 +56,13 @@ class MetatypeCriterionView(Implicit):
     def renderWidget(self, value):
         if value is None:
             value = ''
-        select_all_text = _('All Types')
+
         html = '<select class="store" multiple="multiple" name="%s:list" id="%s" size="5"> ' % (self.criterion.getName(),
                             self.criterion.getName())
         selected = ''
         if not value or value == ['']:
             selected = ' selected="selected"'
+        select_all_text = _('All Types')
         meta_types = ['<option value=""%s>%s</option>' % (selected,
                                                           select_all_text)]
         for meta_type in self.getAvailableMetaTypes():
@@ -90,11 +91,6 @@ class MetatypeCriterionView(Implicit):
                 value = values
         else:
             value = self.getStoredValue()
-        if value == ['']:
-            # return available metatypes from the edit view,
-            # it might be that an adapter is configured so 
-            # not all metatypes are allowed to be shown.
-            value = self.getAvailableMetaTypes()
         return value
 
     getIndexValue = getValue

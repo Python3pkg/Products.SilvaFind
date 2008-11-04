@@ -38,11 +38,14 @@
                       <select class="store" multiple="multiple" size="5"
                               tal:attributes="name name;
                                               id widget_data/name">
-                        <option tal:condition="python: widget_data['value']"
-                                  tal:content="widget_data/select_all_text" selected="selected"/>
+                          <option tal:condition="python: widget_data['value'] and widget_data['value'] != ['']"
+                                  tal:content="widget_data/select_all_text"
+                                  value="" />
                           <option tal:condition="python: not widget_data['value'] or
-                                                         widget_data['value'] == ['']"
-                                  tal:content="widget_data/select_all_text" selected="selected"/>
+                                                 widget_data['value'] == ['']"
+                                  tal:content="widget_data/select_all_text"
+                                  selected="selected"
+                                  value=""/>
                         <tal:block tal:repeat="meta_type widget_data/meta_types">
                           <option tal:condition="python:meta_type in widget_data['value']"
                                   tal:content="python:meta_type.replace('Silva', '')"
@@ -50,7 +53,7 @@
                                   selected="selected"/>
                           <option tal:condition="python:meta_type not in widget_data['value']"
                                   tal:content="python:meta_type.replace('Silva', '')"
-                                  tal:attributes="value meta_type"/>
+                                  tal:attributes="value meta_type" />
                         </tal:block>
                       </select>
                     </td>
