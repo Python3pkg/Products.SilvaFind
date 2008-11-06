@@ -111,14 +111,14 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.click_href_labeled('search_test')
         sb.click_href_labeled('view public version')
         if pdf:
-            link = sb.browser.getLink(title)
-            self.failUnless(link.text in sb.browser.contents)
             sb.browser.getControl(name='fulltext').value = full_text
             sb.browser.getControl(name='silva-content.maintitle:record').value = title
             sb.click_button_labeled('Search')
             self.failUnless(full_text in sb.browser.contents)
         else:
-            print 'else'
+            # this area is meant for machines that don't have
+            # pdftotext
+            print 'tests need to be written'
         sb.go('http://nohost/root/edit')
 
     def test_silvafind(self):
