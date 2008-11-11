@@ -114,7 +114,7 @@ InitializeClass(FindService)
 def manage_addFindService(
     context, id='service_find', title='', REQUEST=None):
     """Add find service.
-    """    
+    """
     service = FindService(id)
     service.title = 'Find Service'
     context._setObject(id, service)
