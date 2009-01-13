@@ -239,6 +239,8 @@ class SilvaFindView(silvaviews.View):
     """View a Silva Find.
     """
 
+    silvaconf.context(IFind)
+
     def isViewableForUser(self, brain):
         security_manager = getSecurityManager()
         return security_manager.checkPermission('View', brain.getObject())
