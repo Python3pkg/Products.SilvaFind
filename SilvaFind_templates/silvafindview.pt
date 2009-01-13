@@ -1,20 +1,16 @@
-<tal:block define="model request/ghost_model | request/model;
-                   public options/public | nothing;
-                   title_method python: test(public, 'get_title', 'get_title_editable');
-                   root_url model/get_root_url"
-           xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
            i18n:domain="silvafind">
 
   <h2 class="heading"
-      tal:content="model/get_title">
+      tal:content="content/get_title">
     title
   </h2>
 
-  <div class="searchform" tal:condition="model/isFormNeeded">
-    <form name="search_form" tal:attributes="action model/absolute_url">
+  <div class="searchform" tal:condition="context/isFormNeeded">
+    <form name="search_form" tal:attributes="action context/absolute_url">
       <table class="silvatable plain">
         <tbody>
-          <tr tal:repeat="fieldView model/getPublicFieldViews">
+          <tr tal:repeat="fieldView context/getPublicFieldViews">
             <td class="searchform-title"
                 tal:content="fieldView/getTitle"
                 i18n:translate="">
@@ -158,12 +154,12 @@
   <tal:block tal:condition="request/form/keys">
 
     <div class="searchresults"
-         tal:define="resultparts python:model.searchResultsWithDescription(request);
+         tal:define="resultparts python:context.searchResultsWithDescription(request);
                      results python:resultparts[0];
                      msg python:resultparts[1];
-                     columnTitles model/getResultsColumnTitles;
-                     batch python:model.getBatch(results);
-                     fields python:model.getPublicResultFieldViews();">
+                     columnTitles context/getResultsColumnTitles;
+                     batch python:view.getBatch(results);
+                     fields python:context.getPublicResultFieldViews();">
 
       <h3 class="heading" i18n:translate=""
           tal:condition="python:len(batch)">Search Results</h3>
@@ -181,8 +177,7 @@
                      i18n:attributes="title">
                     <img alt="Previous"
                          tal:define="image here/globals/left.gif"
-                         tal:attributes="
-                                         src image/absolute_url;
+                         tal:attributes="src image/absolute_url;
                                          width image/width;
                                          height image/height;
                                          "/>
@@ -212,8 +207,7 @@
                     <tal:block i18n:translate="">Next</tal:block>
                     <img alt="Next"
                          tal:define="image here/globals/right.gif"
-                         tal:attributes="
-                                         src image/absolute_url;
+                         tal:attributes="src image/absolute_url;
                                          width image/width;
                                          height image/height;
                                          "/>
@@ -239,10 +233,10 @@
                 </span>
                 <tal:block tal:define="result python:field.render(context, item)"
                            tal:condition="python:not field.getName() in ['resultcount', 'totalresultcount']">
-                  <span tal:condition="python:same_type(result, [])"
+                  <span tal:condition="python:isinstance(result, list)"
                         tal:repeat="item result"
                         tal:replace="structure item" />
-                  <span tal:condition="python:not same_type(result, [])"
+                  <span tal:condition="python:not isinstance(result, list)"
                         tal:replace="structure result" />
                 </tal:block>
               </tal:block>
