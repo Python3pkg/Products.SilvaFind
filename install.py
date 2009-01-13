@@ -48,13 +48,9 @@ def registerViews(reg):
     """
     # edit
     reg.register('edit', 'Silva Find', ['edit', 'Content', 'SilvaFind'])
-    # public
-    reg.register('public', 'Silva Find', ['public', 'SilvaFind',])
 
 def unregisterViews(reg):
-    for meta_type in ['Silva Find']:
-        reg.unregister('edit', meta_type)
-        reg.unregister('view', meta_type)
+    reg.unregister('edit', 'Silva Find')
 
 
 def setupService(root):

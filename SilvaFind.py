@@ -22,6 +22,7 @@ from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle
 
+from silva.core.views import views as silvaviews
 from silva.core.views import z3cforms as silvaz3cforms
 from silva.core import conf as silvaconf
 
@@ -307,6 +308,11 @@ class SilvaFindAddForm(silvaz3cforms.AddForm):
     """
 
     silvaconf.name(u'Silva Find')
+
+
+class SilvaFindView(silvaviews.View):
+    """View a Silva Find.
+    """
 
 
 manage_addSilvaFindForm = PageTemplateFile("www/silvaFindAdd", globals(),
