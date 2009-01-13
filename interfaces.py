@@ -1,6 +1,6 @@
 # Copyright (c) 2006-2009 Infrae. All rights reserved.
 # See also LICENSE.txt
-# $Id: SilvaFind.py 33006 2009-01-13 12:31:43Z sylvain $
+# $Id$
 
 from zope.interface import Interface
 from Products.Silva import interfaces
