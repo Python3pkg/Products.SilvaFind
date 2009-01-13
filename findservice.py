@@ -1,16 +1,18 @@
 # Copyright (c) 2002-2009 Infrae. All rights reserved.
 # See also LICENSE.txt
-# Python
+# $Id$
 
 # Zope
-from OFS import Folder
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
+from zope.interface import implements
 
 # Silva
+from Products.Silva.BaseService import SilvaService
 from Products.Silva import helpers
-from Products.SilvaFind.globalschema import globalSearchFields, globalResultsFields
 
+from Products.SilvaFind.interfaces import IFindService
+from Products.SilvaFind.globalschema import globalSearchFields, globalResultsFields
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import ResultsSchema
 from Products.SilvaFind.schema import MetadataResultField
@@ -20,29 +22,24 @@ from Products.SilvaFind.schema import IntegerRangeMetadataCriterionField
 from Products.SilvaFind.schema import AutomaticMetaDataResultField
 from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
 
-class FindService(Folder.Folder):
+from silva.core import conf as silvaconf
+
+
+class FindService(SilvaService):
     """Find Service
     """
-    
+
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find Service"
-    
-    manage_options = (
-        () +
-        Folder.Folder.manage_options
-        )
-    #needed to be able to add a SilvaFind object
-    def __init__(self, id):
-        FindService.inheritedAttribute('__init__')(self, id)
+    implements(IFindService)
+    silvaconf.icon('www/find_service.png')
+    silvaconf.factory('manage_addSilvaFindService')
+
+    def __init__(self, id, title):
+        super(FindService, self).__init__(id, title)
         self.search_schema = None
         self.result_schema = None
-    
-    def _add_ordered_id(self, item):
-        pass
-
-    def _remove_ordered_id(self, item):
-        pass
 
     def getSearchSchema(self):
         if not self.search_schema is None:
@@ -53,7 +50,7 @@ class FindService(Folder.Folder):
             metadata_fields = self._createMetadataCriterionFields()
             amd = amd[0]
             index = globalSearchFields.index(amd)
-            fields = (globalSearchFields[:index] 
+            fields = (globalSearchFields[:index]
                         + metadata_fields +
                         globalSearchFields[index:])
             fields.remove(amd)
@@ -70,7 +67,7 @@ class FindService(Folder.Folder):
             metadata_fields = self._createMetadataResultFields()
             amd = amd[0]
             index = globalResultsFields.index(amd)
-            fields = (globalResultsFields[:index] 
+            fields = (globalResultsFields[:index]
                         + metadata_fields +
                         globalResultsFields[index:])
             fields.remove(amd)
@@ -109,15 +106,15 @@ class FindService(Folder.Folder):
                     field = MetadataCriterionField(set.id, el.id)
                 fields.append(field)
         return fields
+
 InitializeClass(FindService)
 
-def manage_addFindService(
-    context, id='service_find', title='', REQUEST=None):
+
+def manage_addSilvaFindService(
+    context, id='service_find', title='Find Service', REQUEST=None):
     """Add find service.
     """
-    service = FindService(id)
-    service.title = 'Find Service'
+    service = FindService(id, title)
     context._setObject(id, service)
-    service = getattr(context, id)
     helpers.add_and_edit(context, id, REQUEST)
     return ''

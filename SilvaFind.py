@@ -22,18 +22,19 @@ from Products.Silva import SilvaPermissions
 from Products.Silva.helpers import add_and_edit
 from Products.Silva import mangle
 
-from Products.SilvaMetadata.Index import createIndexId
+from silva.core.views import z3cforms as silvaz3cforms
+from silva.core import conf as silvaconf
 
 #SilvaFind
 from Products.SilvaFind.query import Query
-from Products.SilvaFind.interfaces import ISilvaQuery
+from Products.SilvaFind.interfaces import IFind
 from Products.SilvaFind.adapters.interfaces import ICriterionView
 from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
 class SilvaFind(Query, Content, SimpleItem):
-    __doc__ = _("""Silva Find is a powerful search feature that allows easy 
+    __doc__ = _("""Silva Find is a powerful search feature that allows easy
         creation of search forms and result pages. Users can add a Find
         anywhere and define which fields to make searchable by site visitors
         and/or which fields to limit to a preset value. Users also can
@@ -43,29 +44,27 @@ class SilvaFind(Query, Content, SimpleItem):
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find"
-
-    implements(ISilvaQuery)
+    implements(IFind)
+    silvaconf.icon('www/find.png')
+    silvaconf.factory('manage_addSilvaFindForm')
+    silvaconf.factory('manage_addSilvaFind')
 
     def __init__(self, id):
-        try:
-            Content.__init__(self, id)
-        except TypeError, err:
-            # some compatibility for older silvas
-            Content.__init__(self, id, 'dummy title for silva < 2.0')
+        Content.__init__(self, id)
         Query.__init__(self)
         self.shownFields = PersistentMapping()
         self.shownResultsFields = PersistentMapping()
         # by default we only show fulltext search
         # and a couple of resultfields
-        self.shownFields['fulltext'] = True 
-        self.shownResultsFields['link'] = True 
-        self.shownResultsFields['ranking'] = True 
-        self.shownResultsFields['resultcount'] = True 
-        self.shownResultsFields['icon'] = True 
-        self.shownResultsFields['date'] = True 
-        self.shownResultsFields['textsnippet'] = True 
-        self.shownResultsFields['thumbnail'] = True 
-        self.shownResultsFields['breadcrumbs'] = True 
+        self.shownFields['fulltext'] = True
+        self.shownResultsFields['link'] = True
+        self.shownResultsFields['ranking'] = True
+        self.shownResultsFields['resultcount'] = True
+        self.shownResultsFields['icon'] = True
+        self.shownResultsFields['date'] = True
+        self.shownResultsFields['textsnippet'] = True
+        self.shownResultsFields['thumbnail'] = True
+        self.shownResultsFields['breadcrumbs'] = True
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')
@@ -80,7 +79,7 @@ class SilvaFind(Query, Content, SimpleItem):
         """always deletable"""
         return 1
 
-    def can_set_title(self):        
+    def can_set_title(self):
         """always settable"""
         # XXX: we badly need Publishable type objects to behave right.
         return 1
@@ -93,13 +92,13 @@ class SilvaFind(Query, Content, SimpleItem):
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
     def getPublicFieldViews(self):
         result = [view for view in self.getFieldViews()
                     if self.isCriterionShown(view.getName())]
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -153,9 +152,9 @@ class SilvaFind(Query, Content, SimpleItem):
 
         if not results:
             return ([], _('No items matched your search.'))
-        
-        # XXX the searchresults could have textsnippets of documents 
-        # that the user is not supposed to see. 
+
+        # XXX the searchresults could have textsnippets of documents
+        # that the user is not supposed to see.
         # Instead of filtering these objects out (bad performance)
         # or filtering them out in the getBatch method (screws up resultcount)
         # it is now checked in the pagetemplate with the isViewableForUser
@@ -170,12 +169,12 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getBatch')
     def getBatch(self,results, size=20, orphan=2, overlap=0):
         # Custom getabatch method to filter out unviewable objects.
-        # This may lead to performance problems because all objects 
+        # This may lead to performance problems because all objects
         # in the search results need to be accessed until the right
         # number of objects are found.
-        # This behaviour also has the sideeffect that the total result 
+        # This behaviour also has the sideeffect that the total result
         # count might change as a user is viewing subsequent batches.
-        
+
         REQ = self.REQUEST
 
 
@@ -216,7 +215,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
                 return qs
 
-        # create a new query string with the correct batch_start/end 
+        # create a new query string with the correct batch_start/end
         # for the next/previous batch
 
         if batch.end < len(results):
@@ -230,7 +229,7 @@ class SilvaFind(Query, Content, SimpleItem):
             REQ.set('previous_batch_url', '%s?%s' % (REQ.URL, qs))
 
         return batch
-        
+
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):
         result = []
@@ -239,22 +238,22 @@ class SilvaFind(Query, Content, SimpleItem):
             # wrapped to enable security checks
             resultFieldView = resultFieldView.__of__(self)
             result.append(resultFieldView)
-        return result  
+        return result
 
     def getPublicResultFieldViews(self):
         result = [view for view in self.getResultFieldViews()
                     if self.isResultShown(view.getName())]
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'getResultColumns')
     def getResultColumns(self):
         return [(field.getColumnTitle(), field.render) for field in self.getResultsSchema().getFields()]
-        
+
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
     def searchResultsObjects(self, REQUEST={}):
         results = self.searchResults(REQUEST)
         return [result.getObject().get_silva_object() for result in results]
-    
+
 
     #MUTATORS
     security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')
@@ -291,7 +290,7 @@ class SilvaFind(Query, Content, SimpleItem):
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
-            if (self.shownFields.has_key(field.getName()) 
+            if (self.shownFields.has_key(field.getName())
                     or field.getName() == 'path'):
                 queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
                 value = queryPart.getIndexValue(REQUEST)
@@ -300,20 +299,19 @@ class SilvaFind(Query, Content, SimpleItem):
                 searchArguments[queryPart.getIndexId()] = value
         return searchArguments
 
-    def to_xml(self, context):
-        """Render object to XML.
-        """
-        f = context.f
-        f.write('<silva_find id="%s">' % self.id)
-        f.write('</silva_find>')
-        
-         
-                         
-
 InitializeClass(SilvaFind)
 
+
+class SilvaFindAddForm(silvaz3cforms.AddForm):
+    """Add form for Silva Find.
+    """
+
+    silvaconf.name(u'Silva Find')
+
+
 manage_addSilvaFindForm = PageTemplateFile("www/silvaFindAdd", globals(),
-    __name__='manage_addSilvaFindForm')
+                                           __name__='manage_addSilvaFindForm')
+
 
 def manage_addSilvaFind(self, id, title, REQUEST=None):
     """Add a silvasearch."""
@@ -325,4 +323,3 @@ def manage_addSilvaFind(self, id, title, REQUEST=None):
     object.set_title(title)
     add_and_edit(self, id, REQUEST)
     return ''
-

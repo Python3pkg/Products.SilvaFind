@@ -1,10 +1,13 @@
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 import re
 
 from zope.interface import implements
 
 from Products.ZCTextIndex.ParseTree import ParseError
 
-from Products.Silva.ViewCode import ViewCode
 from Products.Silva.interfaces import IVersion
 from Products.Silva.interfaces import IPublishable
 from Products.SilvaFind.interfaces import IMetadataCriterionField
@@ -16,7 +19,7 @@ from Products.SilvaFind.interfaces import IResultField
 from Products.SilvaFind.interfaces import IMetatypeCriterionField
 from Products.SilvaFind.i18n import translate as _
 
-class Schema:
+class Schema(object):
     def __init__(self, fields):
         self.fields = fields
 
@@ -30,12 +33,12 @@ class Schema:
         return [field.getName() for field in self.getFields()]
 
 class SearchSchema(Schema):
-   pass 
+   pass
 
 class ResultsSchema(Schema):
-   pass 
+   pass
 
-class BaseMetadataCriterionField:
+class BaseMetadataCriterionField(object):
 
     def __init__(self, metadataSet, metadataId):
         self.metadataSet = metadataSet
@@ -59,40 +62,40 @@ class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
 class IntegerRangeMetadataCriterionField(BaseMetadataCriterionField):
     implements(IIntegerRangeMetadataCriterionField)
 
-class FullTextCriterionField:
+class FullTextCriterionField(object):
     implements(IFullTextCriterionField)
 
     def getName(self):
         return _("fulltext")
 
-class MetatypeCriterionField:
+class MetatypeCriterionField(object):
     implements(IMetatypeCriterionField)
-    
+
     def getName(self):
         return _("meta_type")
-    
-class PathCriterionField:
+
+class PathCriterionField(object):
     implements(IPathCriterionField)
-    
+
     def getName(self):
         return _("path")
 
 class AutomaticMetaDataCriterionField(object):
     """This class is a marker to put in the schemalist.
-    This class will automaticly be replaced in the list 
+    This class will automaticly be replaced in the list
     with all possible metadata values
     """
     pass
-    
+
 class AutomaticMetaDataResultField(object):
     """This class is a marker to put in the schemalist.
-    This class will automaticly be replaced in the list 
+    This class will automaticly be replaced in the list
     with all possible metadata values
     """
     pass
 class ResultField(object):
     implements(IResultField)
-    
+
     def __init__(self, id='', title='', description=''):
         # XXX the empty default values can go in 1.2, but are needed
         # for now, otherwise somehow the manage_services screen is
@@ -114,10 +117,10 @@ class ResultField(object):
         value = getattr(item.getObject(), self.id)()
         if not value:
             return
-            
-        if hasattr(value, 'strftime'): 
-            # what the hell are these things?, 
-            # they don't have a decent type            
+
+        if hasattr(value, 'strftime'):
+            # what the hell are these things?,
+            # they don't have a decent type
             value = value.strftime('%d %b %Y %H:%M')
 
         value = '<span class="searchresult-field-value">%s</span>' % value
@@ -132,7 +135,7 @@ class MetatypeResultField(ResultField):
         if IVersion.providedBy(the_object):
             the_object = the_object.object()
         return context.render_icon_by_meta_type(
-            getattr(the_object, 'meta_type'))    
+            getattr(the_object, 'meta_type'))
 
 class RankingResultField(ResultField):
     implements(IResultField)
@@ -143,13 +146,13 @@ class RankingResultField(ResultField):
         index = catalog.Indexes['fulltext']
         query = context.REQUEST.form.get('fulltext')
         if not query:
-            return 
+            return
         query = unicode(query, 'utf8')
         batch_start =  int(context.REQUEST.form.get('batch_start',0))
         batch_end = batch_start + 25
         try:
             rankings = index.query(query, batch_end)[0]
-        except ParseError: 
+        except ParseError:
             return
         if not rankings:
             return
@@ -170,7 +173,7 @@ class TotalResultCountField(ResultField):
         # this is only here, so it can be enabled / disabled
         # in the smi.
 
-        # Please note that enabling that showing the total 
+        # Please note that enabling that showing the total
         # number of search results might be a security risk
         # since it can be figured out that certain objects
         # were ommitted from the search
@@ -183,7 +186,7 @@ class ResultCountField(ResultField):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
         # in the smi.
-        return 
+        return
 
 class LinkResultField(ResultField):
     implements(IResultField)
@@ -198,7 +201,7 @@ class LinkResultField(ResultField):
         if len(title) > 50:
             title = title[:50] + ellipsis
         return '<a href="%s" class="searchresult-link">%s</a>' % (url, title)
-    
+
 class DateResultField(ResultField):
     implements(IResultField)
 
@@ -210,15 +213,15 @@ class DateResultField(ResultField):
         if date == None:
             date = object.get_modification_datetime()
         datestr = date.strftime('%d %b %Y %H:%M').lower()
-        
+
         return '<span class="searchresult-date">%s</span>' % datestr
-    
+
 class ThumbnailResultField(ResultField):
      implements(IResultField)
 
      description = _('Shows thumbnails for images')
 
-     
+
      def render(self, context, item):
         object = item.getObject()
 
@@ -232,8 +235,8 @@ class ThumbnailResultField(ResultField):
         img = object.thumbnail_image.tag()
         anchor = '<a href="%s">%s</a>' % (url, img)
         return '<div class="searchresult-thumbnail">%s</div>' % anchor
-                     
-        
+
+
 class FullTextResultField(ResultField):
     implements(IResultField)
 
@@ -246,7 +249,7 @@ class FullTextResultField(ResultField):
         searchterm = unicode(item.REQUEST.form.get('fulltext', ''), 'utf8')
         catalog = context.service_catalog
         fulltext = catalog.getIndexDataForRID(item.getRID()).get('fulltext', [])
-        
+
         if not fulltext:
             # no fulltext available, probably an image
             return ''
@@ -258,9 +261,9 @@ class FullTextResultField(ResultField):
         skipwords = len(('%s %s' % (idstring, object.get_title())).split(' '))
         fulltext = fulltext[skipwords:]
         fulltextstr = ' '.join(fulltext)
-        
+
         searchterms = searchterm.split()
-        
+
         if not searchterms:
             # searchterm is not specified,
             # return the first 20 words
@@ -277,11 +280,11 @@ class FullTextResultField(ResultField):
             text = []
             lowestpos = len(fulltext)
             highestpos = 0
-            
+
             hilite_terms = []
             for searchterm in searchterms:
                 term = re.escape(searchterm)
-                
+
                 if '?' in term or '*' in term:
                     termq = term.replace('\\?', '.')
                     termq = termq.replace('\\*', '.[^\ ]*')
@@ -295,7 +298,7 @@ class FullTextResultField(ResultField):
                         hilite_terms.append(term)
                 else:
                     hilite_terms.append(term)
-                    
+
                 if not term in fulltext:
                     # term matched probably something in the title
                     # return the first n words:
@@ -312,20 +315,20 @@ class FullTextResultField(ResultField):
                     highestpos = pos
                 start = pos -(words/2)
                 end = pos + (words/2) + 1
-                if start < 0 : 
+                if start < 0 :
                     end += -start
                     start = 0
-                    
+
                 pre = ' '.join(fulltext[start:pos])
                 post = ' '.join(fulltext[pos+1:end])
-                
+
                 if not text and start != 0:
                     # we're adding the first (splitted) result
                     # and it's not at the beginning of the fulltext
                     # lets add an ellipsis
                     pre = ellipsis + pre
-                    
-                
+
+
                 text.append('%s %s %s %s' % (
                                 pre,
                                 fulltext[pos],
@@ -345,13 +348,13 @@ class FullTextResultField(ResultField):
                     if lowestpos < 0:
                         highestpos += -lowestpos
                         lowestpos = 0
-                    
+
                     text = fulltext[lowestpos:highestpos]
                     if not lowestpos == 0:
                         text[0] = '%s %s' % (ellipsis, text[0])
                     if highestpos < len(fulltext)-1:
                         text[-1] += ' %s' % ellipsis
-            
+
             # do some hiliting, use original text
             # (with punctuation) if this is a silva document
             text = ' '.join(text)
@@ -386,14 +389,14 @@ class FullTextResultField(ResultField):
                 term = re.escape(term)
                 text = ' ' + text
                 regexp = re.compile(
-                    '([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(), 
+                    '([^a-zA-Z0-9]+)(%s)([^a-zA-Z0-9]+)' % term.lower(),
                     re.IGNORECASE)
                 sub = ('\g<1><strong class="search-result-snippet-hilite">'
                        '\g<2></strong>\g<3>')
                 text = regexp.sub(sub, text)
         return '<div class="searchresult-snippet">%s</div>' % text.strip()
-        
-            
+
+
 
 class BreadcrumbsResultField(ResultField):
     implements(IResultField)
@@ -416,7 +419,7 @@ class IconResultField(ResultField):
             object = object.object()
         img = context.render_icon(object)
         return '<span class="searchresult-icon">%s</span>' % img
-    
+
 class MetadataResultField(ResultField):
     implements(IResultField)
 
@@ -438,14 +441,14 @@ class MetadataResultField(ResultField):
 
         if not value:
             return
-        
-        #if hasattr(value, 'strftime'): 
-            # what the hell are these things?, 
-            # they don't have a decent type            
+
+        #if hasattr(value, 'strftime'):
+            # what the hell are these things?,
+            # they don't have a decent type
             #value = value.strftime('%d %b %Y %H:%M')
         cssid = "metadata-%s-%s" % (set, element)
         result = [  '<span class="searchresult-field %s">' % cssid,
-        
+
                     '<span class="searchresult-field-title">',
                     _(self.title),
                     '</span>',
@@ -456,4 +459,4 @@ class MetadataResultField(ResultField):
         # we return a list here, so the pt. can iterate it, and self.title will
         # be translated.
         return result
-    
+

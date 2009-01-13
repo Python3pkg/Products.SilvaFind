@@ -2,7 +2,6 @@
 # See also LICENSE.txt
 # $Id$
 
-import os
 from Products.Silva.tests import SilvaTestCase
 from Testing import ZopeTestCase
 ZopeTestCase.installProduct('SilvaFind')

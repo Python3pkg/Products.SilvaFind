@@ -65,7 +65,7 @@
     provides=".interfaces.IIndexedField"
     factory=".metatypecriterion.IndexedMetatypeCriterion"
   />
-  
+
   <adapter
     for="Products.SilvaFind.interfaces.IPathCriterionField
       Products.SilvaFind.interfaces.ISilvaQuery"
@@ -93,7 +93,7 @@
     provides=".interfaces.IIndexedField"
     factory=".pathcriterion.IndexedPathCriterion"
   />
-  
+
   <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"
@@ -135,7 +135,7 @@
     provides=".interfaces.IStoreCriterion"
     factory=".metadatacriterion.StoreIntegerRangeMetadataCriterion"
   />
-  
+
   <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery"

@@ -4,7 +4,6 @@
 
 import os
 import unittest
-from Products.Five.testbrowser import Browser
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
 from Products.Silva.tests.SilvaBrowser import SilvaBrowser
 from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase

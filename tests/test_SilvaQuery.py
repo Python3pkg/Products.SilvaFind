@@ -5,8 +5,6 @@
 import unittest
 import DateTime
 import SilvaFindTestCase
-from Products.SilvaFind.globalschema import globalSearchFields
-
 
 
 class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):

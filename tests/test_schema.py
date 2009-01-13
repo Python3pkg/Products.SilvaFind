@@ -7,8 +7,6 @@ from unittest import TestSuite
 from unittest import makeSuite
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import MetadataCriterionField
-from Products.SilvaFind.query import Query
-from Products.SilvaFind.errors import SilvaFindError
 
 class testSchema(TestCase):
 
@@ -24,7 +22,8 @@ class testSchema(TestCase):
         self.assertEquals([self.field1, self.field2], self.schema.getFields())
 
     def testFieldNames(self):
-        self.assertEquals(['meta-set-field-id1', 'meta-set-field-id2'], self.schema.getFieldNames())
+        self.assertEquals(['meta-set-field-id1', 'meta-set-field-id2'],
+                          self.schema.getFieldNames())
 
     def testHasField(self):
         self.failIf(self.schema.hasField('meta-set-field-id3'))

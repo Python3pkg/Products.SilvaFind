@@ -1,11 +1,13 @@
-from Acquisition import Implicit
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
 
-class StoreCriterion:
+class StoreCriterion(object):
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
-        
-class CatalogMetadataSetup:
+
+class CatalogMetadataSetup(object):
     def __init__(self, field, root):
         self.field = field
         self.root = root

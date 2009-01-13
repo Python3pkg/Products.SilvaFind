@@ -1,17 +1,21 @@
-from ZODB.PersistentMapping import PersistentMapping
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
 
+from ZODB.PersistentMapping import PersistentMapping
 from errors import SilvaFindError
 
-class Query:
+class Query(object):
+
     def __init__(self):
         self.searchValues = PersistentMapping()
-    
+
     def getSearchSchema(self):
         return self.service_find.getSearchSchema()
-    
+
     def getResultsSchema(self):
         return self.service_find.getResultsSchema()
-    
+
     def getCriterionValue(self, name):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
@@ -19,7 +23,7 @@ class Query:
         else:
             raise SilvaFindError('No field named %s defined in search schema' %
             name)
-        
+
     def setCriterionValue(self, name, value):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
@@ -29,14 +33,13 @@ class Query:
             name)
 
     def getResultsColumnIds(self):
-        return [field.getColumnId() 
+        return [field.getColumnId()
             for field in self.getResultsSchema().getFields()]
-           
+
     def getResultsColumnTitles(self):
-        return [field.getColumnTitle() 
+        return [field.getColumnTitle()
             for field in self.getResultsSchema().getFields()]
 
     def getRenderedColumns(self, context, item):
-        return [field.render(context, item) 
+        return [field.render(context, item)
             for field in self.getResultsSchema().getFields()]
-        

@@ -1,23 +1,24 @@
 Changes
 =======
 
-1.1.8 (Unreleased)
-------------------
+1.2 (unreleased)
+----------------
 
+- Fix SilvaFind under Silva 2.2.
 
-1.1.7 (2008/11/04)
+1.1.7 (2008-11-04)
 ------------------
 
 - Fix metatype selector
 
-1.1.6 (2008/10/29)
+1.1.6 (2008-10-29)
 ------------------
 
 - Fix tests
 
 - Redo the render_helper page template for inputs.
 
-1.1.5 (2008/10/02)
+1.1.5 (2008-10-02)
 ------------------
 
 - Reformating the documentation to valid ReST.
@@ -36,7 +37,7 @@ Features added:
 
 Changes:
 
-- SilvaFind is now using Silva 2.0 zcml extension 
+- SilvaFind is now using Silva 2.0 zcml extension
   registration.  From this version forward this
   product will not work in Silva 1.6 or lower.
 
@@ -46,7 +47,7 @@ Changes:
 Bugs Fixed:
 
 - metatypecriterion used all types when no selection was
-  made in SMI, it should have used all *available* types 
+  made in SMI, it should have used all *available* types
   instead since this could be overwritten with an adapter.
 
 1.1.2

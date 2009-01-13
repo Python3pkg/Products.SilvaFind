@@ -1,33 +1,21 @@
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 #Silva
 from Products.Silva.fssite import registerDirectory
-import install
 
 from AccessControl import allow_module
+from silva.core import conf as silvaconf
+
+silvaconf.extensionName('SilvaFind')
+silvaconf.extensionTitle('Silva Find')
 
 allow_module('Products.SilvaFind.i18n')
 
-has_makeContainerFilter = True
-try:
-    from Products.Silva.helpers import makeContainerFilter
-except:
-    has_makeContainerFilter = False
+import install
 
 def initialize(context):
-    import findservice
-    
     registerDirectory('views', globals())
     registerDirectory('resources', globals())
 
-    if has_makeContainerFilter:
-        context.registerClass(
-            findservice.FindService,
-            constructors = (findservice.manage_addFindService,),
-            icon = "www/find_service.png",
-            container_filter = makeContainerFilter()
-            )
-    else:
-        context.registerClass(
-            findservice.FindService,
-            constructors = (findservice.manage_addFindService,),
-            icon = "www/find.png"
-            )
