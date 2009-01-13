@@ -1,3 +1,7 @@
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 import os
 from Products.Silva.tests import SilvaTestCase
 from Testing import ZopeTestCase
@@ -8,6 +12,6 @@ class SilvaFindTestCase(SilvaTestCase.SilvaTestCase):
         return self.addObject(object, 'SilvaFind', id, title=title,
                               product='SilvaFind')
 
-    
-    
-    
+
+
+

@@ -3,16 +3,16 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:silva="http://infrae.com/ns/silvaconf"
-    i18n_domain="silvafind"
-    >
+    i18n_domain="silvafind">
 
-  <include package=".adapters" /> 
+  <include package="Products.Silva" />
+  <include package=".adapters" />
 
   <i18n:registerTranslations directory="i18n" />
 
-  <!-- register the extension and its content types --> 
+  <!-- register the extension and its content types -->
   <silva:extension
-    name="SilvaFind" 
+    name="SilvaFind"
     title="Silva Find"
     />
 
@@ -20,6 +20,6 @@
     content=".SilvaFind.SilvaFind"
     extension_name="SilvaFind"
     icon="www/find.png"
-    /> 
+    />
 
 </configure>

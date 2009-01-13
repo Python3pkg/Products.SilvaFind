@@ -1,3 +1,7 @@
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 # Zope
 from OFS.SimpleItem import SimpleItem
 from Globals import InitializeClass

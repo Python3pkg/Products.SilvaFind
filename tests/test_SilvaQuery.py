@@ -1,15 +1,19 @@
+# Copyright (c) 2006-2009 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 import unittest
 import DateTime
 import SilvaFindTestCase
 from Products.SilvaFind.globalschema import globalSearchFields
 
 
- 
+
 class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
-    
+
     def afterSetUp(self):
         self.add_query(self.root, 'query', 'Query')
-            
+
     def test_instance(self):
         self.failUnless('query' in self.root.objectIds())
 
@@ -23,7 +27,7 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
                     {'maintitle':'Title',
                      'shorttitle':'Short'})
         query._edit(request)
-        # content type    
+        # content type
         self.assertEquals(query.getFieldViews()[0].getStoredValue(), 'Olliphant')
         # fulltext
         self.assertEquals(query.getFieldViews()[1].getStoredValue(), 'xyz')
@@ -36,7 +40,7 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
         # expiration time
         # below_path
         self.assertEquals(query.getFieldViews()[7].getStoredValue(), '/root/')
-        
+
     def test_search(self):
         document = self.add_document(self.root, 'doc', 'Document')
         document.get_editable().content.manage_edit(u'<p>abc def xyz</p>')
