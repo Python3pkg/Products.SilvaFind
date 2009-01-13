@@ -48,16 +48,14 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
     def content(self, sb, pdf=True):
         directory = os.path.dirname(__file__)
         for text_name, text_attribute in content.iteritems():
-            file_handle = open(os.path.join(directory,
-                                            text_attribute['file']))
+            file_handle = open(os.path.join(directory, text_attribute['file']))
             file_data = file_handle.read()
             file_handle.seek(0)
             self.root.manage_addProduct['Silva'].manage_addFile(
                 text_attribute['id'], text_attribute['title'], file_handle)
             file_handle.close()
 
-        sb.make_content('Silva Find', id='search_test',
-                                      title='Search test')
+        sb.make_content('Silva Find', id='search_test', title='Search test')
 
         ids = sb.get_content_ids()
         self.failUnless('search_test' in ids)
@@ -91,7 +89,6 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             sb.click_href_labeled('root')
 
     def modify_interface(self, sb, keyword):
-        import pdb ; pdb.set_trace()
         sb.click_href_labeled('search_test')
         checkbox = sb.browser.getControl(name='meta_type:list')
         form = sb.browser.getForm(index=0)
