@@ -5,7 +5,6 @@
     xmlns:silva="http://infrae.com/ns/silvaconf"
     i18n_domain="silvafind">
 
-  <include package="Products.Silva" />
   <include package=".adapters" />
 
   <i18n:registerTranslations directory="i18n" />

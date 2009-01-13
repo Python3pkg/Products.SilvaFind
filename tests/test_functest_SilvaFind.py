@@ -58,7 +58,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
 
         sb.make_content('Silva Find', id='search_test',
                                       title='Search test')
-        
+
         ids = sb.get_content_ids()
         self.failUnless('search_test' in ids)
 
@@ -73,7 +73,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
                     sb.make_content('Silva File', id=text_attribute['id'],
                                                   title=text_attribute['title'],
                                                   file=text_attribute['file'])
-            
+
                     ids = sb.get_content_ids()
                     self.failUnless('the_raven' in ids)
                     self.failUnless('second_coming' in ids)
@@ -91,6 +91,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             sb.click_href_labeled('root')
 
     def modify_interface(self, sb, keyword):
+        import pdb ; pdb.set_trace()
         sb.click_href_labeled('search_test')
         checkbox = sb.browser.getControl(name='meta_type:list')
         form = sb.browser.getForm(index=0)
@@ -105,7 +106,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         self.assertEquals(form.getControl(name='show_silva-extra-keywords:bool').value, True)
         self.assertEquals(form.getControl(name='silva-extra.keywords:record').value, keyword)
         sb.click_href_labeled('root')
-    
+
     def search(self, sb, text_id, title, full_text, pdf=True):
         """ search terms
             the_great_figure: gold
