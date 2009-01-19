@@ -5,7 +5,7 @@
 import os
 import unittest
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
-from Products.Silva.tests.SilvaBrowser import SilvaBrowser
+from Products.Silva.tests.SilvaBrowser import SilvaBrowser, SILVA_FORM, Z3CFORM_FORM
 from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
 
 content = {
@@ -54,7 +54,9 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
                 text_attribute['id'], text_attribute['title'], file_handle)
             file_handle.close()
 
+        sb.form_type = Z3CFORM_FORM
         sb.make_content('Silva Find', id='search_test', title='Search test')
+        sb.form_type = SILVA_FORM
 
         ids = sb.get_content_ids()
         self.failUnless('search_test' in ids)
@@ -104,22 +106,20 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.click_href_labeled('root')
 
     def search(self, sb, text_id, title, full_text, pdf=True):
-        """ search terms
-            the_great_figure: gold
-            the_second_coming: falcon
-            the_raven: raven
+        """Search terms:
+           the_great_figure: gold
+           the_second_coming: falcon
+           the_raven: raven
         """
         sb.click_href_labeled('search_test')
-        sb.click_href_labeled('view public version')
+        sb.click_href_labeled('view...')
         if pdf:
-            link = sb.browser.getLink(title)
-            self.failUnless(link.text in sb.browser.contents)
             sb.browser.getControl(name='fulltext').value = full_text
             sb.browser.getControl(name='silva-content.maintitle:record').value = title
             sb.click_button_labeled('Search')
             self.failUnless(full_text in sb.browser.contents)
-        else:
-            print 'else'
+            link = sb.browser.getLink(title)
+            self.failUnless(link.text in sb.browser.contents)
         sb.go('http://nohost/root/edit')
 
     def test_silvafind(self):

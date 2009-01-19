@@ -17,22 +17,22 @@ class StoreMetatypeCriterion(StoreCriterion):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
         criterion_value = REQUEST.get(field_name, None)
-        if not criterion_value: 
+        if not criterion_value:
             return
         self.query.setCriterionValue(field_name, criterion_value)
 
 class MetatypeCriterionView(Implicit):
-    
+
     security = ClassSecurityInfo()
-    
+
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
-    
+
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'canBeShown')
     def canBeShown(self):
-        return True 
+        return True
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
@@ -71,43 +71,37 @@ class MetatypeCriterionView(Implicit):
                 selected = ' selected="selected"'
             name = meta_type.replace('Silva ', '')
             meta_types.append('<option value="%s"%s>%s</option>' % (meta_type,
-                                                                    selected, 
+                                                                    selected,
                                                                     name))
-        html += '\n'.join(meta_types) 
+        html += '\n'.join(meta_types)
         html += '</select>'
         return html
-    
+
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self, REQUEST):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value:
             if type(value) != type([]):
-                value = unicode(value, 'UTF-8')
-            else:
-                values = []
-                for vl in value:
-                    values.append(unicode(vl, 'UTF-8'))
-                value = values
-        else:
-            value = self.getStoredValue()
-        return value
+                return unicode(value, 'UTF-8')
+            return [unicode(vl, 'UTF-8') for vl in value if vl] or u''
+        return self.getStoredValue()
 
     getIndexValue = getValue
 
     def getAvailableMetaTypes(self):
-        return self.query.REQUEST.model.service_catalog.uniqueValuesFor(
-                self.getIndexId())
+        return self.query.service_catalog.uniqueValuesFor(
+            self.getIndexId())
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         return value
-        
+
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
         return 'content type'
-        
+
     def getIndexId(self):
         return 'meta_type'
 

@@ -124,6 +124,8 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
     def searchResultsWithDescription(self, REQUEST={}):
+        if not REQUEST.has_key('search_submit'):
+            return ([], 'empty')
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
@@ -144,8 +146,9 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('Search query can not start '
                             'with wildcard character.'))
         if queryEmpty:
-            return ([], 'empty')
+            return ([], _('You need to fill at least one field in the search form.'))
         try:
+            print searchArguments
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
             return ([], _('Search query contains only common '
