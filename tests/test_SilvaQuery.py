@@ -47,6 +47,7 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
         query = self.root.query
         request = query.REQUEST
         request.set('fulltext', 'xyz')
+        request.set('search_submit', 'Search')
         query._edit(request)
         resultBrains = query.searchResults()
         self.assertEquals(len(resultBrains), 1)
