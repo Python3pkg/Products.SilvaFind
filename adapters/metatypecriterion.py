@@ -12,14 +12,25 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
+
+def convertValue(value):
+    """Convert a value from what you get from the REQUEST to something
+    working correctly with the catalog.
+    """
+    if not value:
+        return u''
+    if type(value) != type([]):
+        return unicode(value, 'UTF-8')
+    return [unicode(vl, 'UTF-8') for vl in value if vl] or u''
+
+
 class StoreMetatypeCriterion(StoreCriterion):
     def store(self, REQUEST):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
-        criterion_value = REQUEST.get(field_name, None)
-        if not criterion_value:
-            return
+        criterion_value = convertValue(REQUEST.get(field_name, None))
         self.query.setCriterionValue(field_name, criterion_value)
+
 
 class MetatypeCriterionView(Implicit):
 
@@ -60,7 +71,7 @@ class MetatypeCriterionView(Implicit):
         html = '<select class="store" multiple="multiple" name="%s:list" id="%s" size="5"> ' % (self.criterion.getName(),
                             self.criterion.getName())
         selected = ''
-        if not value or value == ['']:
+        if not value:
             selected = ' selected="selected"'
         select_all_text = _('All Types')
         meta_types = ['<option value=""%s>%s</option>' % (selected,
@@ -82,9 +93,7 @@ class MetatypeCriterionView(Implicit):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value:
-            if type(value) != type([]):
-                return unicode(value, 'UTF-8')
-            return [unicode(vl, 'UTF-8') for vl in value if vl] or u''
+            return convertValue(value)
         return self.getStoredValue()
 
     getIndexValue = getValue
@@ -95,8 +104,7 @@ class MetatypeCriterionView(Implicit):
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
-        value = self.query.getCriterionValue(self.criterion.getName())
-        return value
+        return self.query.getCriterionValue(self.criterion.getName())
 
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
@@ -105,13 +113,11 @@ class MetatypeCriterionView(Implicit):
     def getIndexId(self):
         return 'meta_type'
 
-    security.declareProtected(SilvaPermissions.View,
-        'getName')
+    security.declareProtected(SilvaPermissions.View, 'getName')
     def getName(self):
         return self.criterion.getName()
 
-    security.declareProtected(SilvaPermissions.View,
-        'getDescription')
+    security.declareProtected(SilvaPermissions.View, 'getDescription')
     def getDescription(self):
         return _('Search for the selected content types.')
 

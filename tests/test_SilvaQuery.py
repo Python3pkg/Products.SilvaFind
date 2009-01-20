@@ -8,7 +8,6 @@ from zope.interface.verify import verifyObject
 from Products.Silva.tests.SilvaTestCase import SilvaTestCase
 from Products.Silva.tests.helpers import publishObject
 from Products.SilvaFind.interfaces import IFind
-import SilvaFindTestCase
 
 
 class SilvaQueryTestCase(SilvaTestCase):

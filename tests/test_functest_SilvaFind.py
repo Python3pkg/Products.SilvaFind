@@ -36,7 +36,6 @@ content = {
 }
 
 
-
 class SilvaFindTestCase(SilvaFunctionalTestCase):
     """
         check if machine has pdftotext
@@ -54,12 +53,8 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
                 text_attribute['id'], text_attribute['title'], file_handle)
             file_handle.close()
 
-        sb.form_type = Z3CFORM_FORM
         sb.make_content('Silva Find', id='search_test', title='Search test')
-        sb.form_type = SILVA_FORM
-
-        ids = sb.get_content_ids()
-        self.failUnless('search_test' in ids)
+        self.failUnless('search_test' in sb.get_content_ids())
 
         if pdf:
             ids = sb.get_content_ids()
@@ -81,17 +76,19 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
 
     def modify_text_metadata(self, sb):
         for text_name, text_attribute in content.iteritems():
+            keywords = text_attribute['keywords']
             sb.click_href_labeled(text_name)
             sb.click_tab_named('properties')
-            sb.browser.getControl(name='silva-extra.keywords:record').value = text_attribute['keywords']
+            sb.browser.getControl(name='silva-extra.keywords:record').value = keywords
             sb.browser.getControl(name='save_metadata:method', index=0).click()
-            self.failUnless(text_attribute['keywords'] in sb.browser.contents)
+            feedback = sb.get_status_feedback()
+            self.failUnless(feedback.startswith('Metadata saved.'))
+            self.assertEquals(sb.browser.getControl(name='silva-extra.keywords:record').value, keywords)
             sb.click_href_labeled('edit')
             sb.click_href_labeled('root')
 
     def modify_interface(self, sb, keyword):
         sb.click_href_labeled('search_test')
-        checkbox = sb.browser.getControl(name='meta_type:list')
         form = sb.browser.getForm(index=0)
         form.getControl(name='show_meta_type:bool').value = ['checked']
         form.getControl(name='show_silva-content-maintitle:bool').value = ['checked']
@@ -103,7 +100,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         self.assertEquals(form.getControl(name='show_silva-content-maintitle:bool').value, True)
         self.assertEquals(form.getControl(name='show_silva-extra-keywords:bool').value, True)
         self.assertEquals(form.getControl(name='silva-extra.keywords:record').value, keyword)
-        sb.click_href_labeled('root')
+        sb.go(sb.smi_url())
 
     def search(self, sb, text_id, title, full_text, pdf=True):
         """Search terms:
@@ -120,9 +117,9 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             self.failUnless(full_text in sb.browser.contents)
             link = sb.browser.getLink(title)
             self.failUnless(link.text in sb.browser.contents)
-        sb.go('http://nohost/root/edit')
+        sb.go(sb.smi_url())
 
-    def test_silvafind(self):
+    def test_searchfile(self):
         sb = SilvaBrowser()
         status, url = sb.login('manager', 'secret', sb.smi_url())
         self.assertEquals(status, 200)
@@ -143,8 +140,6 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             self.search(sb, text_attribute['id'],
                             text_attribute['title'],
                             text_attribute['full_text'])
-        h2 = sb.get_listing_h2()
-        self.failUnless('Silva Root' in h2)
         status, url = sb.click_href_labeled('logout')
         self.assertEquals(status, 401)
 
