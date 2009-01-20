@@ -13,25 +13,28 @@ content = {
         'id': 'the_great_figure',
         'title': 'The Great Figure',
         'file': 'the_great_figure.pdf',
-        'full_text': 'gold',
+        'fulltext': 'gold',
         'short_title': '',
         'keywords': 'williams',
+        'format': 'pdf',
     },
     'the_raven': {
         'id': 'the_raven',
         'title': 'The Raven',
         'file': 'raven.txt',
-        'full_text': 'bleak',
+        'fulltext': 'bleak',
         'short_title': '',
         'keywords': 'poe',
+        'format': 'txt',
     },
     'the_second_coming': {
         'id': 'the_second_coming',
         'title': 'The Second Coming',
         'file': 'the_second_coming.txt',
-        'full_text': 'Spiritus Mundi',
+        'fulltext': 'Spiritus Mundi',
         'short_title': '',
         'keywords': 'yeats',
+        'format': 'txt',
     },
 }
 
@@ -43,41 +46,29 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         test search results of SilvaFind
     """
 
-    def content(self, sb, pdf=True):
+    def content(self, sb):
         directory = os.path.dirname(__file__)
-        for text_name, text_attribute in content.iteritems():
-            file_handle = open(os.path.join(directory, text_attribute['file']))
+        for name, doc in content.iteritems():
+            file_handle = open(os.path.join(directory, doc['file']))
             file_data = file_handle.read()
             file_handle.seek(0)
             self.root.manage_addProduct['Silva'].manage_addFile(
-                text_attribute['id'], text_attribute['title'], file_handle)
+                doc['id'], doc['title'], file_handle)
             file_handle.close()
 
         sb.make_content('Silva Find', id='search_test', title='Search test')
-        self.failUnless('search_test' in sb.get_content_ids())
+        ids = sb.get_content_ids()
+        self.failUnless('search_test' in ids)
+        self.failUnless('the_raven' in ids)
+        self.failUnless('the_second_coming' in ids)
+        self.failUnless('the_great_figure' in ids)
 
-        if pdf:
-            ids = sb.get_content_ids()
-            self.failUnless('the_raven' in ids)
-            self.failUnless('the_second_coming' in ids)
-            self.failUnless('the_great_figure' in ids)
-        else:
-            for text_name, text_attribute in content.iteritems():
-                if text_attribute['id'] != 'the_great_figure':
-                    sb.make_content('Silva File', id=text_attribute['id'],
-                                                  title=text_attribute['title'],
-                                                  file=text_attribute['file'])
-
-                    ids = sb.get_content_ids()
-                    self.failUnless('the_raven' in ids)
-                    self.failUnless('second_coming' in ids)
-                else:
-                    continue
+        self.modify_text_metadata(sb)
 
     def modify_text_metadata(self, sb):
-        for text_name, text_attribute in content.iteritems():
-            keywords = text_attribute['keywords']
-            sb.click_href_labeled(text_name)
+        for name, doc in content.iteritems():
+            keywords = doc['keywords']
+            sb.click_href_labeled(name)
             sb.click_tab_named('properties')
             sb.browser.getControl(name='silva-extra.keywords:record').value = keywords
             sb.browser.getControl(name='save_metadata:method', index=0).click()
@@ -102,44 +93,60 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         self.assertEquals(form.getControl(name='silva-extra.keywords:record').value, keyword)
         sb.go(sb.smi_url())
 
-    def search(self, sb, text_id, title, full_text, pdf=True):
-        """Search terms:
-           the_great_figure: gold
-           the_second_coming: falcon
-           the_raven: raven
+    def search_empty(self, sb):
+        """Just click on search without filling any fields.
+        """
+        msg = 'You need to fill at least one field in the search form.'
+        sb.click_href_labeled('search_test')
+        sb.click_href_labeled('view...')
+        self.failIf(msg in sb.contents)
+        sb.click_button_labeled('Search')
+        self.failUnless(msg in sb.contents)
+        sb.go(sb.smi_url())
+
+    def search_noresult(self, sb):
+        """Make a search which gives no results.
+        """
+        msg = 'No items matched your search.'
+        sb.click_href_labeled('search_test')
+        sb.click_href_labeled('view...')
+        self.failIf(msg in sb.contents)
+        # I don't think by default you will have document with that
+        sb.browser.getControl(name='fulltext').value = 'blablaxyz'
+        sb.click_button_labeled('Search')
+        self.failUnless(msg in sb.contents)
+        sb.go(sb.smi_url())
+
+    def search(self, sb, doc):
+        """Search terms documents.
         """
         sb.click_href_labeled('search_test')
         sb.click_href_labeled('view...')
-        if pdf:
-            sb.browser.getControl(name='fulltext').value = full_text
-            sb.browser.getControl(name='silva-content.maintitle:record').value = title
-            sb.click_button_labeled('Search')
-            self.failUnless(full_text in sb.browser.contents)
-            link = sb.browser.getLink(title)
-            self.failUnless(link.text in sb.browser.contents)
+        if doc['format'] != 'pdf' or PDF_TO_TEXT_AVAILABLE:
+            sb.browser.getControl(name='fulltext').value = doc['fulltext']
+        sb.browser.getControl(name='silva-content.maintitle:record').value = doc['title']
+        sb.click_button_labeled('Search')
+        link = sb.browser.getLink(doc['title'])
+        self.failUnless(doc['fulltext'] in sb.contents)
+        self.failUnless(link.text in sb.contents)
         sb.go(sb.smi_url())
 
-    def test_searchfile(self):
+    def test_search(self):
+        """Test silva find objects.
+        """
         sb = SilvaBrowser()
         status, url = sb.login('manager', 'secret', sb.smi_url())
         self.assertEquals(status, 200)
-        if PDF_TO_TEXT_AVAILABLE:
-            # run SilvaFind with pdf tests
-            self.content(sb)
-        else:
-            # run SilvaFind with no pdf tests
-            print """
-                  pdftotext is not installed.
-                  SilvaFind test will continue without testing pdf find functionality!
-                  Please install pdftotext and restart the test to fully test SilvaFind
-                  """
-            self.content(sb, pdf=None)
-        self.modify_text_metadata(sb)
-        for text_name, text_attribute in content.iteritems():
-            self.modify_interface(sb, text_attribute['keywords'])
-            self.search(sb, text_attribute['id'],
-                            text_attribute['title'],
-                            text_attribute['full_text'])
+        # Setup: Create some contents
+        self.content(sb)
+        # Test 1 empty search
+        self.search_empty(sb)
+        # Test 2 invalid search
+        self.search_noresult(sb)
+        # Test 3 search with docs
+        for name, doc in content.iteritems():
+            self.modify_interface(sb, doc['keywords'])
+            self.search(sb, doc)
         status, url = sb.click_href_labeled('logout')
         self.assertEquals(status, 401)
 
