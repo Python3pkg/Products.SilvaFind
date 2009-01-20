@@ -2,20 +2,27 @@
 # See also LICENSE.txt
 # $Id$
 
-import unittest
-import DateTime
+# Zope 3
+from zope.interface.verify import verifyObject
+
+from Products.Silva.tests.SilvaTestCase import SilvaTestCase
+from Products.Silva.tests.helpers import publishObject
+from Products.SilvaFind.interfaces import IFind
 import SilvaFindTestCase
 
 
-class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
+class SilvaQueryTestCase(SilvaTestCase):
+    """Test some silva find features.
+    """
 
     def afterSetUp(self):
-        self.add_query(self.root, 'query', 'Query')
+        self.add_find(self.root, 'query', 'Query')
 
-    def test_instance(self):
+    def test_find(self):
         self.failUnless('query' in self.root.objectIds())
+        verifyObject(IFind, self.root.query)
 
-    def test_edit(self):
+    def test_widgets(self):
         query = self.root.query
         request = query.REQUEST
         request.set('fulltext', 'xyz')
@@ -39,21 +46,7 @@ class SilvaQueryTestCase(SilvaFindTestCase.SilvaFindTestCase):
         # below_path
         self.assertEquals(query.getFieldViews()[7].getStoredValue(), '/root/')
 
-    def test_search(self):
-        document = self.add_document(self.root, 'doc', 'Document')
-        document.get_editable().content.manage_edit(u'<p>abc def xyz</p>')
-        document.set_unapproved_version_publication_datetime(DateTime.DateTime())
-        document.approve_version()
-        query = self.root.query
-        request = query.REQUEST
-        request.set('fulltext', 'xyz')
-        request.set('search_submit', 'Search')
-        query._edit(request)
-        resultBrains = query.searchResults()
-        self.assertEquals(len(resultBrains), 1)
-        resultObjects = [result.getObject().object() for result in resultBrains]
-        self.failUnless(document in resultObjects)
-
+import unittest
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(SilvaQueryTestCase))
