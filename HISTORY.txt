@@ -1,9 +1,12 @@
 Changes
 =======
 
-1.1.8 (Unreleased)
+1.1.8 (2009/02/04)
 ------------------
 
+- Fix ported from the trunk so find works.
+
+- Removing nested tables, adding css classes, adding type attribute.
 
 1.1.7 (2008/11/04)
 ------------------
