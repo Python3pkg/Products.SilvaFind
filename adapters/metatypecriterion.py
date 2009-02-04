@@ -12,13 +12,25 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
+
+def convertValue(value):
+    """Convert a value from what you get from the REQUEST to something
+    working correctly with the catalog.
+    """
+    if not value:
+        return u''
+    if type(value) != type([]):
+        return unicode(value, 'UTF-8')
+    return [unicode(vl, 'UTF-8') for vl in value if vl] or u''
+
+
+
+
 class StoreMetatypeCriterion(StoreCriterion):
     def store(self, REQUEST):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
-        criterion_value = REQUEST.get(field_name, None)
-        if not criterion_value: 
-            return
+        criterion_value = convertValue(REQUEST.get(field_name, None))
         self.query.setCriterionValue(field_name, criterion_value)
 
 class MetatypeCriterionView(Implicit):
@@ -82,16 +94,8 @@ class MetatypeCriterionView(Implicit):
         field_name = self.criterion.getName()
         value = REQUEST.get(field_name, None)
         if value:
-            if type(value) != type([]):
-                value = unicode(value, 'UTF-8')
-            else:
-                values = []
-                for vl in value:
-                    values.append(unicode(vl, 'UTF-8'))
-                value = values
-        else:
-            value = self.getStoredValue()
-        return value
+            return convertValue(value)
+        return self.getStoredValue()
 
     getIndexValue = getValue
 
