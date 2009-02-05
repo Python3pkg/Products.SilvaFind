@@ -4,7 +4,8 @@ Changes
 1.1.8 (2009/02/04)
 ------------------
 
-- Fix ported from the trunk so find works.
+- Fix ported from the trunk so find works after you click on save in
+  the edit form.
 
 - Removing nested tables, adding css classes, adding type attribute.
 
