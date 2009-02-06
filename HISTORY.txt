@@ -1,7 +1,7 @@
 Changes
 =======
 
-1.1.9 (unreleased)
+1.1.9 (2009/02/06)
 ------------------
 
 - Don't do any search by default. You need to click on the button
@@ -12,6 +12,8 @@ Changes
   been added on that form.
 
 - Remove deprecated use of zope.app.zapi, use zope.component instead.
+
+- ``searchResults`` is deprecated.
 
 1.1.8 (2009/02/04)
 ------------------
