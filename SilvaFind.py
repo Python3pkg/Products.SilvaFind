@@ -152,7 +152,6 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('You need to fill at least one '
                           'field in the search form.'))
         try:
-            print searchArguments
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
             return ([], _('Search query contains only common '
