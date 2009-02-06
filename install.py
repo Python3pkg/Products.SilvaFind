@@ -2,7 +2,7 @@
 """
 
 # zope3
-from zope.app import zapi
+from zope.component import getMultiAdapter
 
 # Silva
 from Products.Silva.install import add_fss_directory_view
@@ -65,6 +65,6 @@ def checkIndexes(root):
     """
 
     for field in root.service_find.getSearchSchema().getFields():
-        indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
+        indexedField = getMultiAdapter((field, root), IIndexedField)
         indexedField.checkIndex()
 

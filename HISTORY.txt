@@ -4,17 +4,24 @@ Changes
 1.2 (unreleased)
 ----------------
 
-- Fix SilvaFind under Silva 2.2.
+- Fix SilvaFind under Silva 2.2: fix invalid search arguments set on
+  Find objects when you edit find settings.
+
+- Do not search by default, you need to click on the *Search* button.
+
+- Refactor add-form, public view, product installation.
+
+- Use zope.component instead of zope.app.zapi.
 
 1.1.7 (2008-11-04)
 ------------------
 
-- Fix metatype selector
+- Fix metatype selector.
 
 1.1.6 (2008-10-29)
 ------------------
 
-- Fix tests
+- Fix tests.
 
 - Redo the render_helper page template for inputs.
 

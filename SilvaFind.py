@@ -13,7 +13,7 @@ from ZTUtils import Batch
 
 # zope3
 from zope.interface import implements
-from zope.app import zapi
+from zope.component import getMultiAdapter
 
 # Silva
 from Products.Silva.Content import Content
@@ -89,7 +89,7 @@ class SilvaFind(Query, Content, SimpleItem):
     def getFieldViews(self):
         result = []
         for field in self.service_find.getSearchSchema().getFields():
-            searchFieldView = zapi.getMultiAdapter((field, self), ICriterionView)
+            searchFieldView = getMultiAdapter((field, self), ICriterionView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
@@ -162,7 +162,7 @@ class SilvaFind(Query, Content, SimpleItem):
     def getResultFieldViews(self):
         result = []
         for field in self.service_find.getResultsSchema().getFields():
-            resultFieldView = zapi.getMultiAdapter((field, self), IResultView)
+            resultFieldView = getMultiAdapter((field, self), IResultView)
             # wrapped to enable security checks
             resultFieldView = resultFieldView.__of__(self)
             result.append(resultFieldView)
@@ -201,7 +201,7 @@ class SilvaFind(Query, Content, SimpleItem):
     #HELPERS
     def storeCriterionValues(self, REQUEST):
         for field in self.getSearchSchema().getFields():
-            storeCriterion = zapi.getMultiAdapter((field, self), IStoreCriterion)
+            storeCriterion = getMultiAdapter((field, self), IStoreCriterion)
             storeCriterion.store(REQUEST)
 
     def storeShownCriterion(self, REQUEST):
@@ -220,7 +220,7 @@ class SilvaFind(Query, Content, SimpleItem):
         for field in self.getSearchSchema().getFields():
             if (self.shownFields.has_key(field.getName())
                     or field.getName() == 'path'):
-                queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
+                queryPart = getMultiAdapter((field, self), IQueryPart)
                 value = queryPart.getIndexValue(REQUEST)
                 if value is None:
                     value = ''
