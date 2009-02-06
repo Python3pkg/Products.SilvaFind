@@ -2,7 +2,7 @@
 """
 
 # zope3
-from zope.app import zapi
+from zope.component import getMultiAdapter
 
 # Silva
 from Products.Silva.install import add_fss_directory_view
@@ -74,7 +74,8 @@ def setupService(root):
     # might be a security risc, and was not used anyway
     return 
 
-    SilvaFind.manage_addSilvaFind(root.service_find, 'default', 'Default search')
+    SilvaFind.manage_addSilvaFind(
+        root.service_find, 'default', 'Default search')
     default = root.service_find.default
     for field in root.service_find.getSearchSchema().getFields():
         fieldName = field.getName()
@@ -86,6 +87,6 @@ def checkIndexes(root):
     """
 
     for field in root.service_find.getSearchSchema().getFields():
-        indexedField = zapi.getMultiAdapter((field, root), IIndexedField)
+        indexedField = getMultiAdapter((field, root), IIndexedField)
         indexedField.checkIndex()
     

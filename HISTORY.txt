@@ -4,7 +4,14 @@ Changes
 1.1.9 (unreleased)
 ------------------
 
-- ***
+- Don't do any search by default. You need to click on the button
+  *Search* to have any results.
+
+- Validate edition form: you need at least to have one search
+  criterion activated, and one display field. Message feedback have
+  been added on that form.
+
+- Remove deprecated use of zope.app.zapi, use zope.component instead.
 
 1.1.8 (2009/02/04)
 ------------------

@@ -2,6 +2,8 @@
 # See also LICENSE.txt
 # $Id$
 
+from warnings import warn
+
 # Zope
 from OFS.SimpleItem import SimpleItem
 from Globals import InitializeClass
@@ -13,7 +15,7 @@ from ZTUtils import Batch
 
 # zope3
 from zope.interface import implements
-from zope.app import zapi
+from zope.component import getMultiAdapter
 
 # Silva
 from Products.Silva.Content import Content
@@ -33,7 +35,7 @@ from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
 class SilvaFind(Query, Content, SimpleItem):
-    __doc__ = _("""Silva Find is a powerful search feature that allows easy 
+    __doc__ = _("""Silva Find is a powerful search feature that allows easy
         creation of search forms and result pages. Users can add a Find
         anywhere and define which fields to make searchable by site visitors
         and/or which fields to limit to a preset value. Users also can
@@ -57,15 +59,15 @@ class SilvaFind(Query, Content, SimpleItem):
         self.shownResultsFields = PersistentMapping()
         # by default we only show fulltext search
         # and a couple of resultfields
-        self.shownFields['fulltext'] = True 
-        self.shownResultsFields['link'] = True 
-        self.shownResultsFields['ranking'] = True 
-        self.shownResultsFields['resultcount'] = True 
-        self.shownResultsFields['icon'] = True 
-        self.shownResultsFields['date'] = True 
-        self.shownResultsFields['textsnippet'] = True 
-        self.shownResultsFields['thumbnail'] = True 
-        self.shownResultsFields['breadcrumbs'] = True 
+        self.shownFields['fulltext'] = True
+        self.shownResultsFields['link'] = True
+        self.shownResultsFields['ranking'] = True
+        self.shownResultsFields['resultcount'] = True
+        self.shownResultsFields['icon'] = True
+        self.shownResultsFields['date'] = True
+        self.shownResultsFields['textsnippet'] = True
+        self.shownResultsFields['thumbnail'] = True
+        self.shownResultsFields['breadcrumbs'] = True
 
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'is_cacheable')
@@ -80,7 +82,7 @@ class SilvaFind(Query, Content, SimpleItem):
         """always deletable"""
         return 1
 
-    def can_set_title(self):        
+    def can_set_title(self):
         """always settable"""
         # XXX: we badly need Publishable type objects to behave right.
         return 1
@@ -89,17 +91,17 @@ class SilvaFind(Query, Content, SimpleItem):
     def getFieldViews(self):
         result = []
         for field in self.service_find.getSearchSchema().getFields():
-            searchFieldView = zapi.getMultiAdapter((field, self), ICriterionView)
+            searchFieldView = getMultiAdapter((field, self), ICriterionView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
     def getPublicFieldViews(self):
         result = [view for view in self.getFieldViews()
                     if self.isCriterionShown(view.getName())]
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -118,12 +120,15 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'searchResults')
     def searchResults(self, REQUEST={}):
-        # this is here for backwards compatibility
+        warn("searchResults is going to disappear in SilvaFind 1.2",
+             DeprecationWarning, stacklevel=2)
         return self.searchResultsWithDescription(REQUEST)[0]
 
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
     def searchResultsWithDescription(self, REQUEST={}):
+        if not REQUEST.has_key('search_submit'):
+            return ([], 'empty')
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(REQUEST)
         queryEmpty = True
@@ -144,8 +149,10 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('Search query can not start '
                             'with wildcard character.'))
         if queryEmpty:
-            return ([], 'empty')
+            return ([], _('You need to fill at least one '
+                          'field in the search form.'))
         try:
+            print searchArguments
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
             return ([], _('Search query contains only common '
@@ -153,12 +160,6 @@ class SilvaFind(Query, Content, SimpleItem):
 
         if not results:
             return ([], _('No items matched your search.'))
-        
-        # XXX the searchresults could have textsnippets of documents 
-        # that the user is not supposed to see. 
-        # Instead of filtering these objects out (bad performance)
-        # or filtering them out in the getBatch method (screws up resultcount)
-        # it is now checked in the pagetemplate with the isViewableForUser
 
         return (results, '')
 
@@ -170,12 +171,12 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getBatch')
     def getBatch(self,results, size=20, orphan=2, overlap=0):
         # Custom getabatch method to filter out unviewable objects.
-        # This may lead to performance problems because all objects 
+        # This may lead to performance problems because all objects
         # in the search results need to be accessed until the right
         # number of objects are found.
-        # This behaviour also has the sideeffect that the total result 
+        # This behaviour also has the sideeffect that the total result
         # count might change as a user is viewing subsequent batches.
-        
+
         REQ = self.REQUEST
 
 
@@ -216,7 +217,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
                 return qs
 
-        # create a new query string with the correct batch_start/end 
+        # create a new query string with the correct batch_start/end
         # for the next/previous batch
 
         if batch.end < len(results):
@@ -230,57 +231,79 @@ class SilvaFind(Query, Content, SimpleItem):
             REQ.set('previous_batch_url', '%s?%s' % (REQ.URL, qs))
 
         return batch
-        
+
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):
         result = []
         for field in self.service_find.getResultsSchema().getFields():
-            resultFieldView = zapi.getMultiAdapter((field, self), IResultView)
+            resultFieldView = getMultiAdapter((field, self), IResultView)
             # wrapped to enable security checks
             resultFieldView = resultFieldView.__of__(self)
             result.append(resultFieldView)
-        return result  
+        return result
 
     def getPublicResultFieldViews(self):
         result = [view for view in self.getResultFieldViews()
                     if self.isResultShown(view.getName())]
-        return result  
+        return result
 
     security.declareProtected(SilvaPermissions.View, 'getResultColumns')
     def getResultColumns(self):
-        return [(field.getColumnTitle(), field.render) for field in self.getResultsSchema().getFields()]
-        
+        return [(field.getColumnTitle(), field.render)
+                for field in self.getResultsSchema().getFields()]
+
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
     def searchResultsObjects(self, REQUEST={}):
         results = self.searchResults(REQUEST)
         return [result.getObject().get_silva_object() for result in results]
-    
+
 
     #MUTATORS
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')
+    security.declareProtected(
+        SilvaPermissions.ChangeSilvaContent, 'manage_edit')
     def manage_edit(self, REQUEST):
         """Store fields values
         """
-        self._edit(REQUEST)
-        REQUEST.RESPONSE.redirect(self.absolute_url() + '/edit/tab_edit')
+        message, message_type = self._edit(REQUEST)
+        return self.edit['tab_edit'](message=message, message_type=message_type)
 
     def _edit(self, REQUEST):
         """Store fields values
         """
+        # Validate values
+        def validate(name, schema):
+            atLeastOneShown = False
+            for field in schema.getFields():
+                fieldName = field.getName()
+                shown = REQUEST.get(name + fieldName, False)
+                atLeastOneShown = atLeastOneShown or shown
+            return atLeastOneShown
+
+        if not validate('show_', self.getSearchSchema()):
+            return (_('You need to activate at least one search criterion.'),
+                    'error')
+        if not validate('show_result_', self.getResultsSchema()):
+            return (_('You need to display at least one field in the results.'),
+                    'error')
+
+        # Save them
         self.storeCriterionValues(REQUEST)
         self.storeShownCriterion(REQUEST)
         self.storeShownResult(REQUEST)
+        return (_('Changes saved.'),
+                'feedback')
 
     #HELPERS
     def storeCriterionValues(self, REQUEST):
         for field in self.getSearchSchema().getFields():
-            storeCriterion = zapi.getMultiAdapter((field, self), IStoreCriterion)
+            storeCriterion = getMultiAdapter((field, self), IStoreCriterion)
             storeCriterion.store(REQUEST)
 
     def storeShownCriterion(self, REQUEST):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
+
 
     def storeShownResult(self, REQUEST):
         for field in self.getResultsSchema().getFields():
@@ -291,9 +314,9 @@ class SilvaFind(Query, Content, SimpleItem):
     def getCatalogSearchArguments(self, REQUEST):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
-            if (self.shownFields.has_key(field.getName()) 
+            if (self.shownFields.has_key(field.getName())
                     or field.getName() == 'path'):
-                queryPart = zapi.getMultiAdapter((field, self), IQueryPart)
+                queryPart = getMultiAdapter((field, self), IQueryPart)
                 value = queryPart.getIndexValue(REQUEST)
                 if value is None:
                     value = ''
@@ -306,9 +329,9 @@ class SilvaFind(Query, Content, SimpleItem):
         f = context.f
         f.write('<silva_find id="%s">' % self.id)
         f.write('</silva_find>')
-        
-         
-                         
+
+
+
 
 InitializeClass(SilvaFind)
 
