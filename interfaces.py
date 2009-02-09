@@ -20,7 +20,7 @@ class IMetadataCriterionField(Interface):
     '''
     def getMetadataSet():
         '''returns Silva MetadataSet id'''
-        
+
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
 
@@ -44,13 +44,13 @@ class IFullTextCriterionField(Interface):
 class IMetatypeCriterionField(Interface):
     '''
     Criterion corresponding to the Silva Meta Type of an object
-    '''   
-    
+    '''
+
 class IPathCriterionField(Interface):
     '''
     Criterion used to restrict searchresults so they start with a specific path
     '''
-    
+
 class IResultField(Interface):
     '''
     Mapping between schema results field and ZCatalog metadata column
@@ -66,4 +66,4 @@ class IResultField(Interface):
     def render(context, item):
         '''renders result field for item
         '''
-        
+

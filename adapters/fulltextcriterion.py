@@ -21,17 +21,17 @@ class StoreFullTextCriterion(StoreCriterion):
         self.query.setCriterionValue(field_name, criterion_value)
 
 class FullTextCriterionView(Implicit):
-    
+
     security = ClassSecurityInfo()
-    
+
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
-    
+
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'canBeShown')
     def canBeShown(self):
-        return True 
+        return True
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
@@ -44,7 +44,7 @@ class FullTextCriterionView(Implicit):
     def renderPublicWidget(self):
         value = self.getValue(self.query.REQUEST)
         return {'name': self.criterion.getName(),
-                'field_type': self.__class__.__name__,         
+                'field_type': self.__class__.__name__,
                 'value': value,}
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
@@ -53,7 +53,7 @@ class FullTextCriterionView(Implicit):
         if value is None:
             value = ""
         html = '''
-        <input class="store" type="text" name="%s" id="%s" value="%s" size="20" /> 
+        <input class="store" type="text" name="%s" id="%s" value="%s" size="20" />
         '''
         return html % (self.criterion.getName(),
                        self.criterion.getName(),
@@ -68,18 +68,18 @@ class FullTextCriterionView(Implicit):
         else:
             value = self.getStoredValue()
         return value
-        
+
     getIndexValue = getValue
-    
+
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         return value
-        
+
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
         return _('full text')
-        
+
     def getIndexId(self):
         return 'fulltext'
 
@@ -87,7 +87,7 @@ class FullTextCriterionView(Implicit):
         'getDescription')
     def getDescription(self):
         return _('Search the full text.')
-        
+
     security.declareProtected(SilvaPermissions.View,
         'getName')
     def getName(self):

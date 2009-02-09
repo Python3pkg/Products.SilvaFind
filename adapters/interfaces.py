@@ -2,14 +2,14 @@ from zope.interface import Interface
 
 class ICriterionView(Interface):
     '''
-    To display a criterion both in view and in edit form. 
+    To display a criterion both in view and in edit form.
     '''
     def getTitle():
         '''returns field title for view'''
 
     def getDescription():
         '''returns description of the criterion field'''
-        
+
     def canBeShown():
         '''Boolean indicating if show chechbox should be shown in edit view'''
 
@@ -24,17 +24,17 @@ class ICriterionView(Interface):
 
     def getValue(REQUEST):
         '''returns value from REQUEST or stored value'''
-        
+
     def getStoredValue():
         '''returns stored value for the corresponding field'''
-        
+
 class IStoreCriterion(Interface):
     '''
     Stores criterion value in query instance
     '''
     def store(REQUEST):
         '''store value in query
-        
+
            REQUEST could be a dict
         '''
 
@@ -48,7 +48,7 @@ class IQueryPart(Interface):
     def getIndexValue(REQUEST):
         '''returns value used by catalog searches, could be a dict for
         DateIndex for instance.
-        
+
         The value in REQUEST is used.
         If not found, stored value is used.
         '''
@@ -73,7 +73,7 @@ class ICatalogMetadataSetup(Interface):
 
 class IResultView(Interface):
     '''
-    To display a result both in view and in edit form. 
+    To display a result both in view and in edit form.
     '''
     def getTitle():
         '''returns field title for view'''

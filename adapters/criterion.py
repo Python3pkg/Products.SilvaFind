@@ -4,7 +4,7 @@ class StoreCriterion:
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
-        
+
 class CatalogMetadataSetup:
     def __init__(self, field, root):
         self.field = field
