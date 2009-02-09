@@ -66,19 +66,19 @@ class FullTextCriterionField(object):
     implements(IFullTextCriterionField)
 
     def getName(self):
-        return _("fulltext")
+        return "fulltext"
 
 class MetatypeCriterionField(object):
     implements(IMetatypeCriterionField)
 
     def getName(self):
-        return _("meta_type")
+        return "meta_type"
 
 class PathCriterionField(object):
     implements(IPathCriterionField)
 
     def getName(self):
-        return _("path")
+        return "path"
 
 class AutomaticMetaDataCriterionField(object):
     """This class is a marker to put in the schemalist.
