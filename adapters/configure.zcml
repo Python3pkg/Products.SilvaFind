@@ -5,7 +5,7 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IResultField
-         Products.Silva.interfaces.IRoot"
+         silva.core.interfaces.IRoot"
     provides=".interfaces.ICatalogMetadataSetup"
     factory=".criterion.CatalogMetadataSetup"
     />
@@ -33,7 +33,7 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetadataCriterionField
-         Products.Silva.interfaces.IRoot"
+         silva.core.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
     factory=".metadatacriterion.IndexedMetadataCriterion"
     />
@@ -61,7 +61,7 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetatypeCriterionField
-      Products.Silva.interfaces.IRoot"
+      silva.core.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
     factory=".metatypecriterion.IndexedMetatypeCriterion"
   />
@@ -89,7 +89,7 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IPathCriterionField
-      Products.Silva.interfaces.IRoot"
+      silva.core.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
     factory=".pathcriterion.IndexedPathCriterion"
   />
@@ -159,7 +159,7 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriterionField
-         Products.Silva.interfaces.IRoot"
+         silva.core.interfaces.IRoot"
     provides=".interfaces.IIndexedField"
     factory=".fulltextcriterion.IndexedFullTextCriterion"
     />

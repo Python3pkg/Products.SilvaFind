@@ -3,7 +3,7 @@
 # $Id$
 
 from zope.interface import Interface
-from Products.Silva import interfaces
+from silva.core import interfaces
 
 '''
 A query is a set of criteria.

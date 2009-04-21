@@ -8,8 +8,7 @@ from zope.interface import implements
 
 from Products.ZCTextIndex.ParseTree import ParseError
 
-from Products.Silva.interfaces import IVersion
-from Products.Silva.interfaces import IPublishable
+from silva.core.interfaces import IVersion, IPublishable
 from Products.SilvaFind.interfaces import IMetadataCriterionField
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
