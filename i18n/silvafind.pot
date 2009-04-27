@@ -1,31 +1,34 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: SilvaFind trunk"
-"POT-Creation-Date: Tue Jul 29 12:31:02 2008\n"
+"POT-Creation-Date: Mon Apr 27 17:48:32 2009\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Silva Translators <eric+i18n@infrae.com>\n"
+"Language-Team: Silva i18n team <walco@infrae.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generated-By: zope/app/translation_files/extract.py\n"
+"Generated-By: zope/app/translation_files/extract.py\n"
 
-#: /SilvaFind.py:140
+#: /SilvaFind.py:146
 msgid "Search query can not start with wildcard character."
 msgstr ""
 
-#: /SilvaFind.py:147
+#: /SilvaFind.py:149
+msgid "You need to fill at least one field in the search form."
+msgstr ""
+
+#: /SilvaFind.py:153
 msgid "Search query contains only common or reserved words."
 msgstr ""
 
-#: /SilvaFind.py:151
-#: /views/public/SilvaFind/render_helper.pt:156
+#: /SilvaFind.py:157
+#: /SilvaFind_templates/silvafindview.pt:220
 msgid "No items matched your search."
 msgstr ""
 
-#: /SilvaFind.py:32
+#: /SilvaFind.py:38
 msgid ""
-"Silva Find is a powerful search feature that allows easy \n"
+"Silva Find is a powerful search feature that allows easy\n"
 "        creation of search forms and result pages. Users can add a Find\n"
 "        anywhere and define which fields to make searchable by site visitors\n"
 "        and/or which fields to limit to a preset value. Users also can\n"
@@ -33,39 +36,77 @@ msgid ""
 "        metadata sets/fields are supported."
 msgstr ""
 
-#: /adapters/fulltextcriterion.py:79
+#: /SilvaFind_templates/silvafindview.pt:105
+msgid "Search"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:132
+msgid "Search Results"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:142
+msgid "See the previous result listing: alt-p"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:152
+msgid "Previous"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:161
+msgid "Showing results ${batch_start} to ${batch_end}"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:165
+msgid "of about ${total}"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:171
+msgid "See the next result listing: alt-n"
+msgstr ""
+
+#: /SilvaFind_templates/silvafindview.pt:175
+msgid "Next"
+msgstr ""
+
+#: /adapters/fulltextcriterion.py:81
 msgid "full text"
 msgstr ""
 
-#: /adapters/fulltextcriterion.py:87
+#: /adapters/fulltextcriterion.py:89
 msgid "Search the full text."
 msgstr ""
 
 #: /adapters/metadatacriterion.py:202
+#: /adapters/metadatacriterion.py:233
 msgid "between"
 msgstr ""
 
 #: /adapters/metadatacriterion.py:203
+#: /adapters/metadatacriterion.py:234
 msgid "and"
 msgstr ""
 
 #: /adapters/metadatacriterion.py:204
+#: /adapters/metadatacriterion.py:235
 msgid "only integers"
 msgstr ""
 
-#: /adapters/metadatacriterion.py:342
+#: /adapters/metadatacriterion.py:361
+#: /adapters/metadatacriterion.py:392
 msgid "from"
 msgstr ""
 
-#: /adapters/metadatacriterion.py:343
+#: /adapters/metadatacriterion.py:362
+#: /adapters/metadatacriterion.py:393
 msgid "to"
 msgstr ""
 
-#: /adapters/metatypecriterion.py:121
+#: /adapters/metatypecriterion.py:122
 msgid "Search for the selected content types."
 msgstr ""
 
-#: /adapters/metatypecriterion.py:54
+#: /adapters/metatypecriterion.py:58
+#: /adapters/metatypecriterion.py:76
 msgid "All Types"
 msgstr ""
 
@@ -77,86 +118,74 @@ msgstr ""
 msgid "Only search below this location (a path from the site root)."
 msgstr ""
 
-#: /globalschema.py:26
+#: /globalschema.py:25
 msgid "Ranking"
 msgstr ""
 
-#: /globalschema.py:27
-#: /schema.py:139
+#: /globalschema.py:26
+#: /schema.py:141
 msgid "full text result ranking"
 msgstr ""
 
-#: /globalschema.py:28
+#: /globalschema.py:27
 msgid "TotalResultCount"
 msgstr ""
 
-#: /globalschema.py:29
+#: /globalschema.py:28
 msgid "Show total number of results"
 msgstr ""
 
-#: /globalschema.py:30
+#: /globalschema.py:29
 msgid "ResultCount"
 msgstr ""
 
-#: /globalschema.py:31
-#: /schema.py:181
+#: /globalschema.py:30
+#: /schema.py:183
 msgid "search result count"
 msgstr ""
 
-#: /globalschema.py:32
+#: /globalschema.py:31
 msgid "Icon"
 msgstr ""
 
-#: /globalschema.py:33
+#: /globalschema.py:32
 msgid "Display the icon of the content type."
 msgstr ""
 
-#: /globalschema.py:34
+#: /globalschema.py:33
 msgid "Link"
 msgstr ""
 
-#: /globalschema.py:35
+#: /globalschema.py:34
 msgid "Date"
 msgstr ""
 
-#: /globalschema.py:36
+#: /globalschema.py:35
 msgid "Text snippet"
 msgstr ""
 
-#: /globalschema.py:37
+#: /globalschema.py:36
 msgid "Thumbnail"
 msgstr ""
 
-#: /globalschema.py:39
+#: /globalschema.py:38
 msgid "Breadcrumbs"
 msgstr ""
 
-#: /schema.py:167
+#: /schema.py:169
 msgid "total search result number"
 msgstr ""
 
-#: /schema.py:219
+#: /schema.py:221
 msgid "Shows thumbnails for images"
 msgstr ""
 
-#: /schema.py:240
+#: /schema.py:242
 msgid "Add text snippets from content"
 msgstr ""
 
-#: /schema.py:423
+#: /schema.py:425
 msgid "(metadata field)"
-msgstr ""
-
-#: /schema.py:66
-msgid "fulltext"
-msgstr ""
-
-#: /schema.py:72
-msgid "meta_type"
-msgstr ""
-
-#: /schema.py:78
-msgid "path"
 msgstr ""
 
 #: /views/edit/Content/SilvaFind/edit.pt:108
@@ -213,37 +242,5 @@ msgstr ""
 
 #: /views/edit/Content/SilvaFind/get_tabs.py:20
 msgid "access"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:100
-msgid "of about ${total}"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:106
-msgid "See the next result listing: alt-n"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:110
-msgid "Next"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:37
-msgid "Search"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:66
-msgid "Search Results"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:76
-msgid "See the previous result listing: alt-p"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:87
-msgid "Previous"
-msgstr ""
-
-#: /views/public/SilvaFind/render_helper.pt:96
-msgid "Showing results ${batch_start} to ${batch_end}"
 msgstr ""
 
