@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: silva-find\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: Tue Jul 29 12:31:02 2008\n"
-"PO-Revision-Date: 2009-04-27 17:42+0200\n"
-"Last-Translator: thisfred <eric@infrae.com>\n"
+"POT-Creation-Date: Mon Apr 27 17:57:48 2009\n"
+"PO-Revision-Date: 2009-04-27 18:02+0100\n"
+"Last-Translator: Wim Boucquaert <wim@infrae.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,63 +18,84 @@ msgstr ""
 "X-Generator: Launchpad (build Unknown)\n"
 "Domain: silvafind\n"
 
-#: /SilvaFind.py:140
+#: /SilvaFind.py:149
 msgid "Search query can not start with wildcard character."
 msgstr "Zoekopdracht mag niet met een joker beginnen."
 
-#: /SilvaFind.py:147
+#: /SilvaFind.py:152
+msgid "You need to fill at least one field in the search form."
+msgstr "Je moet minstens één veld invullen in het zoekformulier."
+
+#: /SilvaFind.py:157
 msgid "Search query contains only common or reserved words."
 msgstr "Zoekopdracht bevat alleen algemene of gereserveerde woorden."
 
-#: /SilvaFind.py:151 /views/public/SilvaFind/render_helper.pt:156
+#: /SilvaFind.py:161
+#: /views/public/SilvaFind/render_helper.pt:227
 msgid "No items matched your search."
 msgstr "Geen items gevonden."
 
-#: /SilvaFind.py:32
+#: /SilvaFind.py:282
+msgid "You need to activate at least one search criterion."
+msgstr "Je moet minstens één zoek criteria activeren."
+
+#: /SilvaFind.py:285
+msgid "You need to display at least one field in the results."
+msgstr "Je moet minstens één veld weergeven in de zoekresultaten."
+
+#: /SilvaFind.py:292
+msgid "Changes saved."
+msgstr "Wijzigingen opgeslagen."
+
+#: /SilvaFind.py:38
 msgid ""
-"Silva Find is a powerful search feature that allows easy \n"
+"Silva Find is a powerful search feature that allows easy\n"
 "        creation of search forms and result pages. Users can add a Find\n"
-"        anywhere and define which fields to make searchable by site "
-"visitors\n"
+"        anywhere and define which fields to make searchable by site visitors\n"
 "        and/or which fields to limit to a preset value. Users also can\n"
-"        determine which fields should be displayed in the search results. "
-"All\n"
+"        determine which fields should be displayed in the search results. All\n"
 "        metadata sets/fields are supported."
 msgstr ""
 
-#: /adapters/fulltextcriterion.py:79
+#: /adapters/fulltextcriterion.py:81
 msgid "full text"
 msgstr "volledige tekst"
 
-#: /adapters/fulltextcriterion.py:87
+#: /adapters/fulltextcriterion.py:89
 msgid "Search the full text."
 msgstr "Zoeken in de volledige tekst."
 
 #: /adapters/metadatacriterion.py:202
+#: /adapters/metadatacriterion.py:233
 msgid "between"
 msgstr "tussen"
 
 #: /adapters/metadatacriterion.py:203
+#: /adapters/metadatacriterion.py:234
 msgid "and"
 msgstr "en"
 
 #: /adapters/metadatacriterion.py:204
+#: /adapters/metadatacriterion.py:235
 msgid "only integers"
 msgstr "alleen gehele getallen"
 
-#: /adapters/metadatacriterion.py:342
+#: /adapters/metadatacriterion.py:361
+#: /adapters/metadatacriterion.py:392
 msgid "from"
 msgstr "van"
 
-#: /adapters/metadatacriterion.py:343
+#: /adapters/metadatacriterion.py:362
+#: /adapters/metadatacriterion.py:393
 msgid "to"
 msgstr "tot"
 
-#: /adapters/metatypecriterion.py:121
+#: /adapters/metatypecriterion.py:126
 msgid "Search for the selected content types."
 msgstr "Zoeken naar de geselecteerde contenttypen"
 
-#: /adapters/metatypecriterion.py:54
+#: /adapters/metatypecriterion.py:59
+#: /adapters/metatypecriterion.py:77
 msgid "All Types"
 msgstr "Alle soorten"
 
@@ -90,7 +111,8 @@ msgstr "Alleen onder deze locatie (een pad vanaf de root van de site) zoeken."
 msgid "Ranking"
 msgstr "Score"
 
-#: /globalschema.py:27 /schema.py:139
+#: /globalschema.py:27
+#: /schema.py:139
 msgid "full text result ranking"
 msgstr "volledige tekst resultaatscore"
 
@@ -106,7 +128,8 @@ msgstr "Laat het totale aantal resultaten zien"
 msgid "ResultCount"
 msgstr "ResultCount"
 
-#: /globalschema.py:31 /schema.py:181
+#: /globalschema.py:31
+#: /schema.py:181
 msgid "search result count"
 msgstr "aantal zoekresultaten"
 
@@ -153,18 +176,6 @@ msgstr "Tekstfragmenten van inhoud toevoegen."
 #: /schema.py:423
 msgid "(metadata field)"
 msgstr "(metadataveld)"
-
-#: /schema.py:66
-msgid "fulltext"
-msgstr "volledige tekst"
-
-#: /schema.py:72
-msgid "meta_type"
-msgstr "meta_type"
-
-#: /schema.py:78
-msgid "path"
-msgstr "pad"
 
 #: /views/edit/Content/SilvaFind/edit.pt:108
 msgid "search results for &#xab;${title_or_id}&#xbb;"
@@ -222,38 +233,44 @@ msgstr "eigenschappen"
 msgid "access"
 msgstr "toegang"
 
-#: /views/public/SilvaFind/render_helper.pt:100
-msgid "of about ${total}"
-msgstr "van ongeveer ${total}"
-
-#: /views/public/SilvaFind/render_helper.pt:106
-msgid "See the next result listing: alt-n"
-msgstr "Volgende resultaatlijst bekijken: alt-n"
-
-#: /views/public/SilvaFind/render_helper.pt:110
-msgid "Next"
-msgstr "Volgende"
-
-#: /views/public/SilvaFind/render_helper.pt:37
+#: /views/public/SilvaFind/render_helper.pt:109
 msgid "Search"
 msgstr "Zoeken"
 
-#: /views/public/SilvaFind/render_helper.pt:66
+#: /views/public/SilvaFind/render_helper.pt:137
 msgid "Search Results"
 msgstr "Zoekresultaten"
 
-#: /views/public/SilvaFind/render_helper.pt:76
+#: /views/public/SilvaFind/render_helper.pt:147
 msgid "See the previous result listing: alt-p"
 msgstr "Vorige resultaatlijst bekijken: alt-p"
 
-#: /views/public/SilvaFind/render_helper.pt:87
+#: /views/public/SilvaFind/render_helper.pt:158
 msgid "Previous"
 msgstr "Vorige"
 
-#: /views/public/SilvaFind/render_helper.pt:96
+#: /views/public/SilvaFind/render_helper.pt:167
 msgid "Showing results ${batch_start} to ${batch_end}"
 msgstr "Resultaten van ${batch_start} tot ${batch_end}"
 
+#: /views/public/SilvaFind/render_helper.pt:171
+msgid "of about ${total}"
+msgstr "van ongeveer ${total}"
+
+#: /views/public/SilvaFind/render_helper.pt:177
+msgid "See the next result listing: alt-n"
+msgstr "Volgende resultaatlijst bekijken: alt-n"
+
+#: /views/public/SilvaFind/render_helper.pt:181
+msgid "Next"
+msgstr "Volgende"
+
+#~ msgid "fulltext"
+#~ msgstr "volledige tekst"
+#~ msgid "meta_type"
+#~ msgstr "meta_type"
+#~ msgid "path"
+#~ msgstr "pad"
 #~ msgid ""
 #~ "This a special document that can show a list of content\n"
 #~ "       items resulting from a search with specific values for criteria\n"
@@ -263,10 +280,10 @@ msgstr "Resultaten van ${batch_start} tot ${batch_end}"
 #~ "weergeven die het resultaat zijn van een zoekopdracht met specifieke "
 #~ "waarden voor criteria of een formulier om zoek-criteria in te voeren "
 #~ "alvorens resultaten te verkrijgen."
-
 #~ msgid ""
 #~ "<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
 #~ "Showing results ${batch_start} to ${batch_end} of about ${total}"
 #~ msgstr ""
 #~ "<img alt=\"spacer\" width=\"16\" height=\"16\" border=\"0\" src=\"\" /> "
 #~ "Resultaten van ${batch_start} tot ${batch_end} van +/- ${total}"
+
