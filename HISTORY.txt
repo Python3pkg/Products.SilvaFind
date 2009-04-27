@@ -4,7 +4,7 @@ Changes
 1.1.11 (unreleased)
 -------------------
 
-- ...
+- Fix for Dutch translations.
 
 1.1.10 (2009/02/09)
 -------------------
