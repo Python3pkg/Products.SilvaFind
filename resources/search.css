@@ -1,9 +1,11 @@
 /* stylesheet for silva find search and searchresult pages */
-.searchform {}
 
 .searchform input, .searchform select, .searchform textarea {
-  width: 99%;
-  !width: 94%; /* IE7 hack */
+  width: 94%;
+}
+
+body > .searchform input, body > .searchform select, body > .searchform textarea {
+  width: 99%; /* IE hack */
 }
 
 div.searchform input.searchform-submit {
@@ -25,8 +27,6 @@ div.searchform input.searchform-submit {
   padding-top:0.25em;
   padding-left:0.5em;
 }
-
-.searchresults h3 {}
 
 .searchresult-header {
   margin: 0.5em 0;
@@ -62,8 +62,6 @@ div.searchresult {
   font-size:0.95em;
 }
 
-.searchresult-icon {}
-
 .searchresult-counter {
     margin-left:-1ex;
 }
@@ -92,25 +90,12 @@ div.searchresult {
   font-style:italic;
 }
 
-/*
-.searchresult-field-title:after {
-  content:':';
-}
-*/
-
 .searchresult-snippet{
   margin-left:2em;
 }
 
 .searchresult-notallowed {
   color:red;
-}
-
-.searchresult-snippet-hilite{
-
-}
-
-.searchresult-ranking{
 }
 
 .searchresult-thumbnail {
