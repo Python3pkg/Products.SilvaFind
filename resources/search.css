@@ -4,8 +4,8 @@
   width: 94%;
 }
 
-body > .searchform input, body > .searchform select, body > .searchform textarea {
-  width: 99%; /* IE hack */
+*:first-child+html .searchform input, *:first-child+html .searchform select, *:first-child+html .searchform textarea {
+  width: 99%; /* IE7 hack */
 }
 
 div.searchform input.searchform-submit {
