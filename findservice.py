@@ -5,10 +5,9 @@
 # Zope
 from AccessControl import ClassSecurityInfo
 from Globals import InitializeClass
-from zope.interface import implements
+from five import grok
 
 # Silva
-from Products.Silva.BaseService import SilvaService
 from Products.Silva import helpers
 
 from Products.SilvaFind.interfaces import IFindService
@@ -22,6 +21,7 @@ from Products.SilvaFind.schema import IntegerRangeMetadataCriterionField
 from Products.SilvaFind.schema import AutomaticMetaDataResultField
 from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
 
+from silva.core.services.base import SilvaService
 from silva.core import conf as silvaconf
 
 
@@ -32,7 +32,7 @@ class FindService(SilvaService):
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find Service"
-    implements(IFindService)
+    grok.implements(IFindService)
     silvaconf.icon('www/find_service.png')
     silvaconf.factory('manage_addSilvaFindService')
 
