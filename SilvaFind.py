@@ -4,7 +4,11 @@
 
 # Zope
 from OFS.SimpleItem import SimpleItem
-from Globals import InitializeClass
+try:
+    from App.class_init import InitializeClass # Zope 2.12
+except ImportError:
+    from Globals import InitializeClass # Zope < 2.12
+
 from AccessControl import ClassSecurityInfo, getSecurityManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.PersistentMapping import PersistentMapping
