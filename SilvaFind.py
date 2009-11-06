@@ -116,11 +116,6 @@ class SilvaFind(Query, Content, SimpleItem):
                 return True
         return False
 
-    security.declareProtected(SilvaPermissions.View, 'searchResults')
-    def searchResults(self, REQUEST={}):
-        # this is here for backwards compatibility
-        return self.searchResultsWithDescription(REQUEST)[0]
-
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
     def searchResultsWithDescription(self, REQUEST={}):
@@ -146,7 +141,8 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('Search query can not start '
                             'with wildcard character.'))
         if queryEmpty:
-            return ([], _('You need to fill at least one field in the search form.'))
+            return ([], _('You need to fill at least one '
+                          'field in the search form.'))
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError, err:
@@ -194,9 +190,26 @@ class SilvaFind(Query, Content, SimpleItem):
     def _edit(self, REQUEST):
         """Store fields values
         """
+        # Validate values
+        def validate(name, schema):
+            atLeastOneShown = False
+            for field in schema.getFields():
+                fieldName = field.getName()
+                shown = REQUEST.get(name + fieldName, False)
+                atLeastOneShown = atLeastOneShown or shown
+            return atLeastOneShown
+
+        if not validate('show_', self.getSearchSchema()):
+            return (_('You need to activate at least one search criterion.'),
+                    'error')
+        if not validate('show_result_', self.getResultsSchema()):
+            return (_('You need to display at least one field in the results.'),
+                    'error')
+        # Save them
         self.storeCriterionValues(REQUEST)
         self.storeShownCriterion(REQUEST)
         self.storeShownResult(REQUEST)
+        return (_('Changes saved.'), 'feedback')
 
     #HELPERS
     def storeCriterionValues(self, REQUEST):

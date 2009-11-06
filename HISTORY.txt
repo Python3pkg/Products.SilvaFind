@@ -4,6 +4,9 @@ Changes
 1.2 (unreleased)
 ----------------
 
+- Add validation on the edit screen so that the user enter at least
+  one search criteria.
+
 - Fix for Dutch translations.
 
 - Fix SilvaFind under Silva 2.2: fix invalid search arguments set on
