@@ -171,7 +171,8 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'getResultColumns')
     def getResultColumns(self):
-        return [(field.getColumnTitle(), field.render) for field in self.getResultsSchema().getFields()]
+        return [(field.getColumnTitle(), field.render)
+                for field in self.getResultsSchema().getFields()]
 
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
     def searchResultsObjects(self, REQUEST={}):
@@ -180,12 +181,13 @@ class SilvaFind(Query, Content, SimpleItem):
 
 
     #MUTATORS
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent, 'manage_edit')
+    security.declareProtected(
+        SilvaPermissions.ChangeSilvaContent, 'manage_edit')
     def manage_edit(self, REQUEST):
         """Store fields values
         """
-        self._edit(REQUEST)
-        REQUEST.RESPONSE.redirect(self.absolute_url() + '/edit/tab_edit')
+        message, message_type = self._edit(REQUEST)
+        return self.edit['tab_edit'](message=message, message_type=message_type)
 
     def _edit(self, REQUEST):
         """Store fields values

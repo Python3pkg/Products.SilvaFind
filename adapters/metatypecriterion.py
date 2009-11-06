@@ -29,8 +29,6 @@ class StoreMetatypeCriterion(StoreCriterion):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
         criterion_value = convertValue(REQUEST.get(field_name, None))
-        if not criterion_value:
-            return
         self.query.setCriterionValue(field_name, criterion_value)
 
 
