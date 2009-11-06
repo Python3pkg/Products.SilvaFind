@@ -21,29 +21,6 @@ class SilvaQueryTestCase(SilvaTestCase):
         self.failUnless('query' in self.root.objectIds())
         verifyObject(IFind, self.root.query)
 
-    def test_widgets(self):
-        query = self.root.query
-        request = query.REQUEST
-        request.set('fulltext', 'xyz')
-        request.set('meta_type', 'Olliphant')
-        request.set('path', '/')
-        request.set('silva-content',
-                    {'maintitle':'Title',
-                     'shorttitle':'Short'})
-        query._edit(request)
-        # content type
-        self.assertEquals(query.getFieldViews()[0].getStoredValue(), 'Olliphant')
-        # fulltext
-        self.assertEquals(query.getFieldViews()[1].getStoredValue(), 'xyz')
-        # title
-        self.assertEquals(query.getFieldViews()[2].getStoredValue(), 'Title')
-        # short title
-        self.assertEquals(query.getFieldViews()[3].getStoredValue(), 'Short')
-        # keywords
-        # publication time
-        # expiration time
-        # below_path
-        self.assertEquals(query.getFieldViews()[7].getStoredValue(), '/root/')
 
 import unittest
 def test_suite():
