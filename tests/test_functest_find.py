@@ -1,4 +1,4 @@
-# Copyright (c) 2008-2009 Infrae. All rights reserved.
+# Copyright (c) 2008-2010 Infrae. All rights reserved.
 # See also LICENSE.txt
 # $Id$
 
@@ -11,7 +11,7 @@ from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
 
 test_fixture = {
     'the_great_figure': {
-        'id': 'the_great_figure',
+        'id': 'the_great_figure.pdf',
         'title': 'The Great Figure',
         'file': 'the_great_figure.pdf',
         'fulltext': 'gold',
@@ -20,7 +20,7 @@ test_fixture = {
         'format': 'pdf',
     },
     'the_raven': {
-        'id': 'the_raven',
+        'id': 'the_raven.txt',
         'title': 'The Raven',
         'file': 'raven.txt',
         'fulltext': 'bleak',
@@ -29,7 +29,7 @@ test_fixture = {
         'format': 'txt',
     },
     'the_second_coming': {
-        'id': 'the_second_coming',
+        'id': 'the_second_coming.txt',
         'title': 'The Second Coming',
         'file': 'the_second_coming.txt',
         'fulltext': 'Spiritus Mundi',
@@ -100,7 +100,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         """Helper to create a Silva File with the given data.
         """
         directory = os.path.dirname(__file__)
-        file_handle = open(os.path.join(directory, doc['file']))
+        file_handle = open(os.path.join(directory, 'data', doc['file']))
         self.root.manage_addProduct['Silva'].manage_addFile(
             doc['id'], doc['title'], file_handle)
         file_handle.close()
@@ -160,13 +160,15 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.go(sb.smi_url())
         sb.click_href_labeled('search_test')
         sb.click_href_labeled('view...')
-        if doc['format'] != 'pdf' or PDF_TO_TEXT_AVAILABLE:
+        test_fulltext = (doc['format'] != 'pdf' or PDF_TO_TEXT_AVAILABLE)
+        if test_fulltext:
             sb.browser.getControl(name='fulltext').value = doc['fulltext']
         sb.browser.getControl(
             name='silva-content.maintitle:record').value = doc['title']
         sb.click_button_labeled('Search')
         link = sb.browser.getLink(doc['title'])
-        self.failUnless(doc['fulltext'] in sb.contents)
+        if test_fulltext:
+            self.failUnless(doc['fulltext'] in sb.contents)
         self.failUnless(link.text in sb.contents)
 
     def test_empty_search(self):
