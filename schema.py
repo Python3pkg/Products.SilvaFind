@@ -5,6 +5,7 @@
 import re
 
 from zope.interface import implements
+from zope.traversing.browser import absoluteURL
 
 from Products.ZCTextIndex.ParseTree import ParseError
 
@@ -404,8 +405,9 @@ class BreadcrumbsResultField(ResultField):
         obj = item.getObject()
         result = []
         for crumb in obj.get_breadcrumbs()[:-1]:
-            result.append('<a href="%s">%s</a>' % (crumb.silva_object_url(),
-                                                   crumb.get_title_or_id()))
+            result.append('<a href="%s">%s</a>' % (
+                    absoluteURL(crumb, crumb.REQUEST),
+                    crumb.get_title_or_id()))
         result = '<span> &#183; </span>'.join(result)
         return '<span class="searchresult-breadcrumb">%s</span>' % result
 
