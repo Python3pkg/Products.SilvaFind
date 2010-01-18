@@ -136,7 +136,7 @@
                    tal:condition="python:batch.size < len(results)">
         <table class="searchresult-header" width="100%">
           <tr>
-            <td align="left" width="20%">
+            <td align="left" class="align-left" width="20%">
               <span class="searchresult-previous">
                 <tal:block condition="request/previous_batch_url | nothing">
                   <a href="previousbatch" accesskey="p"
@@ -153,7 +153,7 @@
                 </tal:block>
               </span>
             </td>
-            <td align="center">
+            <td align="center" class="align-center">
               <span class="searchresult-info" i18n:translate="">
                 Showing results
                 <tal:block replace="batch/start" i18n:name="batch_start" />
@@ -165,7 +165,7 @@
                 <tal:block replace="batch/total" i18n:name="total" />
               </span>
             </td>
-            <td align="right" width="20%">
+            <td align="right" class="align-right" width="20%">
               <span class="searchresult-next">
                 <tal:block condition="request/next_batch_url | nothing">
                   <a href="nextbatch" accesskey="n"
