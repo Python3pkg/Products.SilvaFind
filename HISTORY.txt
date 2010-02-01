@@ -1,8 +1,8 @@
 Changes
 =======
 
-1.2 (unreleased)
-----------------
+1.2b1 (2010-02-01)
+------------------
 
 - Add validation on the edit screen so that the user enter at least
   one search criteria.
