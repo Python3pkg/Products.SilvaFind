@@ -238,6 +238,7 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
             if (self.shownFields.has_key(field.getName())
+                    and self.shownFields.get(field.getName(), False)
                     or field.getName() == 'path'):
                 queryPart = getMultiAdapter((field, self), IQueryPart)
                 value = queryPart.getIndexValue(REQUEST)
