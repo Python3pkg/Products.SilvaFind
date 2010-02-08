@@ -1,2 +1,2 @@
-SilvaFind 1.2b2
+SilvaFind 1.2dev
 
