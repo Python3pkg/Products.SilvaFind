@@ -5,6 +5,7 @@
 from ZODB.PersistentMapping import PersistentMapping
 from errors import SilvaFindError
 
+
 class Query(object):
 
     def __init__(self):

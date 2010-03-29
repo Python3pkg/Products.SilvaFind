@@ -12,6 +12,7 @@ from Products.SilvaFind import SilvaFind
 from Products.SilvaFind import findservice
 from Products.SilvaFind.adapters.interfaces import IIndexedField
 
+
 def install(root):
     # create the core views from filesystem
     add_fss_directory_view(root.service_views,

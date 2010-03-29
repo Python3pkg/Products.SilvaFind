@@ -15,6 +15,7 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
+
 class StoreFullTextCriterion(StoreCriterion):
     def store(self, request):
         field_name = self.criterion.getName()
@@ -22,6 +23,7 @@ class StoreFullTextCriterion(StoreCriterion):
         if criterion_value is None:
             return
         self.query.setCriterionValue(field_name, criterion_value)
+
 
 class FullTextCriterionView(Implicit):
 

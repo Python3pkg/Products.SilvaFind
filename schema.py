@@ -19,6 +19,7 @@ from Products.SilvaFind.interfaces import IResultField
 from Products.SilvaFind.interfaces import IMetatypeCriterionField
 from Products.SilvaFind.i18n import translate as _
 
+
 class Schema(object):
     def __init__(self, fields):
         self.fields = fields
@@ -32,11 +33,14 @@ class Schema(object):
     def getFieldNames(self):
         return [field.getName() for field in self.getFields()]
 
+
 class SearchSchema(Schema):
    pass
 
+
 class ResultsSchema(Schema):
    pass
+
 
 class BaseMetadataCriterionField(object):
 
@@ -53,14 +57,18 @@ class BaseMetadataCriterionField(object):
     def getName(self):
         return "%s-%s" % (self.getMetadataSet(), self.getMetadataId())
 
+
 class MetadataCriterionField(BaseMetadataCriterionField):
     implements(IMetadataCriterionField)
+
 
 class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
     implements(IDateRangeMetadataCriterionField)
 
+
 class IntegerRangeMetadataCriterionField(BaseMetadataCriterionField):
     implements(IIntegerRangeMetadataCriterionField)
+
 
 class FullTextCriterionField(object):
     implements(IFullTextCriterionField)
@@ -68,17 +76,20 @@ class FullTextCriterionField(object):
     def getName(self):
         return "fulltext"
 
+
 class MetatypeCriterionField(object):
     implements(IMetatypeCriterionField)
 
     def getName(self):
         return "meta_type"
 
+
 class PathCriterionField(object):
     implements(IPathCriterionField)
 
     def getName(self):
         return "path"
+
 
 class AutomaticMetaDataCriterionField(object):
     """This class is a marker to put in the schemalist.
@@ -87,12 +98,15 @@ class AutomaticMetaDataCriterionField(object):
     """
     pass
 
+
 class AutomaticMetaDataResultField(object):
     """This class is a marker to put in the schemalist.
     This class will automaticly be replaced in the list
     with all possible metadata values
     """
     pass
+
+
 class ResultField(object):
     implements(IResultField)
 
@@ -127,6 +141,7 @@ class ResultField(object):
         title = '<span class="searchresult-field-title">%s</span>' % self.title
         return '<span class="searchresult-field">%s%s</span>' % (title, value)
 
+
 class MetatypeResultField(ResultField):
     implements(IResultField)
 
@@ -136,6 +151,7 @@ class MetatypeResultField(ResultField):
             the_object = the_object.object()
         return context.render_icon_by_meta_type(
             getattr(the_object, 'meta_type'))
+
 
 class RankingResultField(ResultField):
     implements(IResultField)
@@ -165,6 +181,7 @@ class RankingResultField(ResultField):
                 return '<span class="searchresult-ranking">%s %.1f%%</span>' % (
                             img, (ranking[1] / highest))
 
+
 class TotalResultCountField(ResultField):
     implements(IResultField)
     description=_('total search result number')
@@ -188,6 +205,7 @@ class ResultCountField(ResultField):
         # in the smi.
         return
 
+
 class LinkResultField(ResultField):
     implements(IResultField)
     def render(self, context, item, request):
@@ -202,6 +220,7 @@ class LinkResultField(ResultField):
             title = title[:50] + ellipsis
         return '<a href="%s" class="searchresult-link">%s</a>' % (url, title)
 
+
 class DateResultField(ResultField):
     implements(IResultField)
 
@@ -215,6 +234,7 @@ class DateResultField(ResultField):
         datestr = date.strftime('%d %b %Y %H:%M').lower()
 
         return '<span class="searchresult-date">%s</span>' % datestr
+
 
 class ThumbnailResultField(ResultField):
      implements(IResultField)
@@ -397,7 +417,6 @@ class FullTextResultField(ResultField):
         return '<div class="searchresult-snippet">%s</div>' % text.strip()
 
 
-
 class BreadcrumbsResultField(ResultField):
     implements(IResultField)
 
@@ -411,6 +430,7 @@ class BreadcrumbsResultField(ResultField):
         result = '<span> &#183; </span>'.join(result)
         return '<span class="searchresult-breadcrumb">%s</span>' % result
 
+
 class IconResultField(ResultField):
     implements(IResultField)
 
@@ -420,6 +440,7 @@ class IconResultField(ResultField):
             object = object.object()
         img = context.render_icon(object)
         return '<span class="searchresult-icon">%s</span>' % img
+
 
 class MetadataResultField(ResultField):
     implements(IResultField)

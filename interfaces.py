@@ -36,6 +36,7 @@ class IFindService(interfaces.ISilvaService):
         """Return a result schema.
         """
 
+
 class IMetadataCriterionField(Interface):
     '''
     Criterion corresponding to indexed SilvaMetadata fields
@@ -46,11 +47,13 @@ class IMetadataCriterionField(Interface):
     def getMetadataId():
         '''returns Silva MetadataSet element id'''
 
+
 class IDateRangeMetadataCriterionField(IMetadataCriterionField):
     '''
     Criterion corresponding to indexed SilvaMetadata fields
     date
     '''
+
 
 class IIntegerRangeMetadataCriterionField(IMetadataCriterionField):
     '''
@@ -58,20 +61,24 @@ class IIntegerRangeMetadataCriterionField(IMetadataCriterionField):
     date
     '''
 
+
 class IFullTextCriterionField(Interface):
     '''
     Criterion corresponding to the Silva full text index
     '''
+
 
 class IMetatypeCriterionField(Interface):
     '''
     Criterion corresponding to the Silva Meta Type of an object
     '''
 
+
 class IPathCriterionField(Interface):
     '''
     Criterion used to restrict searchresults so they start with a specific path
     '''
+
 
 class IResultField(Interface):
     '''
@@ -85,7 +92,7 @@ class IResultField(Interface):
         '''returns title of resultfield
         '''
 
-    def render(context, item):
+    def render(context, item, request):
         '''renders result field for item
         '''
 

@@ -199,7 +199,7 @@
                       tal:content="string:${num}.">
                   count
                 </span>
-                <tal:block tal:define="result python:field.render(context, item)"
+                <tal:block tal:define="result python:field.render(context, item, request)"
                            tal:condition="python:not field.getName() in ['resultcount', 'totalresultcount']">
                   <span tal:condition="python:isinstance(result, list)"
                         tal:repeat="item result"

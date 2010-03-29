@@ -40,7 +40,7 @@ class ResultView(Implicit):
 
     security.declareProtected(SilvaPermissions.View,
         'render')
-    def render(self, context, item):
-        return self.result.render(context, item, context.REQUEST)
+    def render(self, context, item, request):
+        return self.result.render(context, item, request)
 
 InitializeClass(ResultView)

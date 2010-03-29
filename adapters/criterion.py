@@ -2,10 +2,12 @@
 # See also LICENSE.txt
 # $Id$
 
+
 class StoreCriterion(object):
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
+
 
 class CatalogMetadataSetup(object):
     def __init__(self, field, root):
