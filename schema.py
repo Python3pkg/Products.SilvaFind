@@ -113,7 +113,7 @@ class ResultField(object):
     def getColumnTitle(self):
         return self.title
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         value = getattr(item.getObject(), self.id)()
         if not value:
             return
@@ -130,7 +130,7 @@ class ResultField(object):
 class MetatypeResultField(ResultField):
     implements(IResultField)
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         the_object = item.getObject()
         if IVersion.providedBy(the_object):
             the_object = the_object.object()
@@ -168,7 +168,7 @@ class RankingResultField(ResultField):
 class TotalResultCountField(ResultField):
     implements(IResultField)
     description=_('total search result number')
-    def render(self, context, item):
+    def render(self, context, item, request):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
         # in the smi.
@@ -177,12 +177,12 @@ class TotalResultCountField(ResultField):
         # number of search results might be a security risk
         # since it can be figured out that certain objects
         # were ommitted from the search
-        return
+        return None
 
 class ResultCountField(ResultField):
     implements(IResultField)
     description=_('search result count')
-    def render(self, context, item):
+    def render(self, context, item, request):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
         # in the smi.
@@ -190,7 +190,7 @@ class ResultCountField(ResultField):
 
 class LinkResultField(ResultField):
     implements(IResultField)
-    def render(self, context, item):
+    def render(self, context, item, request):
         object = item.getObject()
         if IVersion.providedBy(object):
             url = object.aq_parent.absolute_url()
@@ -205,7 +205,7 @@ class LinkResultField(ResultField):
 class DateResultField(ResultField):
     implements(IResultField)
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         object = item.getObject()
         date = None
         if IPublishable.providedBy(object):
@@ -222,7 +222,7 @@ class ThumbnailResultField(ResultField):
      description = _('Shows thumbnails for images')
 
 
-     def render(self, context, item):
+     def render(self, context, item, request):
         object = item.getObject()
 
         if object.meta_type != 'Silva Image':
@@ -242,11 +242,11 @@ class FullTextResultField(ResultField):
 
     description = _('Add text snippets from content')
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         object = item.getObject()
         ellipsis = '&#8230;'
         maxwords = 40
-        searchterm = unicode(item.REQUEST.form.get('fulltext', ''), 'utf8')
+        searchterm = unicode(request.form.get('fulltext', ''), 'utf8')
         catalog = context.service_catalog
         fulltext = catalog.getIndexDataForRID(item.getRID()).get('fulltext', [])
 
@@ -401,12 +401,12 @@ class FullTextResultField(ResultField):
 class BreadcrumbsResultField(ResultField):
     implements(IResultField)
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         obj = item.getObject()
         result = []
         for crumb in obj.get_breadcrumbs()[:-1]:
             result.append('<a href="%s">%s</a>' % (
-                    absoluteURL(crumb, crumb.REQUEST),
+                    absoluteURL(crumb, request),
                     crumb.get_title_or_id()))
         result = '<span> &#183; </span>'.join(result)
         return '<span class="searchresult-breadcrumb">%s</span>' % result
@@ -414,7 +414,7 @@ class BreadcrumbsResultField(ResultField):
 class IconResultField(ResultField):
     implements(IResultField)
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         object = item.getObject()
         if IVersion.providedBy(object):
             object = object.object()
@@ -432,7 +432,7 @@ class MetadataResultField(ResultField):
     def getMetadataElement(self):
         return self.element
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         set, element = self.id.split(':')
 
         value = context.service_metadata.getMetadataValue(

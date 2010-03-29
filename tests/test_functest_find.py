@@ -165,6 +165,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             sb.browser.getControl(name='fulltext').value = doc['fulltext']
         sb.browser.getControl(
             name='silva-content.maintitle:record').value = doc['title']
+        sb.browser.handleErrors = False
         sb.click_button_labeled('Search')
         link = sb.browser.getLink(doc['title'])
         if test_fulltext:

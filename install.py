@@ -30,6 +30,7 @@ def install(root):
 
     setupService(root)
     checkIndexes(root)
+    configureAddables(root)
 
 
 def uninstall(root):
@@ -41,6 +42,15 @@ def uninstall(root):
 
 def is_installed(root):
     return hasattr(root.service_views, 'SilvaFind')
+
+
+def configureAddables(root):
+    addables = ['Silva Find']
+    new_addables = root.get_silva_addables_allowed_in_container()
+    for a in addables:
+        if a not in new_addables:
+            new_addables.append(a)
+    root.set_silva_addables_allowed_in_container(new_addables)
 
 
 def registerViews(reg):
