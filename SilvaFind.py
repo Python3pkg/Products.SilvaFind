@@ -334,7 +334,7 @@ manage_addSilvaFindForm = PageTemplateFile("www/silvaFindAdd", globals(),
                                            __name__='manage_addSilvaFindForm')
 
 
-def manage_addSilvaFind(self, id, title, request=None):
+def manage_addSilvaFind(self, id, title, REQUEST=None):
     """Add a silvasearch."""
     if not mangle.Id(self, id).isValid():
         return
@@ -342,5 +342,5 @@ def manage_addSilvaFind(self, id, title, request=None):
     self._setObject(id, object)
     object = getattr(self, id)
     object.set_title(title)
-    add_and_edit(self, id, request)
+    add_and_edit(self, id, REQUEST)
     return ''

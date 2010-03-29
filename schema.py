@@ -141,14 +141,14 @@ class RankingResultField(ResultField):
     implements(IResultField)
     description=_('full text result ranking')
 
-    def render(self, context, item):
+    def render(self, context, item, request):
         catalog = context.service_catalog
         index = catalog.Indexes['fulltext']
-        query = context.REQUEST.form.get('fulltext')
+        query = request.form.get('fulltext')
         if not query:
             return
         query = unicode(query, 'utf8')
-        batch_start =  int(context.request.form.get('batch_start',0))
+        batch_start =  int(request.form.get('batch_start',0))
         batch_end = batch_start + 25
         try:
             rankings = index.query(query, batch_end)[0]

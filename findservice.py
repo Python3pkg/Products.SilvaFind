@@ -115,10 +115,10 @@ InitializeClass(FindService)
 
 
 def manage_addSilvaFindService(
-    context, id='service_find', title='Find Service', request=None):
+    context, id='service_find', title='Find Service', REQUEST=None):
     """Add find service.
     """
     service = FindService(id, title)
     context._setObject(id, service)
-    helpers.add_and_edit(context, id, request)
+    helpers.add_and_edit(context, id, REQUEST)
     return ''
