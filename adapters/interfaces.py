@@ -20,10 +20,10 @@ class ICriterionView(Interface):
         '''returns widget HTML rendered with stored value'''
 
     def renderPublicWidget():
-        '''returns widget HTML rendered with value from REQUEST'''
+        '''returns widget HTML rendered with value from request'''
 
-    def getValue(REQUEST):
-        '''returns value from REQUEST or stored value'''
+    def getValue():
+        '''returns value from request or stored value'''
         
     def getStoredValue():
         '''returns stored value for the corresponding field'''
@@ -32,10 +32,10 @@ class IStoreCriterion(Interface):
     '''
     Stores criterion value in query instance
     '''
-    def store(REQUEST):
+    def store(request):
         '''store value in query
         
-           REQUEST could be a dict
+           request could be a dict
         '''
 
 class IQueryPart(Interface):
@@ -45,11 +45,10 @@ class IQueryPart(Interface):
     def getIndexId():
         '''returns ZCatalog index id of the criterion'''
 
-    def getIndexValue(REQUEST):
+    def getIndexValue():
         '''returns value used by catalog searches, could be a dict for
         DateIndex for instance.
         
-        The value in REQUEST is used.
         If not found, stored value is used.
         '''
 

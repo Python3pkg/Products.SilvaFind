@@ -57,10 +57,11 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
 
     security = ClassSecurityInfo()
 
-    def __init__(self, criterion, query):
+    def __init__(self, criterion, query, request):
         root = query.get_root()
         BaseMetadataCriterion.__init__(self, criterion, root)
         self.query = query
+        self.request = request
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
@@ -77,7 +78,7 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
             stored = True
         else:
             stored = False
-            value = self.getValue(self.query.REQUEST)
+            value = self.getValue()
         if stored:
             return self.renderValue(value)
         return self.renderWidget(value)
@@ -96,13 +97,13 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
         return element.field.render(value)
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self, REQUEST):
+    def getValue(self):
         value = self.getStoredValue()
         if value:
             return value
         set_name = self.criterion.getMetadataSet()
         field_name = self.criterion.getMetadataId()
-        set_values = REQUEST.get(set_name, None)
+        set_values = self.request.get(set_name, None)
         if set_values is None:
             return
         value = set_values.get(field_name, None)
@@ -144,10 +145,10 @@ class IndexedMetadataCriterion(BaseMetadataCriterion):
             raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
 
 class StoreMetadataCriterion(StoreCriterion):
-    def store(self, REQUEST):
+    def store(self, request):
         set_name = self.criterion.getMetadataSet()
         field_name = self.criterion.getMetadataId()
-        set_values = REQUEST.get(set_name, None)
+        set_values = request.get(set_name, None)
         if set_values is None:
             return
         criterion_value = set_values.get(field_name, None)
@@ -215,7 +216,7 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             stored = True
         else:
             stored = False
-            value = self.getValue(self.query.REQUEST)
+            value = self.getValue()
         if stored:
             return self.renderValue(value)
 
@@ -243,10 +244,10 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         return "<strong>%s - %s</strong>" % value
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self, REQUEST):
+    def getValue(self):
         field_name = self.criterion.getName()
-        value_lower = REQUEST.get(field_name+'_lower', None)
-        value_upper = REQUEST.get(field_name+'_upper', None)
+        value_lower = self.request.get(field_name+'_lower', None)
+        value_upper = self.request.get(field_name+'_upper', None)
         stored_lower, stored_upper = self.getStoredValue()
         if value_lower:
             try:
@@ -266,8 +267,8 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
                 value_upper = stored_upper
         return value_lower, value_upper
 
-    def getIndexValue(self, REQUEST):
-        value_lower, value_upper = self.getValue(REQUEST)
+    def getIndexValue(self):
+        value_lower, value_upper = self.getValue()
         return self.constructQuery(value_lower, value_upper)
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
@@ -305,10 +306,10 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
 InitializeClass(IntegerRangeMetadataCriterionView)
 
 class StoreIntegerRangeMetadataCriterion(StoreCriterion):
-    def store(self, REQUEST):
+    def store(self, request):
         field_name = self.criterion.getName()
-        criterion_value_lower = REQUEST.get(field_name+'_lower', None)
-        criterion_value_upper = REQUEST.get(field_name+'_upper', None)
+        criterion_value_lower = request.get(field_name+'_lower', None)
+        criterion_value_upper = request.get(field_name+'_upper', None)
         if criterion_value_lower is None and criterion_value_upper is None:
             return
         if criterion_value_lower:
@@ -373,7 +374,7 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
             stored = True
         else:
             stored = False
-            value = self.getValue(self.query.REQUEST)
+            value = self.getValue()
         if stored:
             return self.renderValue(value)
 
@@ -401,10 +402,10 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         return "<strong>%s - %s</strong>" % value
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self, REQUEST):
+    def getValue(self):
         field_name = self.criterion.getName()
-        value_begin = REQUEST.get(field_name+'_begin', None)
-        value_end = REQUEST.get(field_name+'_end', None)
+        value_begin = self.request.get(field_name+'_begin', None)
+        value_end = self.request.get(field_name+'_end', None)
         stored_begin, stored_end = self.getStoredValue()
         if value_begin:
             try:
@@ -424,8 +425,8 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
                 value_end = stored_end
         return value_begin, value_end
 
-    def getIndexValue(self, REQUEST):
-        value_begin, value_end = self.getValue(REQUEST)
+    def getIndexValue(self):
+        value_begin, value_end = self.getValue()
         return self.constructQuery(value_begin, value_end)
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
@@ -466,10 +467,10 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
 InitializeClass(DateRangeMetadataCriterionView)
 
 class StoreDateRangeMetadataCriterion(StoreCriterion):
-    def store(self, REQUEST):
+    def store(self, request):
         field_name = self.criterion.getName()
-        criterion_value_begin = REQUEST.get(field_name+'_begin', None)
-        criterion_value_end = REQUEST.get(field_name+'_end', None)
+        criterion_value_begin = request.get(field_name+'_begin', None)
+        criterion_value_end = request.get(field_name+'_end', None)
         if criterion_value_begin is None and criterion_value_end is None:
             return
         self.query.setCriterionValue(self.criterion.getName(),

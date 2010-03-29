@@ -65,7 +65,7 @@
     </tr>
   </thead>
   <tbody>
-    <tal:block tal:repeat="fieldView model/getFieldViews">
+    <tal:block tal:repeat="fieldView python:model.getFieldViews(request)">
     <tr tal:define="iterate repeat/fieldView/odd"
         tal:attributes="class python:iterate and 'odd' or 'even'">
       <td class="align-center">

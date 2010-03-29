@@ -17,7 +17,7 @@ from Products.SilvaFind.errors import SilvaFindError
 
 
 def convertValue(value):
-    """Convert a value from what you get from the REQUEST to something
+    """Convert a value from what you get from the request to something
     working correctly with the catalog.
     """
     if not value:
@@ -28,10 +28,10 @@ def convertValue(value):
 
 
 class StoreMetatypeCriterion(StoreCriterion):
-    def store(self, REQUEST):
+    def store(self, request):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
-        criterion_value = convertValue(REQUEST.get(field_name, None))
+        criterion_value = convertValue(request.get(field_name, None))
         self.query.setCriterionValue(field_name, criterion_value)
 
 
@@ -39,9 +39,10 @@ class MetatypeCriterionView(Implicit):
 
     security = ClassSecurityInfo()
 
-    def __init__(self, criterion, query):
+    def __init__(self, criterion, query, request):
         self.criterion = criterion
         self.query = query
+        self.request = request
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'canBeShown')
@@ -57,7 +58,7 @@ class MetatypeCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST)
+        value = self.getValue()
         select_all_text = _('All Types')
         return {'value': value,
                 'name': self.criterion.getName(),
@@ -92,9 +93,9 @@ class MetatypeCriterionView(Implicit):
         return html
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self, REQUEST):
+    def getValue(self):
         field_name = self.criterion.getName()
-        value = REQUEST.get(field_name, None)
+        value = self.request.get(field_name, None)
         if value:
             return convertValue(value)
         return self.getStoredValue()

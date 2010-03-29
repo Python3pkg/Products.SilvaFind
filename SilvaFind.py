@@ -90,18 +90,19 @@ class SilvaFind(Query, Content, SimpleItem):
         return 1
 
     security.declareProtected(SilvaPermissions.View, 'getFieldViews')
-    def getFieldViews(self):
+    def getFieldViews(self, request):
         result = []
         for field in self.service_find.getSearchSchema().getFields():
-            searchFieldView = getMultiAdapter((field, self), ICriterionView)
+            searchFieldView = getMultiAdapter((field, self, request), 
+                ICriterionView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
             result.append(searchFieldView)
         return result
 
     security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
-    def getPublicFieldViews(self):
-        result = [view for view in self.getFieldViews()
+    def getPublicFieldViews(self, request):
+        result = [view for view in self.getFieldViews(request)
                   if self.isCriterionShown(view.getName())]
         return result
 
@@ -122,11 +123,11 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
-    def searchResultsWithDescription(self, REQUEST={}):
-        if not REQUEST.has_key('search_submit'):
+    def searchResultsWithDescription(self, request={}):
+        if not request.has_key('search_submit'):
             return ([], 'empty')
         catalog = self.get_root().service_catalog
-        searchArguments = self.getCatalogSearchArguments(REQUEST)
+        searchArguments = self.getCatalogSearchArguments(request)
         queryEmpty = True
         for key, value in searchArguments.items():
             if key in ['path', 'meta_type']:
@@ -179,8 +180,8 @@ class SilvaFind(Query, Content, SimpleItem):
                 for field in self.getResultsSchema().getFields()]
 
     security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
-    def searchResultsObjects(self, REQUEST={}):
-        results = self.searchResults(REQUEST)
+    def searchResultsObjects(self, request={}):
+        results = self.searchResults(request)
         return [result.getObject().get_silva_object() for result in results]
 
 
@@ -193,7 +194,7 @@ class SilvaFind(Query, Content, SimpleItem):
         message, message_type = self._edit(REQUEST)
         return self.edit['tab_edit'](message=message, message_type=message_type)
 
-    def _edit(self, REQUEST):
+    def _edit(self, request):
         """Store fields values
         """
         # Validate values
@@ -201,7 +202,7 @@ class SilvaFind(Query, Content, SimpleItem):
             atLeastOneShown = False
             for field in schema.getFields():
                 fieldName = field.getName()
-                shown = REQUEST.get(name + fieldName, False)
+                shown = request.get(name + fieldName, False)
                 atLeastOneShown = atLeastOneShown or shown
             return atLeastOneShown
 
@@ -212,36 +213,36 @@ class SilvaFind(Query, Content, SimpleItem):
             return (_('You need to display at least one field in the results.'),
                     'error')
         # Save them
-        self.storeCriterionValues(REQUEST)
-        self.storeShownCriterion(REQUEST)
-        self.storeShownResult(REQUEST)
+        self.storeCriterionValues(request)
+        self.storeShownCriterion(request)
+        self.storeShownResult(request)
         return (_('Changes saved.'), 'feedback')
 
     #HELPERS
-    def storeCriterionValues(self, REQUEST):
+    def storeCriterionValues(self, request):
         for field in self.getSearchSchema().getFields():
             storeCriterion = getMultiAdapter((field, self), IStoreCriterion)
-            storeCriterion.store(REQUEST)
+            storeCriterion.store(request)
 
-    def storeShownCriterion(self, REQUEST):
+    def storeShownCriterion(self, request):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
-            self.shownFields[fieldName] = REQUEST.get('show_'+fieldName, False)
+            self.shownFields[fieldName] = request.get('show_'+fieldName, False)
 
-    def storeShownResult(self, REQUEST):
+    def storeShownResult(self, request):
         for field in self.getResultsSchema().getFields():
             fieldName = field.getName()
-            self.shownResultsFields[fieldName] = REQUEST.get(
+            self.shownResultsFields[fieldName] = request.get(
                                             'show_result_'+fieldName, False)
 
-    def getCatalogSearchArguments(self, REQUEST):
+    def getCatalogSearchArguments(self, request):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
             if (self.shownFields.has_key(field.getName())
                     and self.shownFields.get(field.getName(), False)
                     or field.getName() == 'path'):
-                queryPart = getMultiAdapter((field, self), IQueryPart)
-                value = queryPart.getIndexValue(REQUEST)
+                queryPart = getMultiAdapter((field, self, request), IQueryPart)
+                value = queryPart.getIndexValue()
                 if value is None:
                     value = ''
                 searchArguments[queryPart.getIndexId()] = value
@@ -333,7 +334,7 @@ manage_addSilvaFindForm = PageTemplateFile("www/silvaFindAdd", globals(),
                                            __name__='manage_addSilvaFindForm')
 
 
-def manage_addSilvaFind(self, id, title, REQUEST=None):
+def manage_addSilvaFind(self, id, title, request=None):
     """Add a silvasearch."""
     if not mangle.Id(self, id).isValid():
         return
@@ -341,5 +342,5 @@ def manage_addSilvaFind(self, id, title, REQUEST=None):
     self._setObject(id, object)
     object = getattr(self, id)
     object.set_title(title)
-    add_and_edit(self, id, REQUEST)
+    add_and_edit(self, id, request)
     return ''

@@ -17,7 +17,7 @@ class ResultView(Implicit):
     def __init__(self, result, query):
         self.result = result
         self.query = query
-    
+
     security.declareProtected(SilvaPermissions.View,
         'getTitle')
     def getTitle(self):

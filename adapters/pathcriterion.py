@@ -15,44 +15,27 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
 
+from silva.core.views.interfaces import IVirtualSite
+
 class StorePathCriterion(StoreCriterion):
-    def store(self, REQUEST):
+    def store(self, request):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
-        criterion_value = REQUEST.get(field_name, None)
+        criterion_value = request.get(field_name, None)
         if criterion_value is None:
             return
-        sitepath = get_site_path(self.query)
-        criterion_value = (sitepath + '/' + criterion_value).replace('//', '/')
         self.query.setCriterionValue(field_name, criterion_value)
 
-def get_site_path(context):
-    ppath = list(context.getPhysicalPath())
-    vpath = context.virtual_url_path().split('/')
-    # remove the siteroot part of the path from the vpath
-    # if present
-    for path in context.get_root().getPhysicalPath():
-        if vpath[0] == path:
-            vpath.pop(0)
-    vpath.reverse()
-    # remove the virtual path entries from the physical
-    # path to find the root of the virtual site
-    for path in vpath:
-        if ppath[-1] == path:
-            ppath.pop()
-        else:
-            break
-    return '/'.join(ppath)
-    
-    
+
 class PathCriterionView(Implicit):
-    
+
     security = ClassSecurityInfo()
-    
-    def __init__(self, criterion, query):
+
+    def __init__(self, criterion, query, request):
         self.criterion = criterion
         self.query = query
-    
+        self.request = request
+
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'canBeShown')
     def canBeShown(self):
@@ -62,36 +45,30 @@ class PathCriterionView(Implicit):
         'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue() or ''
-        sitepath = get_site_path(self.query)
-        if value.startswith(sitepath):
-            value = value[len(sitepath):]
         return self.renderWidget(value)
 
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
-        value = self.getValue(self.query.REQUEST) or ''
-        sitepath = get_site_path(self.query)
-        if value.startswith(sitepath):
-            value = value[len(sitepath):]
+        value = self.getValue() or ''
         return self.renderWidget(value)
-        
+
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
         if value is None:
             value = ""
         html = '''
-        <input class="store" type="text" name="%s" id="%s" value="%s" size="20" /> 
+        <input class="store" type="text" name="%s" id="%s" value="%s" size="20" />
         '''
-        return html % (self.criterion.getName(), 
+        return html % (self.criterion.getName(),
                        self.criterion.getName(),
                        value)
-    
+
     security.declareProtected(SilvaPermissions.View, 'getValue')
-    def getValue(self, REQUEST):
+    def getValue(self):
         field_name = self.criterion.getName()
-        value = REQUEST.get(field_name, None)
+        value = self.request.get(field_name, None)
         if value:
             pass
             # XXX pathindex does not work with unicode, so do not try
@@ -100,18 +77,18 @@ class PathCriterionView(Implicit):
         if value is None:
             value = ''
         return value
-        
+
     getIndexValue = getValue
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         return value
-        
+
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
         return _('below path')
-        
+
     def getIndexId(self):
         return 'path'
 

@@ -12,14 +12,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetadataCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".metadatacriterion.MetadataCriterionView"
     />
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetadataCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".metadatacriterion.MetadataCriterionView"
     />
@@ -40,14 +42,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetatypeCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".metatypecriterion.MetatypeCriterionView"
   />
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetatypeCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".metatypecriterion.MetatypeCriterionView"
   />
@@ -68,14 +72,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IPathCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".pathcriterion.PathCriterionView"
   />
 
   <adapter
     for="Products.SilvaFind.interfaces.IPathCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".pathcriterion.PathCriterionView"
   />
@@ -96,14 +102,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".metadatacriterion.DateRangeMetadataCriterionView"
     />
 
   <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".metadatacriterion.DateRangeMetadataCriterionView"
     />
@@ -117,14 +125,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IIntegerRangeMetadataCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".metadatacriterion.IntegerRangeMetadataCriterionView"
   />
 
   <adapter
     for="Products.SilvaFind.interfaces.IIntegerRangeMetadataCriterionField
-      Products.SilvaFind.interfaces.ISilvaQuery"
+      Products.SilvaFind.interfaces.ISilvaQuery
+      zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".metadatacriterion.IntegerRangeMetadataCriterionView"
   />
@@ -138,14 +148,16 @@
 
   <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.ICriterionView"
     factory=".fulltextcriterion.FullTextCriterionView"
     />
 
   <adapter
     for="Products.SilvaFind.interfaces.IFullTextCriterionField
-         Products.SilvaFind.interfaces.ISilvaQuery"
+         Products.SilvaFind.interfaces.ISilvaQuery
+         zope.publisher.interfaces.browser.IBrowserRequest"
     provides=".interfaces.IQueryPart"
     factory=".fulltextcriterion.FullTextCriterionView"
     />
