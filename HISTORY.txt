@@ -1,14 +1,18 @@
 Changes
 =======
 
-1.2 (unreleased)
+1.2 (2010-03-31)
 ----------------
-- ...
+
+- Fix search bug.
+
+- Fix installation and configure addables.
+
 
 1.2b2 (2010-02-08)
 ------------------
 
-- Fix bug for catalog query using non-selected fields
+- Fix bug for catalog query using non-selected fields.
 
 1.2b1 (2010-02-01)
 ------------------
