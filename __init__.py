@@ -3,7 +3,7 @@
 # $Id$
 
 #Silva
-from Products.Silva.fssite import registerDirectory
+from Products.FileSystemSite.DirectoryView import registerDirectory
 
 from AccessControl import allow_module
 from silva.core import conf as silvaconf
