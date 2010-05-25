@@ -8,6 +8,7 @@ from unittest import makeSuite
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import MetadataCriterionField
 
+
 class testSchema(TestCase):
 
     def setUp(self):
@@ -29,6 +30,7 @@ class testSchema(TestCase):
         self.failIf(self.schema.hasField('meta-set-field-id3'))
         self.failUnless(self.schema.hasField('meta-set-field-id1'))
 
+
 class testMetadataCriterionField(TestCase):
 
     def setUp(self):
@@ -38,6 +40,7 @@ class testMetadataCriterionField(TestCase):
         self.failIf(self.field is None)
         self.assertEquals('meta-set', self.field.getMetadataSet())
         self.assertEquals('field-id', self.field.getMetadataId())
+
 
 def test_suite():
     suite = TestSuite()
