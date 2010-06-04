@@ -19,8 +19,11 @@ from Products.SilvaFind.interfaces import IResultField
 from Products.SilvaFind.interfaces import IMetatypeCriterionField
 from Products.SilvaFind.i18n import translate as _
 
+# XXX: The Schema and BaseMetadata criterion have been changed back to
+# old style classes because the unpickling is different and it breaks
+# if the inherit from object
 
-class Schema(object):
+class Schema:
     def __init__(self, fields):
         self.fields = fields
 
@@ -42,7 +45,7 @@ class ResultsSchema(Schema):
    pass
 
 
-class BaseMetadataCriterionField(object):
+class BaseMetadataCriterionField:
 
     def __init__(self, metadataSet, metadataId):
         self.metadataSet = metadataSet
