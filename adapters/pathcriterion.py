@@ -1,7 +1,5 @@
-try:
-    from App.class_init import InitializeClass # Zope 2.12
-except ImportError:
-    from Globals import InitializeClass # Zope < 2.12
+from zope.component import getUtility
+from App.class_init import InitializeClass # Zope 2.12
 
 # Zope
 from AccessControl import ClassSecurityInfo
@@ -10,6 +8,9 @@ from Acquisition import Implicit
 # Silva
 from Products.Silva import SilvaPermissions
 from Products.SilvaFind.i18n import translate as _
+from silva.core.references.interfaces import IReferenceService
+from silva.core.references.reference import get_content_from_id
+
 
 # SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
@@ -17,14 +18,47 @@ from Products.SilvaFind.errors import SilvaFindError
 
 from silva.core.views.interfaces import IVirtualSite
 
+
+EDIT_TEMPLATE = \
+r"""
+<div id="%(widget_id)s" class="reference-widget">
+  <button class="reference-dialog-trigger">
+  </button>
+  <div id="%(widget_id)s-dialog"
+       title="target"
+       class="ui-widget reference-dialog">
+  </div>
+  <a target="_blank" id="%(widget_id)s-link">
+    %(target_display)s
+  </a>
+  <input type="hidden"
+         name="%(name)s"
+         id="%(widget_id)s-value" value="">
+  <input type="hidden"
+         id="%(widget_id)s-interface"
+         value="%(interfaces)s">
+  <input type="hidden"
+         id="%(widget_id)s-base"
+         value="%(url)s">
+</div>
+"""
+
+
 class StorePathCriterion(StoreCriterion):
     def store(self, request):
         #XXX some room for refactoring here
-        field_name = self.criterion.getName()
+        field_name = unicode(self.criterion.getName())
         criterion_value = request.get(field_name, None)
-        if criterion_value is None:
-            return
-        self.query.setCriterionValue(field_name, criterion_value)
+        try:
+            target_id = int(criterion_value)
+        except (ValueError, TypeError,):
+            target_id = 0
+        reference_service = getUtility(IReferenceService)
+        ref = reference_service.get_reference(self.query,
+                                              name=field_name,
+                                              add=True)
+        if ref.target_id != target_id:
+            ref.set_target_id(target_id)
 
 
 class PathCriterionView(Implicit):
@@ -58,12 +92,14 @@ class PathCriterionView(Implicit):
     def renderWidget(self, value):
         if value is None:
             value = ""
-        html = '''
-        <input class="store" type="text" name="%s" id="%s" value="%s" size="20" />
-        '''
-        return html % (self.criterion.getName(),
-                       self.criterion.getName(),
-                       value)
+        name = self.criterion.getName()
+        return EDIT_TEMPLATE % {
+            'name': name,
+            'widget_id': "field-%s" % name,
+            'url': self.query.get_root_url(),
+            'interfaces': 'silva.core.interfaces.content.IContainer',
+            'target_display': self.getValue(),
+            'value': self.getStoredValue()}
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
@@ -73,17 +109,27 @@ class PathCriterionView(Implicit):
             pass
             # XXX pathindex does not work with unicode, so do not try
         else:
-            value = self.getStoredValue()
-        if value is None:
-            value = ''
-        return value
+            try:
+                value = int(self.getStoredValue())
+                if not value:
+                    return ''
+            except (ValueError, TypeError,):
+                return ''
+        content = get_content_from_id(value)
+        if content:
+            return "/".join(content.getPhysicalPath())
+        return ''
 
     getIndexValue = getValue
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
-        value = self.query.getCriterionValue(self.criterion.getName())
-        return value
+        field_name = unicode(self.criterion.getName())
+        reference_service = getUtility(IReferenceService)
+        ref = reference_service.get_reference(self.query, name=field_name)
+        if ref:
+            return ref.target_id
+        return None
 
     security.declareProtected(SilvaPermissions.View, 'getTitle')
     def getTitle(self):
@@ -116,4 +162,5 @@ class IndexedPathCriterion:
     def checkIndex(self):
         id = self.getIndexId()
         if id not in self.catalog.indexes():
-            raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
+            raise SilvaFindError('Name "%s" not indexed by service_catalog' %
+                                 id)

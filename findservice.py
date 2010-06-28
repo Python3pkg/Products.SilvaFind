@@ -15,7 +15,8 @@ from five import grok
 from Products.Silva import helpers
 
 from Products.SilvaFind.interfaces import IFindService
-from Products.SilvaFind.globalschema import globalSearchFields, globalResultsFields
+from Products.SilvaFind.globalschema import (globalSearchFields,
+                                             globalResultsFields)
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import ResultsSchema
 from Products.SilvaFind.schema import MetadataResultField
