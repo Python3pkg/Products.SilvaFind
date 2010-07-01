@@ -5,7 +5,9 @@
 import re
 
 from zope.interface import implements
+from zope.component import getMultiAdapter
 from zope.traversing.browser import absoluteURL
+from zope.traversing.browser.interfaces import IAbsoluteURL
 
 from Products.ZCTextIndex.ParseTree import ParseError
 
@@ -188,6 +190,7 @@ class RankingResultField(ResultField):
 class TotalResultCountField(ResultField):
     implements(IResultField)
     description=_('total search result number')
+
     def render(self, context, item, request):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
@@ -202,6 +205,7 @@ class TotalResultCountField(ResultField):
 class ResultCountField(ResultField):
     implements(IResultField)
     description=_('search result count')
+
     def render(self, context, item, request):
         # the actual count is calculated in the pagetemplate
         # this is only here, so it can be enabled / disabled
@@ -211,13 +215,14 @@ class ResultCountField(ResultField):
 
 class LinkResultField(ResultField):
     implements(IResultField)
+
     def render(self, context, item, request):
-        object = item.getObject()
-        if IVersion.providedBy(object):
-            url = object.aq_parent.absolute_url()
+        content = item.getObject()
+        title = content.get_title_or_id()
+        if IVersion.providedBy(content):
+            url = absoluteURL(content.get_content(), request)
         else:
-            url = object.absolute_url()
-        title = item.getObject().get_title_or_id()
+            url = absoluteURL(content, request)
         ellipsis = '&#8230;'
         if len(title) > 50:
             title = title[:50] + ellipsis
@@ -241,32 +246,30 @@ class DateResultField(ResultField):
 
 class ThumbnailResultField(ResultField):
      implements(IResultField)
-
      description = _('Shows thumbnails for images')
 
 
      def render(self, context, item, request):
-        object = item.getObject()
+        content = item.getObject()
 
-        if object.meta_type != 'Silva Image':
+        if content.meta_type != 'Silva Image':
             return
 
-        if object.thumbnail_image is None:
+        if content.thumbnail_image is None:
             return
 
         url = item.getURL()
-        img = object.thumbnail_image.tag()
+        img = content.thumbnail_image.tag()
         anchor = '<a href="%s">%s</a>' % (url, img)
         return '<div class="searchresult-thumbnail">%s</div>' % anchor
 
 
 class FullTextResultField(ResultField):
     implements(IResultField)
-
     description = _('Add text snippets from content')
 
     def render(self, context, item, request):
-        object = item.getObject()
+        content = item.getObject()
         ellipsis = '&#8230;'
         maxwords = 40
         searchterm = unicode(request.form.get('fulltext', ''), 'utf8')
@@ -278,10 +281,10 @@ class FullTextResultField(ResultField):
             return ''
 
         # since fulltext always starts with id and title, lets remove that
-        idstring = object.id
-        if IVersion.providedBy(object):
-            idstring = object.object().id
-        skipwords = len(('%s %s' % (idstring, object.get_title())).split(' '))
+        idstring = content.id
+        if IVersion.providedBy(content):
+            idstring = content.get_content().id
+        skipwords = len(('%s %s' % (idstring, content.get_title())).split(' '))
         fulltext = fulltext[skipwords:]
         fulltextstr = ' '.join(fulltext)
 
@@ -291,8 +294,8 @@ class FullTextResultField(ResultField):
             # searchterm is not specified,
             # return the first 20 words
             text = ' '.join(fulltext[:maxwords])
-            if IVersion.providedBy(object) and hasattr(object, 'fulltext'):
-                realtext = ' '.join(object.fulltext()[2:])
+            if IVersion.providedBy(content) and hasattr(content, 'fulltext'):
+                realtext = ' '.join(content.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
                 text = ' '.join(realtext.split()[:maxwords])
@@ -381,8 +384,8 @@ class FullTextResultField(ResultField):
             # do some hiliting, use original text
             # (with punctuation) if this is a silva document
             text = ' '.join(text)
-            if IVersion.providedBy(object) and hasattr(object, 'fulltext'):
-                realtext = ' '.join(object.fulltext()[2:])
+            if IVersion.providedBy(content) and hasattr(content, 'fulltext'):
+                realtext = ' '.join(content.fulltext()[2:])
                 # replace multiple whitespace characters with one space
                 realtext = re.compile('[\ \n\t\xa0]+').sub(' ', realtext)
                 textparts = text.split(ellipsis)
@@ -424,12 +427,11 @@ class BreadcrumbsResultField(ResultField):
     implements(IResultField)
 
     def render(self, context, item, request):
-        obj = item.getObject()
+        content = item.getObject()
         result = []
-        for crumb in obj.get_breadcrumbs()[:-1]:
-            result.append('<a href="%s">%s</a>' % (
-                    absoluteURL(crumb, request),
-                    crumb.get_title_or_id()))
+        breadcrumb = getMultiAdapter((content, request), IAbsoluteURL)
+        for crumb in breadcrumb.breadcrumbs()[:-1]:
+            result.append('<a href="%s">%s</a>' % (crumb['url'], crumb['name']))
         result = '<span> &#183; </span>'.join(result)
         return '<span class="searchresult-breadcrumb">%s</span>' % result
 
@@ -438,10 +440,10 @@ class IconResultField(ResultField):
     implements(IResultField)
 
     def render(self, context, item, request):
-        object = item.getObject()
-        if IVersion.providedBy(object):
-            object = object.object()
-        img = context.render_icon(object)
+        content = item.getObject()
+        if IVersion.providedBy(content):
+            content = content.get_content()
+        img = context.render_icon(content)
         return '<span class="searchresult-icon">%s</span>' % img
 
 
