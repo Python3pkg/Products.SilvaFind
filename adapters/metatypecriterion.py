@@ -1,19 +1,17 @@
-try:
-    from App.class_init import InitializeClass # Zope 2.12
-except ImportError:
-    from Globals import InitializeClass # Zope < 2.12
+# Copyright (c) 2006-2010 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
 
 # Zope
 from AccessControl import ClassSecurityInfo
 from Acquisition import Implicit
+from App.class_init import InitializeClass
 
 # Silva
 from Products.Silva import SilvaPermissions
-from Products.SilvaFind.i18n import translate as _
-
-# SilvaFind
 from Products.SilvaFind.adapters.criterion import StoreCriterion
 from Products.SilvaFind.errors import SilvaFindError
+from Products.SilvaFind.i18n import translate as _
 
 
 def convertValue(value):

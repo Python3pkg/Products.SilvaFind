@@ -1,22 +1,21 @@
+# Copyright (c) 2006-2010 Infrae. All rights reserved.
+# See also LICENSE.txt
+# $Id$
+
 from zope.component import getUtility
-from App.class_init import InitializeClass # Zope 2.12
 
 # Zope
 from AccessControl import ClassSecurityInfo
 from Acquisition import Implicit
+from App.class_init import InitializeClass
 
 # Silva
 from Products.Silva import SilvaPermissions
+from Products.SilvaFind.adapters.criterion import StoreCriterion
+from Products.SilvaFind.errors import SilvaFindError
 from Products.SilvaFind.i18n import translate as _
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_from_id
-
-
-# SilvaFind
-from Products.SilvaFind.adapters.criterion import StoreCriterion
-from Products.SilvaFind.errors import SilvaFindError
-
-from silva.core.views.interfaces import IVirtualSite
 
 
 EDIT_TEMPLATE = \

@@ -2,7 +2,6 @@
 # See also LICENSE.txt
 # $Id$
 
-
 class StoreCriterion(object):
     def __init__(self, criterion, query):
         self.criterion = criterion

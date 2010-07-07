@@ -37,6 +37,33 @@ class IFindService(interfaces.ISilvaService):
         """
 
 
+class ISchema(Interface):
+    """A find schema.
+    """
+
+    def getFields():
+        """Return fields of the schema.
+        """
+
+    def hasField(name):
+        """Return True if there is field called name in the schema.
+        """
+
+    def getFieldNames():
+        """Return a list of field names.
+        """
+
+
+class ISearchSchema(ISchema):
+    """Search schema.
+    """
+
+
+class IResultsSchema(ISchema):
+    """Result schema.
+    """
+
+
 class IMetadataCriterionField(Interface):
     '''
     Criterion corresponding to indexed SilvaMetadata fields

@@ -12,20 +12,17 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 from Products.ZCTextIndex.ParseTree import ParseError
 
 from silva.core.interfaces import IVersion, IPublishable
-from Products.SilvaFind.interfaces import IMetadataCriterionField
-from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
-from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
-from Products.SilvaFind.interfaces import IFullTextCriterionField
-from Products.SilvaFind.interfaces import IPathCriterionField
-from Products.SilvaFind.interfaces import IResultField
-from Products.SilvaFind.interfaces import IMetatypeCriterionField
+from Products.SilvaFind import interfaces
 from Products.SilvaFind.i18n import translate as _
 
 # XXX: The Schema and BaseMetadata criterion have been changed back to
 # old style classes because the unpickling is different and it breaks
 # if the inherit from object
 
+
 class Schema:
+    implements(interfaces.ISchema)
+
     def __init__(self, fields):
         self.fields = fields
 
@@ -40,11 +37,11 @@ class Schema:
 
 
 class SearchSchema(Schema):
-   pass
+    implements(interfaces.ISearchSchema)
 
 
 class ResultsSchema(Schema):
-   pass
+    implements(interfaces.IResultsSchema)
 
 
 class BaseMetadataCriterionField:
@@ -64,33 +61,33 @@ class BaseMetadataCriterionField:
 
 
 class MetadataCriterionField(BaseMetadataCriterionField):
-    implements(IMetadataCriterionField)
+    implements(interfaces.IMetadataCriterionField)
 
 
 class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
-    implements(IDateRangeMetadataCriterionField)
+    implements(interfaces.IDateRangeMetadataCriterionField)
 
 
 class IntegerRangeMetadataCriterionField(BaseMetadataCriterionField):
-    implements(IIntegerRangeMetadataCriterionField)
+    implements(interfaces.IIntegerRangeMetadataCriterionField)
 
 
 class FullTextCriterionField(object):
-    implements(IFullTextCriterionField)
+    implements(interfaces.IFullTextCriterionField)
 
     def getName(self):
         return "fulltext"
 
 
 class MetatypeCriterionField(object):
-    implements(IMetatypeCriterionField)
+    implements(interfaces.IMetatypeCriterionField)
 
     def getName(self):
         return "meta_type"
 
 
 class PathCriterionField(object):
-    implements(IPathCriterionField)
+    implements(interfaces.IPathCriterionField)
 
     def getName(self):
         return "path"
@@ -113,7 +110,7 @@ class AutomaticMetaDataResultField(object):
 
 
 class ResultField(object):
-    implements(IResultField)
+    implements(interfaces.IResultField)
 
     def __init__(self, id='', title='', description=''):
         # XXX the empty default values can go in 1.2, but are needed
@@ -148,7 +145,6 @@ class ResultField(object):
 
 
 class MetatypeResultField(ResultField):
-    implements(IResultField)
 
     def render(self, context, item, request):
         the_object = item.getObject()
@@ -159,7 +155,6 @@ class MetatypeResultField(ResultField):
 
 
 class RankingResultField(ResultField):
-    implements(IResultField)
     description=_('full text result ranking')
 
     def render(self, context, item, request):
@@ -188,7 +183,6 @@ class RankingResultField(ResultField):
 
 
 class TotalResultCountField(ResultField):
-    implements(IResultField)
     description=_('total search result number')
 
     def render(self, context, item, request):
@@ -203,7 +197,6 @@ class TotalResultCountField(ResultField):
         return None
 
 class ResultCountField(ResultField):
-    implements(IResultField)
     description=_('search result count')
 
     def render(self, context, item, request):
@@ -214,7 +207,6 @@ class ResultCountField(ResultField):
 
 
 class LinkResultField(ResultField):
-    implements(IResultField)
 
     def render(self, context, item, request):
         content = item.getObject()
@@ -230,7 +222,6 @@ class LinkResultField(ResultField):
 
 
 class DateResultField(ResultField):
-    implements(IResultField)
 
     def render(self, context, item, request):
         object = item.getObject()
@@ -245,9 +236,7 @@ class DateResultField(ResultField):
 
 
 class ThumbnailResultField(ResultField):
-     implements(IResultField)
      description = _('Shows thumbnails for images')
-
 
      def render(self, context, item, request):
         content = item.getObject()
@@ -265,7 +254,6 @@ class ThumbnailResultField(ResultField):
 
 
 class FullTextResultField(ResultField):
-    implements(IResultField)
     description = _('Add text snippets from content')
 
     def render(self, context, item, request):
@@ -424,7 +412,6 @@ class FullTextResultField(ResultField):
 
 
 class BreadcrumbsResultField(ResultField):
-    implements(IResultField)
 
     def render(self, context, item, request):
         content = item.getObject()
@@ -437,7 +424,6 @@ class BreadcrumbsResultField(ResultField):
 
 
 class IconResultField(ResultField):
-    implements(IResultField)
 
     def render(self, context, item, request):
         content = item.getObject()
@@ -448,7 +434,6 @@ class IconResultField(ResultField):
 
 
 class MetadataResultField(ResultField):
-    implements(IResultField)
 
     description = _('(metadata field)')
 
