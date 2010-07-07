@@ -1,13 +1,10 @@
 <html tal:omit-tag=""
-  tal:define="
-    view here;
-    model request/model;
-    root_url model/get_root_url;
-    title model/get_title_editable;
-    vein string:edit;"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="silvafind"
-    >
+      tal:define="model request/model;
+                  root_url model/get_root_url;
+                  title model/get_title_editable;
+                  vein string:edit;"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="silvafind">
 
 <table class="columns columns3">
   <tbody>
@@ -17,7 +14,7 @@
       </tal:block>
       <td class="left"
         tal:define="template_id string:tab_edit">
-        <metal:block use-macro="view/macro_vein_navigation/macros/vein" />
+        <metal:block use-macro="here/macro_vein_navigation/macros/vein" />
       </td>
 
       <tal:block replace="nothing">
@@ -34,7 +31,7 @@
     <tr>
       <td class="top" colspan="4">
         <h2>
-          <img tal:replace="structure python:view.render_icon(model)" />
+          <img tal:replace="structure python:here.render_icon(model)" />
           <tal:block i18n:translate="">silva find
           &#xab;<tal:block content="model/get_title_or_id" i18n:name="title_or_id"/>&#xbb;</tal:block>
         </h2>
@@ -157,7 +154,7 @@
   <tfoot>
     <tr>
       <th colspan="4" tal:define="select_id string:show_result_">
-        <metal:plug use-macro="view/macro_select_all/macros/select_all"/>
+        <metal:plug use-macro="here/macro_select_all/macros/select_all"/>
         &nbsp;Show the content of the checked fields in the search results.
       </th>
     </tr>
