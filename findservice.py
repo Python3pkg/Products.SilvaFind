@@ -8,12 +8,10 @@ from App.class_init import InitializeClass
 
 from five import grok
 
-# Silva
-from Products.Silva import helpers
-
+# Silva Find
 from Products.SilvaFind.interfaces import IFindService
-from Products.SilvaFind.globalschema import (globalSearchFields,
-                                             globalResultsFields)
+from Products.SilvaFind.globalschema import (
+    globalSearchFields, globalResultsFields)
 from Products.SilvaFind.schema import SearchSchema
 from Products.SilvaFind.schema import ResultsSchema
 from Products.SilvaFind.schema import MetadataResultField
@@ -30,15 +28,13 @@ from silva.core import conf as silvaconf
 class FindService(SilvaService):
     """Find Service
     """
-
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find Service"
     grok.implements(IFindService)
-    silvaconf.icon('find_service.png')
-    silvaconf.factory('manage_addSilvaFindService')
+    silvaconf.icon('findservice.png')
 
-    def __init__(self, id, title):
+    def __init__(self, id, title=None):
         super(FindService, self).__init__(id, title)
         self.search_schema = None
         self.result_schema = None
@@ -109,13 +105,3 @@ class FindService(SilvaService):
         return fields
 
 InitializeClass(FindService)
-
-
-def manage_addSilvaFindService(
-    context, id='service_find', title='Find Service', REQUEST=None):
-    """Add find service.
-    """
-    service = FindService(id, title)
-    context._setObject(id, service)
-    helpers.add_and_edit(context, id, REQUEST)
-    return ''

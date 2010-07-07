@@ -8,7 +8,6 @@ from zope.component import getMultiAdapter
 from Products.Silva.install import add_fss_directory_view
 
 # SilvaFind
-from Products.SilvaFind import findservice
 from Products.SilvaFind.adapters.interfaces import IIndexedField
 
 
@@ -66,8 +65,9 @@ def unregisterViews(reg):
 def setupService(root):
     """instanciate service in root
     """
-    if not 'service_find' in root.objectIds():
-        findservice.manage_addSilvaFindService(root)
+    if 'service_find' not in root.objectIds():
+        factory = root.manage_addProduct['SilvaFind']
+        factory.manage_addFindService('service_find')
 
 
 def checkIndexes(root):
