@@ -10,9 +10,9 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from ZODB.PersistentMapping import PersistentMapping
 from ZTUtils import Batch
 
-# zope3
+# Zope 3
 from zope.interface import implements
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, getUtility
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
 
@@ -25,9 +25,9 @@ from silva.core.views import views as silvaviews
 from silva.core.forms import z3cforms as silvaz3cforms
 from silva.core import conf as silvaconf
 
-#SilvaFind
+# SilvaFind
 from Products.SilvaFind.query import Query
-from Products.SilvaFind.interfaces import IFind
+from Products.SilvaFind.interfaces import IFind, IFindService
 from Products.SilvaFind.adapters.interfaces import ICriterionView
 from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
@@ -86,8 +86,8 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getFieldViews')
     def getFieldViews(self, request):
         result = []
-        for field in self.service_find.getSearchSchema().getFields():
-            searchFieldView = getMultiAdapter((field, self, request), 
+        for field in getUtility(IFindService).getSearchSchema().getFields():
+            searchFieldView = getMultiAdapter((field, self, request),
                 ICriterionView)
             # wrapped to enable security checks
             searchFieldView = searchFieldView.__of__(self)
@@ -156,7 +156,7 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
     def getResultFieldViews(self):
         result = []
-        for field in self.service_find.getResultsSchema().getFields():
+        for field in getUtility(IFindService).getResultsSchema().getFields():
             resultFieldView = getMultiAdapter((field, self), IResultView)
             # wrapped to enable security checks
             resultFieldView = resultFieldView.__of__(self)

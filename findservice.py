@@ -6,9 +6,11 @@
 from AccessControl import ClassSecurityInfo
 from App.class_init import InitializeClass
 
+from zope.component import getUtility
 from five import grok
 
 # Silva Find
+from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaFind.interfaces import IFindService
 from Products.SilvaFind.globalschema import (
     globalSearchFields, globalResultsFields)
@@ -75,7 +77,7 @@ class FindService(SilvaService):
 
     def _createMetadataResultFields(self):
         fields = []
-        service = self.get_root().service_metadata
+        service = getUtility(IMetadataService)
         for set in service.getCollection().getMetadataSets():
             for el in set.getElements():
                 if el.id == 'hide_from_tocs':
@@ -90,7 +92,7 @@ class FindService(SilvaService):
 
     def _createMetadataCriterionFields(self):
         fields = []
-        service = self.get_root().service_metadata
+        service = getUtility(IMetadataService)
         for set in service.getCollection().getMetadataSets():
             for el in set.getElements():
                 if not el.index_p:
