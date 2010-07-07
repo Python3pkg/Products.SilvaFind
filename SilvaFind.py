@@ -228,7 +228,7 @@ class SilvaFind(Query, Content, SimpleItem):
         for field in self.getResultsSchema().getFields():
             fieldName = field.getName()
             self.shownResultsFields[fieldName] = request.get(
-                                            'show_result_'+fieldName, False)
+                'show_result_'+fieldName, False)
 
     def getCatalogSearchArguments(self, request):
         searchArguments = {}
@@ -242,6 +242,7 @@ class SilvaFind(Query, Content, SimpleItem):
                     value = ''
                 searchArguments[queryPart.getIndexId()] = value
         return searchArguments
+
 
 InitializeClass(SilvaFind)
 

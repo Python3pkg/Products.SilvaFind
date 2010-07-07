@@ -1,4 +1,4 @@
 
-class SilvaFindError(Exception):
+class SilvaFindError(ValueError):
     pass
 
