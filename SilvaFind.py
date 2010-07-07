@@ -3,28 +3,23 @@
 # $Id$
 
 # Zope
-from OFS.SimpleItem import SimpleItem
-try:
-    from App.class_init import InitializeClass # Zope 2.12
-except ImportError:
-    from Globals import InitializeClass # Zope < 2.12
-
 from AccessControl import ClassSecurityInfo, getSecurityManager
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from ZODB.PersistentMapping import PersistentMapping
+from App.class_init import InitializeClass
+from OFS.SimpleItem import SimpleItem
 from Products.ZCTextIndex.ParseTree import ParseError
+from ZODB.PersistentMapping import PersistentMapping
 from ZTUtils import Batch
 
 # zope3
 from zope.interface import implements
 from zope.component import getMultiAdapter
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.event import notify
 
 # Silva
 from Products.Silva.Content import Content
 from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
-from Products.Silva.helpers import add_and_edit
-from Products.Silva import mangle
 
 from silva.core.views import views as silvaviews
 from silva.core.forms import z3cforms as silvaz3cforms
@@ -38,6 +33,7 @@ from Products.SilvaFind.adapters.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
+
 class SilvaFind(Query, Content, SimpleItem):
     __doc__ = _("""Silva Find is a powerful search feature that allows easy
         creation of search forms and result pages. Users can add a Find
@@ -50,9 +46,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
     meta_type = "Silva Find"
     implements(IFind)
-    silvaconf.icon('www/find.png')
-    silvaconf.factory('manage_addSilvaFindForm')
-    silvaconf.factory('manage_addSilvaFind')
+    silvaconf.icon('find.png')
 
     def __init__(self, id):
         Content.__init__(self, id)
@@ -150,7 +144,7 @@ class SilvaFind(Query, Content, SimpleItem):
                           'field in the search form.'))
         try:
             results = catalog.searchResults(searchArguments)
-        except ParseError, err:
+        except ParseError:
             return ([], _('Search query contains only common '
                             'or reserved words.'))
 
@@ -216,6 +210,7 @@ class SilvaFind(Query, Content, SimpleItem):
         self.storeCriterionValues(request)
         self.storeShownCriterion(request)
         self.storeShownResult(request)
+        notify(ObjectModifiedEvent(self))
         return (_('Changes saved.'), 'feedback')
 
     #HELPERS
@@ -256,6 +251,7 @@ class SilvaFindAddForm(silvaz3cforms.AddForm):
     """
 
     silvaconf.name(u'Silva Find')
+
 
 
 class SilvaFindView(silvaviews.View):
@@ -324,23 +320,10 @@ class SilvaFindView(silvaviews.View):
             new_start = start - size
             if new_start < 0: new_start = 0
             qs = getBatchLink(self.request.QUERY_STRING, new_start)
-            self.request.set('previous_batch_url', '%s?%s' % (self.request.URL, qs))
+            self.request.set(
+                'previous_batch_url', '%s?%s' % (self.request.URL, qs))
 
         return batch
 
 
 
-manage_addSilvaFindForm = PageTemplateFile("www/silvaFindAdd", globals(),
-                                           __name__='manage_addSilvaFindForm')
-
-
-def manage_addSilvaFind(self, id, title, REQUEST=None):
-    """Add a silvasearch."""
-    if not mangle.Id(self, id).isValid():
-        return
-    object = SilvaFind(id)
-    self._setObject(id, object)
-    object = getattr(self, id)
-    object.set_title(title)
-    add_and_edit(self, id, REQUEST)
-    return ''

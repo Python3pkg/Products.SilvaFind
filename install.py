@@ -8,7 +8,6 @@ from zope.component import getMultiAdapter
 from Products.Silva.install import add_fss_directory_view
 
 # SilvaFind
-from Products.SilvaFind import SilvaFind
 from Products.SilvaFind import findservice
 from Products.SilvaFind.adapters.interfaces import IIndexedField
 

@@ -4,10 +4,7 @@
 
 # Zope
 from AccessControl import ClassSecurityInfo
-try:
-    from App.class_init import InitializeClass # Zope 2.12
-except ImportError:
-    from Globals import InitializeClass # Zope < 2.12
+from App.class_init import InitializeClass
 
 from five import grok
 
@@ -38,7 +35,7 @@ class FindService(SilvaService):
 
     meta_type = "Silva Find Service"
     grok.implements(IFindService)
-    silvaconf.icon('www/find_service.png')
+    silvaconf.icon('find_service.png')
     silvaconf.factory('manage_addSilvaFindService')
 
     def __init__(self, id, title):
@@ -102,7 +99,6 @@ class FindService(SilvaService):
             for el in set.getElements():
                 if not el.index_p:
                     continue
-                id = '%s:%s' % (set.id, el.id)
                 if el.field_type == 'DateTimeField':
                     field = DateRangeMetadataCriterionField(set.id, el.id)
                 elif el.field_type == 'IntegerField':
