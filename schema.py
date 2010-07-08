@@ -226,11 +226,13 @@ class DateResultField(ResultField):
     def render(self, context, item, request):
         content = item.getObject()
         date = None
+        datestr = ''
         if IPublishable.providedBy(content):
             date = content.publication_datetime()
         if date == None:
             date = content.get_modification_datetime()
-        datestr = date.strftime('%d %b %Y %H:%M').lower()
+        if date and hasattr(date, 'strftime'):
+            datestr = date.strftime('%d %b %Y %H:%M').lower()
 
         return '<span class="searchresult-date">%s</span>' % datestr
 
