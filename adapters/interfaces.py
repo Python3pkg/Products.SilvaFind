@@ -32,6 +32,7 @@ class ICriterionView(Interface):
     def getStoredValue():
         '''returns stored value for the corresponding field'''
 
+
 class IStoreCriterion(Interface):
     '''
     Stores criterion value in query instance

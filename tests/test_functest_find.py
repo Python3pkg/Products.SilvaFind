@@ -5,8 +5,7 @@
 import os
 import unittest
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
-from Products.Silva.tests.SilvaBrowser import SilvaBrowser, SILVA_FORM, \
-    Z3CFORM_FORM
+from Products.Silva.tests.SilvaBrowser import SilvaBrowser
 from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
 
 test_fixture = {

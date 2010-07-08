@@ -11,7 +11,7 @@ from ZODB.PersistentMapping import PersistentMapping
 from ZTUtils import Batch
 
 # Zope 3
-from zope.interface import implements
+from five import grok
 from zope.component import getMultiAdapter, getUtility
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
@@ -22,7 +22,7 @@ from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 
 from silva.core.views import views as silvaviews
-from silva.core.forms import z3cforms as silvaz3cforms
+from zeam.form import silva as silvaforms
 from silva.core import conf as silvaconf
 
 # SilvaFind
@@ -45,7 +45,7 @@ class SilvaFind(Query, Content, SimpleItem):
     security = ClassSecurityInfo()
 
     meta_type = "Silva Find"
-    implements(IFind)
+    grok.implements(IFind)
     silvaconf.icon('find.png')
 
     def __init__(self, id):
@@ -222,13 +222,14 @@ class SilvaFind(Query, Content, SimpleItem):
     def storeShownCriterion(self, request):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
-            self.shownFields[fieldName] = request.get('show_'+fieldName, False)
+            self.shownFields[fieldName] = bool(
+                request.get('show_'+fieldName, False))
 
     def storeShownResult(self, request):
         for field in self.getResultsSchema().getFields():
             fieldName = field.getName()
-            self.shownResultsFields[fieldName] = request.get(
-                'show_result_'+fieldName, False)
+            self.shownResultsFields[fieldName] = bool(
+                request.get('show_result_'+fieldName, False))
 
     def getCatalogSearchArguments(self, request):
         searchArguments = {}
@@ -247,19 +248,20 @@ class SilvaFind(Query, Content, SimpleItem):
 InitializeClass(SilvaFind)
 
 
-class SilvaFindAddForm(silvaz3cforms.AddForm):
+class SilvaFindAddForm(silvaforms.SMIAddForm):
     """Add form for Silva Find.
     """
+    grok.name(u'Silva Find')
+    grok.context(IFind)
 
-    silvaconf.name(u'Silva Find')
+    description = SilvaFind.__doc__
 
 
 
 class SilvaFindView(silvaviews.View):
     """View a Silva Find.
     """
-
-    silvaconf.context(IFind)
+    grok.context(IFind)
 
     def isViewableForUser(self, brain):
         security_manager = getSecurityManager()

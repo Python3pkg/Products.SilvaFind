@@ -224,12 +224,12 @@ class LinkResultField(ResultField):
 class DateResultField(ResultField):
 
     def render(self, context, item, request):
-        object = item.getObject()
+        content = item.getObject()
         date = None
-        if IPublishable.providedBy(object):
-            date = object.publication_datetime()
+        if IPublishable.providedBy(content):
+            date = content.publication_datetime()
         if date == None:
-            date = object.get_modification_datetime()
+            date = content.get_modification_datetime()
         datestr = date.strftime('%d %b %Y %H:%M').lower()
 
         return '<span class="searchresult-date">%s</span>' % datestr

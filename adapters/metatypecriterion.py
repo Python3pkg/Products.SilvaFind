@@ -26,6 +26,7 @@ def convertValue(value):
 
 
 class StoreMetatypeCriterion(StoreCriterion):
+
     def store(self, request):
         #XXX some room for refactoring here
         field_name = self.criterion.getName()
