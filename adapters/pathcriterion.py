@@ -44,6 +44,7 @@ r"""
 
 
 class StorePathCriterion(StoreCriterion):
+
     def store(self, request):
         #XXX some room for refactoring here
         field_name = unicode(self.criterion.getName())
@@ -109,9 +110,10 @@ class PathCriterionView(Implicit):
             # XXX pathindex does not work with unicode, so do not try
         else:
             try:
-                value = int(self.getStoredValue())
+                value = self.getStoredValue()
                 if not value:
                     return ''
+                value = int(value)
             except (ValueError, TypeError,):
                 return ''
         content = get_content_from_id(value)
