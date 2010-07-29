@@ -32,7 +32,7 @@ r"""
   </a>
   <input type="hidden"
          name="%(name)s"
-         id="%(widget_id)s-value" value="">
+         id="%(widget_id)s-value" value="%(value)s">
   <input type="hidden"
          id="%(widget_id)s-interface"
          value="%(interfaces)s">
