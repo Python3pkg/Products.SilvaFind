@@ -11,7 +11,6 @@ from App.class_init import InitializeClass
 from Products.Silva import SilvaPermissions
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.adapters.criterion import StoreCriterion
-from Products.SilvaFind.errors import SilvaFindError
 
 
 class StoreFullTextCriterion(StoreCriterion):
@@ -112,4 +111,4 @@ class IndexedFullTextCriterion:
     def checkIndex(self):
         id = self.getIndexId()
         if id not in self.catalog.indexes():
-            raise SilvaFindError('Name "%s" not indexed by service_catalog' % id)
+            raise ValueError('Name "%s" not indexed by service_catalog' % id)

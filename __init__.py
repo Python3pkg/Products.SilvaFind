@@ -10,6 +10,5 @@ from silva.core import conf as silvaconf
 silvaconf.extensionName('SilvaFind')
 silvaconf.extensionTitle('Silva Find')
 
-registerDirectory('views', globals())
 registerDirectory('resources', globals())
 

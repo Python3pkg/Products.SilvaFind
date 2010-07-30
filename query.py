@@ -6,7 +6,6 @@ from ZODB.PersistentMapping import PersistentMapping
 from zope.component import getUtility
 
 from Products.SilvaFind.interfaces import IFindService
-from Products.SilvaFind.errors import SilvaFindError
 
 
 class Query(object):
@@ -20,12 +19,15 @@ class Query(object):
     def getResultsSchema(self):
         return getUtility(IFindService).getResultsSchema()
 
+    def getResultFields(self):
+        return self.getResultsSchema().getFields()
+
     def getCriterionValue(self, name):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
             return self.searchValues.get(name, None)
         else:
-            raise SilvaFindError(
+            raise ValueError(
                 'No field named %s defined in search schema' %
                 name)
 
@@ -34,18 +36,6 @@ class Query(object):
         if searchSchema.hasField(name):
             self.searchValues[name] = value
         else:
-            raise SilvaFindError(
+            raise ValueError(
                 'No field named %s defined in search schema' %
                 name)
-
-    def getResultsColumnIds(self):
-        return [field.getColumnId()
-            for field in self.getResultsSchema().getFields()]
-
-    def getResultsColumnTitles(self):
-        return [field.getColumnTitle()
-            for field in self.getResultsSchema().getFields()]
-
-    def getRenderedColumns(self, context, item):
-        return [field.render(context, item)
-            for field in self.getResultsSchema().getFields()]

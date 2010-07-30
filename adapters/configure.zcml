@@ -175,11 +175,4 @@
     factory=".fulltextcriterion.IndexedFullTextCriterion"
     />
 
-  <adapter
-    for="Products.SilvaFind.interfaces.IResultField
-         Products.SilvaFind.interfaces.ISilvaQuery"
-    provides=".interfaces.IResultView"
-    factory=".result.ResultView"
-    />
-
 </configure>

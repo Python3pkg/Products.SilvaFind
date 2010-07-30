@@ -108,18 +108,39 @@ class IPathCriterionField(Interface):
 
 
 class IResultField(Interface):
-    '''
-    Mapping between schema results field and ZCatalog metadata column
-    '''
-    def getColumnId():
-        '''returns id of resultfield
-        '''
+    """This describe an included field to appear in the results. That
+    can either a special field like a breadcrumb, the last
+    modification time, a link to the content, or an arbitrary metadata
+    field.
+    """
 
-    def getColumnTitle():
-        '''returns title of resultfield
-        '''
+    def getId():
+        """Gives the ID of this result field.
+        """
 
-    def render(context, item, request):
-        '''renders result field for item
-        '''
+    def getName():
+        """Gives the name of this result field.
+        """
+
+    def getTitle():
+        """Gives the title of this result field.
+        """
+
+    def getDescription():
+        """Gives the description of this result field.
+        """
+
+
+class IResultView(Interface):
+    """Render a ResultField for the public.
+    """
+
+    def __init__(context, result, request):
+        """Build the view
+        """
+
+    def render(item):
+        """renders result field for an item
+        """
+
 

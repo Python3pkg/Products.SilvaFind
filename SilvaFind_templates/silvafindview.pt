@@ -131,24 +131,16 @@
       <ul tal:condition="view/results">
         <li tal:repeat="item view/results">
           <tal:block tal:define="ix repeat/item/index;"
-                     tal:condition="view/fields">
+                     tal:condition="view/result_widgets">
             <div class="searchresult">
-              <tal:block repeat="field view/fields">
+              <tal:block repeat="widget view/result_widgets">
                 <span class="searchresult-counter"
                       tal:define="num python:str(view.results.start + ix + 1)"
-                      tal:condition="python:field.getName() == 'resultcount'"
-                      tal:attributes="style python:'padding-left:%sex' % (3-len(num))"
+                      tal:condition="python:widget.result.getName() == 'resultcount'"
                       tal:content="string:${num}.">
                   count
                 </span>
-                <tal:block tal:define="result python:field.render(context, item, request)"
-                           tal:condition="python:not field.getName() in ['resultcount', 'totalresultcount']">
-                  <span tal:condition="python:isinstance(result, list)"
-                        tal:repeat="item result"
-                        tal:replace="structure item" />
-                  <span tal:condition="python:not isinstance(result, list)"
-                        tal:replace="structure result" />
-                </tal:block>
+                <span tal:replace="structure python:widget.render(item)" />
               </tal:block>
             </div>
           </tal:block>

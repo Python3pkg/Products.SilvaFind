@@ -1,4 +1,0 @@
-
-class SilvaFindError(ValueError):
-    pass
-

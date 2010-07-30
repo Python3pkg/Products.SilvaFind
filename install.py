@@ -13,12 +13,8 @@ from Products.SilvaFind.adapters.interfaces import IIndexedField
 
 def install(root):
     # create the core views from filesystem
-    add_fss_directory_view(root.service_views,
-                           'SilvaFind', __file__, 'views')
     add_fss_directory_view(root.service_resources,
                            'SilvaFind', __file__, 'resources')
-    # also register views
-    registerViews(root.service_view_registry)
 
     # security
     root.manage_permission('Add Silva Finds',
@@ -33,14 +29,12 @@ def install(root):
 
 
 def uninstall(root):
-    unregisterViews(root.service_view_registry)
-    root.service_views.manage_delObjects(['SilvaFind'])
     root.service_resources.manage_delObjects(['SilvaFind'])
     root.manage_delObjects(['service_find'])
 
 
 def is_installed(root):
-    return hasattr(root.service_views, 'SilvaFind')
+    return hasattr(root, 'service_find')
 
 
 def configureAddables(root):
@@ -50,16 +44,6 @@ def configureAddables(root):
         if a not in new_addables:
             new_addables.append(a)
     root.set_silva_addables_allowed_in_container(new_addables)
-
-
-def registerViews(reg):
-    """Register core views on registry.
-    """
-    # edit
-    reg.register('edit', 'Silva Find', ['edit', 'Content', 'SilvaFind'])
-
-def unregisterViews(reg):
-    reg.unregister('edit', 'Silva Find')
 
 
 def setupService(root):

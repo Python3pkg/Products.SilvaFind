@@ -78,21 +78,4 @@ class ICatalogMetadataSetup(Interface):
         Setup of metadata columns in Silva catalog
         '''
 
-class IResultView(Interface):
-    '''
-    To display a result both in view and in edit form.
-    '''
-    def getTitle():
-        '''returns field title for view'''
-
-    def getID():
-        '''returns id of resultfield
-        '''
-
-    def renderWidget(value):
-        '''returns widget HTML for view'''
-
-    def renderEditWidget():
-        '''returns widget HTML rendered with stored value'''
-
 

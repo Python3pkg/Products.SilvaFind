@@ -11,7 +11,7 @@ from ZODB.PersistentMapping import PersistentMapping
 
 # Zope 3
 from five import grok
-from zope.component import getMultiAdapter, getUtility
+from zope.component import getMultiAdapter
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
 from zope import component
@@ -23,15 +23,16 @@ from Products.Silva import SilvaPermissions
 
 from silva.core import conf as silvaconf
 from silva.core.views import views as silvaviews
+from silva.core.smi import smi as silvasmi
 from zeam.form import silva as silvaforms
 from zeam.utils.batch import batch
 from zeam.utils.batch.interfaces import IBatching
 
 # SilvaFind
 from Products.SilvaFind.query import Query
-from Products.SilvaFind.interfaces import IFind, IFindService
+from Products.SilvaFind.interfaces import IFind
 from Products.SilvaFind.adapters.interfaces import ICriterionView
-from Products.SilvaFind.adapters.interfaces import IResultView
+from Products.SilvaFind.interfaces import IResultView
 from Products.SilvaFind.adapters.interfaces import IQueryPart
 from Products.SilvaFind.adapters.interfaces import IStoreCriterion
 
@@ -48,7 +49,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
     meta_type = "Silva Find"
     grok.implements(IFind)
-    silvaconf.icon('find.png')
+    silvaconf.icon('SilvaFind.png')
 
     def __init__(self, id):
         Content.__init__(self, id)
@@ -92,6 +93,11 @@ class SilvaFind(Query, Content, SimpleItem):
         return filter(
             lambda view: self.isCriterionShown(view.getName()),
             self.getFieldViews(request))
+
+    security.declareProtected(SilvaPermissions.View, 'getPublicResultFields')
+    def getPublicResultFields(self):
+        return filter(lambda field: self.isResultShown(field.getName()),
+                      self.getResultFields())
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -145,41 +151,6 @@ class SilvaFind(Query, Content, SimpleItem):
             return ([], _('No items matched your search.'))
 
         return (results, '')
-
-    security.declareProtected(SilvaPermissions.View, 'getResultFieldViews')
-    def getResultFieldViews(self):
-        result = []
-        for field in getUtility(IFindService).getResultsSchema().getFields():
-            resultFieldView = getMultiAdapter((field, self), IResultView)
-            # wrapped to enable security checks
-            resultFieldView = resultFieldView.__of__(self)
-            result.append(resultFieldView)
-        return result
-
-    def getPublicResultFieldViews(self):
-        result = [view for view in self.getResultFieldViews()
-                    if self.isResultShown(view.getName())]
-        return result
-
-    security.declareProtected(SilvaPermissions.View, 'getResultColumns')
-    def getResultColumns(self):
-        return [(field.getColumnTitle(), field.render)
-                for field in self.getResultsSchema().getFields()]
-
-    security.declareProtected(SilvaPermissions.View, 'searchResultsObjects')
-    def searchResultsObjects(self, request={}):
-        results = self.searchResults(request)
-        return [result.getObject().get_silva_object() for result in results]
-
-
-    #MUTATORS
-    security.declareProtected(
-        SilvaPermissions.ChangeSilvaContent, 'manage_edit')
-    def manage_edit(self, REQUEST):
-        """Store fields values
-        """
-        message, message_type = self._edit(REQUEST)
-        return self.edit['tab_edit'](message=message, message_type=message_type)
 
     def _edit(self, request):
         """Store fields values
@@ -250,6 +221,19 @@ class SilvaFindAddForm(silvaforms.SMIAddForm):
     description = SilvaFind.__doc__
 
 
+class SilvaFindEditView(silvasmi.SMIPage):
+    """Edit a Silva Find
+    """
+    grok.context(IFind)
+    grok.name('tab_edit')
+    grok.require('silva.ChangeSilvaContent')
+
+    tab = 'edit'
+
+    def update(self):
+        message, message_type = self.context._edit(self.request)
+        self.send_message(message, message_type)
+
 
 class SilvaFindView(silvaviews.View):
     """View a Silva Find.
@@ -263,9 +247,14 @@ class SilvaFindView(silvaviews.View):
     def update(self):
         results, self.message = \
             self.context.searchResultsWithDescription(self.request)
-        #self.titles = self.context.getResultsColumnTitles()
         self.results = batch(results, count=20, request=self.request)
-        self.fields = self.context.getPublicResultFieldViews()
+        self.result_widgets = []
+        for result in self.context.getPublicResultFields():
+            result_widget = getMultiAdapter((
+                    self.context, result, self.request), IResultView)
+            result_widget.update(self.results)
+            self.result_widgets.append(result_widget)
+
         self.batch = component.getMultiAdapter(
             (self.context, self.results, self.request), IBatching)()
 
