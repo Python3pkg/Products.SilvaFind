@@ -8,22 +8,24 @@ from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.ZCTextIndex.ParseTree import ParseError
 from ZODB.PersistentMapping import PersistentMapping
-from ZTUtils import Batch
 
 # Zope 3
 from five import grok
 from zope.component import getMultiAdapter, getUtility
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
+from zope import component
 
 # Silva
 from Products.Silva.Content import Content
 from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 
+from silva.core import conf as silvaconf
 from silva.core.views import views as silvaviews
 from zeam.form import silva as silvaforms
-from silva.core import conf as silvaconf
+from zeam.utils.batch import batch
+from zeam.utils.batch.interfaces import IBatching
 
 # SilvaFind
 from Products.SilvaFind.query import Query
@@ -74,19 +76,10 @@ class SilvaFind(Query, Content, SimpleItem):
         """
         return 0
 
-    def is_deletable(self):
-        """always deletable"""
-        return 1
-
-    def can_set_title(self):
-        """always settable"""
-        # XXX: we badly need Publishable type objects to behave right.
-        return 1
-
     security.declareProtected(SilvaPermissions.View, 'getFieldViews')
     def getFieldViews(self, request):
         result = []
-        for field in getUtility(IFindService).getSearchSchema().getFields():
+        for field in self.getSearchSchema().getFields():
             searchFieldView = getMultiAdapter((field, self, request),
                 ICriterionView)
             # wrapped to enable security checks
@@ -96,9 +89,9 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
     def getPublicFieldViews(self, request):
-        result = [view for view in self.getFieldViews(request)
-                  if self.isCriterionShown(view.getName())]
-        return result
+        return filter(
+            lambda view: self.isCriterionShown(view.getName()),
+            self.getFieldViews(request))
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -119,7 +112,7 @@ class SilvaFind(Query, Content, SimpleItem):
                              'searchResultsWithDescription')
     def searchResultsWithDescription(self, request={}):
         if not request.has_key('search_submit'):
-            return ([], 'empty')
+            return ([], '')
         catalog = self.get_root().service_catalog
         searchArguments = self.getCatalogSearchArguments(request)
         queryEmpty = True
@@ -267,66 +260,13 @@ class SilvaFindView(silvaviews.View):
         security_manager = getSecurityManager()
         return security_manager.checkPermission('View', brain.getObject())
 
-    def getBatch(self,results, size=20, orphan=2, overlap=0):
-        # Custom getabatch method to filter out unviewable objects.
-        # This may lead to performance problems because all objects
-        # in the search results need to be accessed until the right
-        # number of objects are found.
-        # This behaviour also has the sideeffect that the total result
-        # count might change as a user is viewing subsequent batches.
-
-        try:
-            start_val = self.request.get('batch_start', '0')
-            start = int(start_val)
-            size = int(self.request.get('batch_size',size))
-        except ValueError:
-            start = 0
-
-        result_count = start + size
-        filtered_results = []
-        index = 0
-        for brain in results:
-            if self.isViewableForUser(brain):
-                filtered_results.append(brain)
-                result_count -= 1
-            if result_count == 0:
-                break
-            index += 1
-        results = filtered_results + results[index:]
-
-        batch = Batch(results, size, start, 0, orphan, overlap)
-        batch.total = len(results)
-
-        def getBatchLink(qs, new_start):
-            if new_start is not None:
-                if not qs:
-                    qs = 'batch_start=%d' % new_start
-                elif qs.startswith('batch_start='):
-                    qs = qs.replace('batch_start=%s' % start_val,
-                                    'batch_start=%d' % new_start)
-                elif qs.find('&batch_start=') != -1:
-                    qs = qs.replace('&batch_start=%s' % start_val,
-                                    '&batch_start=%d' % new_start)
-                else:
-                    qs = '%s&batch_start=%d' % (qs, new_start)
-
-                return qs
-
-        # create a new query string with the correct batch_start/end
-        # for the next/previous batch
-
-        if batch.end < len(results):
-            qs = getBatchLink(self.request.QUERY_STRING, batch.end)
-            self.request.set('next_batch_url', '%s?%s' % (self.request.URL, qs))
-
-        if start > 0:
-            new_start = start - size
-            if new_start < 0: new_start = 0
-            qs = getBatchLink(self.request.QUERY_STRING, new_start)
-            self.request.set(
-                'previous_batch_url', '%s?%s' % (self.request.URL, qs))
-
-        return batch
-
+    def update(self):
+        results, self.message = \
+            self.context.searchResultsWithDescription(self.request)
+        #self.titles = self.context.getResultsColumnTitles()
+        self.results = batch(results, count=20, request=self.request)
+        self.fields = self.context.getPublicResultFieldViews()
+        self.batch = component.getMultiAdapter(
+            (self.context, self.results, self.request), IBatching)()
 
 

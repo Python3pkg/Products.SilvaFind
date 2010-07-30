@@ -6,7 +6,6 @@ import unittest
 
 from Products.Silva.silvaxml import xmlexport
 from Products.Silva.tests.test_xmlexport import SilvaXMLTestCase
-from Products.Silva.testing import FunctionalLayer
 
 
 class XMLExportTestCase(SilvaXMLTestCase):

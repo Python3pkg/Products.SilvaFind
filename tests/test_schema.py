@@ -34,6 +34,12 @@ class SchemaTestCase(unittest.TestCase):
         self.failIf(self.schema.hasField('meta-set-field-id3'))
         self.failUnless(self.schema.hasField('meta-set-field-id1'))
 
+        self.assertEqual(
+            self.schema.getField('meta-set-field-id1'),
+            self.field1)
+
+        self.assertRaises(KeyError, self.schema.getField, 'carambar')
+
 
 class MetadataCriterionFieldTestCase(unittest.TestCase):
 

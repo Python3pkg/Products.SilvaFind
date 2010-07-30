@@ -11,6 +11,9 @@ class ICriterionView(Interface):
     def getTitle():
         '''returns field title for view'''
 
+    def getName():
+        '''return field name'''
+
     def getDescription():
         '''returns description of the criterion field'''
 

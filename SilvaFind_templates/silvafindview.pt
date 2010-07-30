@@ -121,79 +121,21 @@
 
   <tal:block tal:condition="request/form/keys">
 
-    <div class="searchresults"
-         tal:define="resultparts python:context.searchResultsWithDescription(request);
-                     results python:resultparts[0];
-                     msg python:resultparts[1];
-                     columnTitles context/getResultsColumnTitles;
-                     batch python:view.getBatch(results);
-                     fields python:context.getPublicResultFieldViews();">
+    <div class="searchresults">
 
       <h3 class="heading" i18n:translate=""
-          tal:condition="python:len(batch)">Search Results</h3>
+          tal:condition="view/results">Search Results</h3>
 
-      <metal:block define-macro="searchinfo"
-                   tal:condition="python:batch.size < len(results)">
-        <table class="searchresult-header" width="100%">
-          <tr>
-            <td align="left" class="align-left" width="20%">
-              <span class="searchresult-previous">
-                <tal:block condition="request/previous_batch_url | nothing">
-                  <a href="previousbatch" accesskey="p"
-                     title="See the previous result listing: alt-p"
-                     tal:attributes="href request/previous_batch_url"
-                     i18n:attributes="title">
-                    <img alt="Previous"
-                         tal:define="image here/globals/left.gif"
-                         tal:attributes="src image/absolute_url;
-                                         width image/width;
-                                         height image/height;
-                                         "/>
-                    <tal:block i18n:translate="">Previous</tal:block></a>
-                </tal:block>
-              </span>
-            </td>
-            <td align="center" class="align-center">
-              <span class="searchresult-info" i18n:translate="">
-                Showing results
-                <tal:block replace="batch/start" i18n:name="batch_start" />
-                to
-                <tal:block replace="batch/end" i18n:name="batch_end" />
-              </span>
-              <span tal:condition="python:'totalresultcount' in [f.getName() for f in fields]" i18n:translate="">
-                of about
-                <tal:block replace="batch/total" i18n:name="total" />
-              </span>
-            </td>
-            <td align="right" class="align-right" width="20%">
-              <span class="searchresult-next">
-                <tal:block condition="request/next_batch_url | nothing">
-                  <a href="nextbatch" accesskey="n"
-                     title="See the next result listing: alt-n"
-                     tal:attributes="href request/next_batch_url"
-                     i18n:attributes="title">
-                    <tal:block i18n:translate="">Next</tal:block>
-                    <img alt="Next"
-                         tal:define="image here/globals/right.gif"
-                         tal:attributes="src image/absolute_url;
-                                         width image/width;
-                                         height image/height;
-                                         "/>
-                  </a>
-                </tal:block>
-              </span>
-          </td></tr>
-        </table>
-      </metal:block>
+      <tal:batch tal:replace="structure view/batch" />
 
-      <ul tal:condition="batch">
-        <li tal:repeat="item batch">
+      <ul tal:condition="view/results">
+        <li tal:repeat="item view/results">
           <tal:block tal:define="ix repeat/item/index;"
-                     tal:condition="fields">
+                     tal:condition="view/fields">
             <div class="searchresult">
-              <tal:block repeat="field fields">
+              <tal:block repeat="field view/fields">
                 <span class="searchresult-counter"
-                      tal:define="num python:str(batch.start + ix)"
+                      tal:define="num python:str(view.results.start + ix + 1)"
                       tal:condition="python:field.getName() == 'resultcount'"
                       tal:attributes="style python:'padding-left:%sex' % (3-len(num))"
                       tal:content="string:${num}.">
@@ -213,11 +155,12 @@
         </li>
       </ul>
 
-      <div metal:use-macro="template/macros/searchinfo" />
+      <tal:batch tal:replace="structure view/batch" />
+
       <p class="searchresult-nomatch searchresult-header"
-         tal:condition="python:not len(batch) and msg != 'empty'">
-        <tal:block condition="msg" content="msg"/>
-        <tal:block condition="not:msg" i18n:translate="">
+         tal:condition="python:not view.results">
+        <tal:block condition="view/message" content="view/message"/>
+        <tal:block condition="not:view/message" i18n:translate="">
           No items matched your search.
         </tal:block>
       </p>

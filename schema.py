@@ -26,6 +26,12 @@ class Schema:
     def __init__(self, fields):
         self.fields = fields
 
+    def getField(self, name):
+        for field in self.fields:
+            if field.getName() == name:
+                return field
+        raise KeyError(name)
+
     def getFields(self):
         return self.fields
 
