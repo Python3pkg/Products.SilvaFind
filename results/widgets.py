@@ -70,6 +70,8 @@ class RankingResultView(ResultView):
 
     def update(self, results):
         query = self.request.form.get('fulltext')
+        self.highest = 1.0
+        self.rankings = {}
         if query:
             query = unicode(query, 'utf8')
             # XXX should use getUtility
@@ -78,8 +80,9 @@ class RankingResultView(ResultView):
             try:
                 max_index = results.start + len(results) + 1
                 rankings = index.query(query, max_index)[0]
-                self.highest = rankings[0][1]/100.0
-                self.rankings = dict(rankings)
+                if rankings:
+                    self.highest = rankings[0][1]/100.0
+                    self.rankings = dict(rankings)
             except ParseError:
                 pass
 
