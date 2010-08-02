@@ -11,7 +11,8 @@ from App.class_init import InitializeClass
 
 # Silva
 from Products.Silva import SilvaPermissions
-from Products.SilvaFind.adapters.criterion import StoreCriterion
+from Products.SilvaFind.adapters.criterion import (
+    StoreCriterion, IndexedCriterion)
 from Products.SilvaFind.i18n import translate as _
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_from_id
@@ -102,33 +103,20 @@ class PathCriterionView(Implicit):
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
-        field_name = self.criterion.getName()
-        value = self.request.get(field_name, None)
-        if value:
-            pass
-            # XXX pathindex does not work with unicode, so do not try
-        else:
-            try:
-                value = self.getStoredValue()
-                if not value:
-                    return ''
-                value = int(value)
-            except (ValueError, TypeError,):
-                return ''
-        content = get_content_from_id(value)
-        if content:
-            return "/".join(content.getPhysicalPath())
-        return ''
+        content = self.getStoredValue()
+        if content is None:
+            return ''
+        return "/".join(content.getPhysicalPath())
 
     getIndexValue = getValue
 
     security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
-        field_name = unicode(self.criterion.getName())
-        reference_service = getUtility(IReferenceService)
-        ref = reference_service.get_reference(self.query, name=field_name)
-        if ref:
-            return ref.target_id
+        name = unicode(self.criterion.getName())
+        service = getUtility(IReferenceService)
+        ref = service.get_reference(self.query, name=name)
+        if ref is not None:
+            return ref.target
         return None
 
     security.declareProtected(SilvaPermissions.View, 'getTitle')
@@ -138,28 +126,18 @@ class PathCriterionView(Implicit):
     def getIndexId(self):
         return 'path'
 
-    security.declareProtected(SilvaPermissions.View,
-        'getName')
+    security.declareProtected(SilvaPermissions.View, 'getName')
     def getName(self):
         return self.criterion.getName()
 
-    security.declareProtected(SilvaPermissions.View,
-        'getDescription')
+    security.declareProtected(SilvaPermissions.View, 'getDescription')
     def getDescription(self):
         return _('Only search below this location (a path from the site root).')
 
 InitializeClass(PathCriterionView)
 
-class IndexedPathCriterion:
-    def __init__(self, criterion, root):
-        self.criterion = criterion
-        self.root = root
-        self.catalog = root.service_catalog
+
+class IndexedPathCriterion(IndexedCriterion):
 
     def getIndexId(self):
         return 'path'
-
-    def checkIndex(self):
-        id = self.getIndexId()
-        if id not in self.catalog.indexes():
-            raise ValueError('Name "%s" not indexed by service_catalog' % id)

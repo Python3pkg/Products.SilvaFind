@@ -35,7 +35,7 @@ globalResultsFields = [
     TotalResultCountField('',   _(u'TotalResultCount'),
                                 _(u'Show total number of results')),
     ResultCountField('',        _(u'ResultCount'),
-                                _(u'search result count')),
+                                _(u'Search result count')),
     MetatypeResultField('',         _(u'Icon'),
                                 _(u'Display the icon of the content type.')),
     LinkResultField('',         _(u'Link')),

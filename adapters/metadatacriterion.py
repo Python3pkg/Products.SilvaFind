@@ -10,7 +10,8 @@ from DateTime import DateTime
 
 # Silva
 from Products.Silva import SilvaPermissions
-from Products.SilvaFind.adapters.criterion import StoreCriterion
+from Products.SilvaFind.adapters.criterion import (
+    StoreCriterion, IndexedCriterion)
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaMetadata.Index import createIndexId
 
@@ -50,6 +51,7 @@ class BaseMetadataCriterion:
         return element.Description()
 
 InitializeClass(BaseMetadataCriterion)
+
 
 class MetadataCriterionView(Implicit, BaseMetadataCriterion):
 
@@ -303,7 +305,9 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
 
 InitializeClass(IntegerRangeMetadataCriterionView)
 
+
 class StoreIntegerRangeMetadataCriterion(StoreCriterion):
+
     def store(self, request):
         field_name = self.criterion.getName()
         criterion_value_lower = request.get(field_name+'_lower', None)

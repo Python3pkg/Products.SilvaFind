@@ -156,11 +156,10 @@ class SilvaFind(Query, Content, SimpleItem):
         """Store fields values
         """
         # Validate values
-        def validate(name, schema):
+        def validate(prefix, schema):
             atLeastOneShown = False
             for field in schema.getFields():
-                fieldName = field.getName()
-                shown = request.get(name + fieldName, False)
+                shown = request.get(prefix + field.getName(), False)
                 atLeastOneShown = atLeastOneShown or shown
             return atLeastOneShown
 
@@ -187,20 +186,19 @@ class SilvaFind(Query, Content, SimpleItem):
         for field in self.getSearchSchema().getFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = bool(
-                request.get('show_'+fieldName, False))
+                request.form.get('show_' + fieldName, False))
 
     def storeShownResult(self, request):
         for field in self.getResultsSchema().getFields():
             fieldName = field.getName()
             self.shownResultsFields[fieldName] = bool(
-                request.get('show_result_'+fieldName, False))
+                request.form.get('show_result_' + fieldName, False))
 
     def getCatalogSearchArguments(self, request):
         searchArguments = {}
         for field in self.getSearchSchema().getFields():
-            if (self.shownFields.has_key(field.getName())
-                    and self.shownFields.get(field.getName(), False)
-                    or field.getName() == 'path'):
+            name = field.getName()
+            if (self.shownFields.get(name, False) or name == 'path'):
                 queryPart = getMultiAdapter((field, self, request), IQueryPart)
                 value = queryPart.getIndexValue()
                 if value is None:
@@ -231,8 +229,9 @@ class SilvaFindEditView(silvasmi.SMIPage):
     tab = 'edit'
 
     def update(self):
-        message, message_type = self.context._edit(self.request)
-        self.send_message(message, message_type)
+        if 'silvafind_save' in self.request.form:
+            message, message_type = self.context._edit(self.request)
+            self.send_message(message, message_type)
 
 
 class SilvaFindView(silvaviews.View):
@@ -249,13 +248,15 @@ class SilvaFindView(silvaviews.View):
             self.context.searchResultsWithDescription(self.request)
         self.results = batch(results, count=20, request=self.request)
         self.result_widgets = []
-        for result in self.context.getPublicResultFields():
-            result_widget = getMultiAdapter((
-                    self.context, result, self.request), IResultView)
-            result_widget.update(self.results)
-            self.result_widgets.append(result_widget)
+        self.batch = u''
+        if self.results:
+            for result in self.context.getPublicResultFields():
+                result_widget = getMultiAdapter((
+                        self.context, result, self.request), IResultView)
+                result_widget.update(self.results)
+                self.result_widgets.append(result_widget)
 
-        self.batch = component.getMultiAdapter(
-            (self.context, self.results, self.request), IBatching)()
+            self.batch = component.getMultiAdapter(
+                (self.context, self.results, self.request), IBatching)()
 
 

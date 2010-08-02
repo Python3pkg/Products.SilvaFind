@@ -69,7 +69,7 @@
         </tal:block>
         <tr class="controls">
           <td class="align-right" colspan="4">
-            <input type="submit" value="save"
+            <input type="submit" value="save" name="silvafind_save"
                    class="button" accesskey="s" title="access key: alt-s"
                    i18n:attributes="value; title" />
           </td>
@@ -139,7 +139,7 @@
         -->
         <tr class="controls">
           <td class="align-right" colspan="4">
-            <input type="submit" value="save"
+            <input type="submit" value="save" name="silvafind_save"
                    class="button" title="access key: alt-s"
                    i18n:attributes="value; title" />
           </td>
