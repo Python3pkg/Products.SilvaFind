@@ -354,9 +354,7 @@ class BreadcrumbsResultView(ResultView):
 class MetadataResultView(ResultView):
     grok.adapts(ISilvaObject, schema.MetadataResultField, Interface)
 
-    def __init__(self, *args):
-        super(MetadataResultView, self).__init__(*args)
-
+    def update(self, results):
         self.set_name, self.element_name = self.result.getId().split(':')
         service = getUtility(IMetadataService)
         metadata_set = service.getMetadataSet(self.set_name)
