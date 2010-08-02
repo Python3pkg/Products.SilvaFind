@@ -9,6 +9,8 @@ from five import grok
 from Products.SilvaFind.interfaces import IResultField
 
 
+NAME = re.compile(r'[^a-z]')
+
 class ResultField(object):
     grok.implements(IResultField)
 
@@ -23,7 +25,7 @@ class ResultField(object):
         self.description = description
 
     def getName(self):
-        return re.compile('[^a-z]').sub('', self.title.lower())
+        return NAME.sub('', self.title.lower())
 
     def getId(self):
         return self.id
@@ -80,6 +82,10 @@ class BreadcrumbsResultField(ResultField):
 
 
 class MetadataResultField(ResultField):
+
+    def __init__(self, id='', title='', description=''):
+        super(MetadataResultField, self).__init__(id, title, description)
+        self.element = id
 
     def setMetadataElement(self, el):
         self.element = el

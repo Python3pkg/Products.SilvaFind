@@ -5,13 +5,16 @@
 
 import re
 
+import localdatetime
+
 from Products.Silva.icon import get_icon_url
 from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IResultView
 from Products.SilvaMetadata.interfaces import IMetadataService
+from Products.SilvaMetadata.interfaces import IMetadataElement
 from Products.ZCTextIndex.ParseTree import ParseError
 from five import grok
-from silva.core.interfaces import ISilvaObject, IVersion, IPublishable, IImage
+from silva.core.interfaces import ISilvaObject, IVersion, IImage
 from silva.core.views.interfaces import IVirtualSite
 from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
@@ -141,16 +144,20 @@ class LinkResultView(ResultView):
 class DateResultView(ResultView):
     grok.adapts(ISilvaObject, schema.DateResultField, Interface)
 
+    def update(self, results):
+        self.locale = localdatetime.get_locale_info(self.request)
+
     def render(self, item):
         content = item.getObject()
-        date = None
+        # XXX we should use publication_datetime on publishable, but
+        # it is currently broken
+        date = content.get_modification_datetime()
         datestr = ''
-        if IPublishable.providedBy(content):
-            date = content.publication_datetime()
-        if date == None:
-            date = content.get_modification_datetime()
-        if date and hasattr(date, 'strftime'):
-            datestr = date.strftime('%d %b %Y %H:%M').lower()
+        if date:
+            if hasattr(date, 'asdatetime'):
+                date = date.asdatetime()
+            datestr = localdatetime.get_formatted_date(
+                date, size="medium", locale=self.locale)
 
         return '<span class="searchresult-date">%s</span>' % datestr
 
@@ -338,7 +345,7 @@ class BreadcrumbsResultView(ResultView):
         content = item.getObject()
         part = []
         breadcrumb = getMultiAdapter((content, self.request), IAbsoluteURL)
-        for crumb in breadcrumb.breadcrumbs()[:-1]:
+        for crumb in breadcrumb.breadcrumbs():
             part.append('<a href="%s">%s</a>' % (crumb['url'], crumb['name']))
         part = '<span> &#183; </span>'.join(part)
         return '<span class="searchresult-breadcrumb">%s</span>' % part
@@ -349,34 +356,35 @@ class MetadataResultView(ResultView):
 
     def __init__(self, *args):
         super(MetadataResultView, self).__init__(*args)
-        self.service = getUtility(IMetadataService)
+
+        self.set_name, self.element_name = self.result.getId().split(':')
+        service = getUtility(IMetadataService)
+        metadata_set = service.getMetadataSet(self.set_name)
+        metadata_element = metadata_set.getElement(self.element_name)
+        assert IMetadataElement.providedBy(metadata_element),\
+            u"Unknow metadata element %s" % self.result.getId()
+        self.renderValue = metadata_element.renderView
+
+        if metadata_element.metadata_in_catalog_p:
+            # If the metadata is available on the brain, directly use it
+            metadataKey = '%s%s' % (self.set_name, self.element_name)
+            self.getValue = lambda item: getattr(item, metadataKey)
+        else:
+            self.getValue = lambda item: service.getMetadataValue(
+                item.getObject(), self.set_name, self.element_name)
 
     def render(self, item):
-        set, element = self.id.split(':')
-
-        value = self.service.getMetadataValue(
-                item.getObject(), set, element)
-
-        value = self.getMetadataElement().renderView(value)
-
-        if not value:
+        result = self.renderValue(self.getValue(item))
+        if not result:
             return
 
-        #if hasattr(value, 'strftime'):
-            # what the hell are these things?,
-            # they don't have a decent type
-            #value = value.strftime('%d %b %Y %H:%M')
-        cssid = "metadata-%s-%s" % (set, element)
-        result = [  '<span class="searchresult-field %s">' % cssid,
-
-                    '<span class="searchresult-field-title">',
-                    self.result.title,
-                    '</span>',
-                    '<span class="searchresult-field-value">',
-                    value,
-                    '</span>',
-                    '</span>']
-        # we return a list here, so the pt. can iterate it, and self.title will
-        # be translated.
-        return result
+        css_class = "metadata-%s-%s" % (self.set_name, self.element_name)
+        return ''.join(['<span class="searchresult-field %s">' % css_class,
+                        '<span class="searchresult-field-title">',
+                        self.result.getTitle(),
+                        '</span>',
+                        '<span class="searchresult-field-value">',
+                        result,
+                        '</span>',
+                        '</span>'])
 

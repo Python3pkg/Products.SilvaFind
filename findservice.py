@@ -14,14 +14,14 @@ from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaFind.interfaces import IFindService
 from Products.SilvaFind.globalschema import (
     globalSearchFields, globalResultsFields)
-from Products.SilvaFind.schema import SearchSchema
-from Products.SilvaFind.schema import ResultsSchema
-from Products.SilvaFind.schema import MetadataResultField
-from Products.SilvaFind.schema import MetadataCriterionField
+from Products.SilvaFind.results.results import AutomaticMetaDataResultField
+from Products.SilvaFind.results.results import MetadataResultField
+from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
 from Products.SilvaFind.schema import DateRangeMetadataCriterionField
 from Products.SilvaFind.schema import IntegerRangeMetadataCriterionField
-from Products.SilvaFind.schema import AutomaticMetaDataResultField
-from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
+from Products.SilvaFind.schema import MetadataCriterionField
+from Products.SilvaFind.schema import ResultsSchema
+from Products.SilvaFind.schema import SearchSchema
 
 from silva.core.services.base import SilvaService
 from silva.core import conf as silvaconf
@@ -83,10 +83,7 @@ class FindService(SilvaService):
                 if el.id == 'hide_from_tocs':
                     continue
                 id = '%s:%s' % (set.id, el.id)
-                title = el.Title()
-                field = MetadataResultField(id, title)
-                field.description = el.Description()
-                field.setMetadataElement(el)
+                field = MetadataResultField(id, el.Title(), el.Description())
                 fields.append(field)
         return fields
 
