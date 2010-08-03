@@ -174,9 +174,8 @@ class ThumbnailResultView(ResultView):
         if content.thumbnail_image is None:
             return
 
-        url = item.getURL()
-        img = content.thumbnail_image.tag()
-        anchor = '<a href="%s">%s</a>' % (url, img)
+        anchor = '<a href="%s"><img src="%s/thumbnail_image" /></a>' % (
+            item.getURL(), content.thumbnail_image.get_download_url())
         return '<div class="searchresult-thumbnail">%s</div>' % anchor
 
 
