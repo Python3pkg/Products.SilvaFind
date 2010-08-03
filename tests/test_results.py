@@ -125,9 +125,7 @@ class ResultTestCase(unittest.TestCase):
             u'<span class="searchresult-breadcrumb">'
             u'<a href="http://localhost/root">root</a>'
             u'<span> &#183; </span>'
-            u'<a href="http://localhost/root/folder">Folder</a>'
-            u'<span> &#183; </span>'
-            u'<a href="http://localhost/root/folder/info">info</a></span>')
+            u'<a href="http://localhost/root/folder">Folder</a></span>')
 
     def test_metadata(self):
         result = schema.MetadataResultField(

@@ -344,7 +344,7 @@ class BreadcrumbsResultView(ResultView):
         content = item.getObject()
         part = []
         breadcrumb = getMultiAdapter((content, self.request), IAbsoluteURL)
-        for crumb in breadcrumb.breadcrumbs():
+        for crumb in breadcrumb.breadcrumbs()[:-1]:
             part.append('<a href="%s">%s</a>' % (crumb['url'], crumb['name']))
         part = '<span> &#183; </span>'.join(part)
         return '<span class="searchresult-breadcrumb">%s</span>' % part
