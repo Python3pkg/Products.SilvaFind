@@ -159,7 +159,8 @@ class DateResultView(ResultView):
             datestr = localdatetime.get_formatted_date(
                 date, size="medium", locale=self.locale)
 
-        return '<span class="searchresult-date">%s</span>' % datestr
+            return '<span class="searchresult-date">%s</span>' % datestr
+        return None
 
 
 class ThumbnailResultView(ResultView):
