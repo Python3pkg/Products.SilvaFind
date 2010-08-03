@@ -136,19 +136,19 @@ class SilvaFind(Query, Content, SimpleItem):
         searchArguments['version_status'] = ['public']
         query = searchArguments.get('fulltext', '').strip()
         if query and query[0] in ['?', '*']:
-            return ([], _('Search query can not start '
-                            'with wildcard character.'))
+            return ([], _(
+                    u'Search query can not start with wildcard character.'))
         if queryEmpty:
-            return ([], _('You need to fill at least one '
-                          'field in the search form.'))
+            return ([], _(
+                    u'You need to fill at least one field in the search form.'))
         try:
             results = catalog.searchResults(searchArguments)
         except ParseError:
-            return ([], _('Search query contains only common '
-                            'or reserved words.'))
+            return ([], _(
+                    u'Search query contains only common or reserved words.'))
 
         if not results:
-            return ([], _('No items matched your search.'))
+            return ([], _(u'No items matched your search.'))
 
         return (results, '')
 
@@ -239,13 +239,15 @@ class SilvaFindView(silvaviews.View):
     """
     grok.context(IFind)
 
-    def isViewableForUser(self, brain):
-        security_manager = getSecurityManager()
-        return security_manager.checkPermission('View', brain.getObject())
-
     def update(self):
+        checkPermission = getSecurityManager().checkPermission
         results, self.message = \
             self.context.searchResultsWithDescription(self.request)
+        # Filter results on View permission
+        # XXX This could be done more in a more lazy fashion
+        results = filter(
+            lambda b: checkPermission('View', b.getObject()),
+            results)
         self.results = batch(results, count=20, request=self.request)
         self.result_widgets = []
         self.batch = u''

@@ -6,6 +6,7 @@
 
   <include package="five.grok" />
   <include package="Products.SilvaFind.adapters" />
+  <include package="silva.batch" />
 
   <i18n:registerTranslations directory="i18n" />
 

@@ -3,6 +3,7 @@
 # $Id$
 
 from zope.component import getUtility
+from zope.traversing.browser import absoluteURL
 
 # Zope
 from AccessControl import ClassSecurityInfo
@@ -14,8 +15,9 @@ from Products.Silva import SilvaPermissions
 from Products.SilvaFind.adapters.criterion import (
     StoreCriterion, IndexedCriterion)
 from Products.SilvaFind.i18n import translate as _
+from Products.Silva.icon import get_icon_url
 from silva.core.references.interfaces import IReferenceService
-from silva.core.references.reference import get_content_from_id
+from silva.core.references.reference import get_content_id
 
 
 EDIT_TEMPLATE = \
@@ -27,8 +29,9 @@ r"""
        title="target"
        class="ui-widget reference-dialog">
   </div>
-  <a target="_blank" id="%(widget_id)s-link">
-    %(target_display)s
+  <a target="_blank" id="%(widget_id)s-link" href="%(target_url)s">
+    <img src="%(icon_url)s" />
+    %(target_title)s
   </a>
   <input type="hidden"
          name="%(name)s"
@@ -78,28 +81,36 @@ class PathCriterionView(Implicit):
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderEditWidget')
     def renderEditWidget(self):
-        value = self.getStoredValue() or ''
-        return self.renderWidget(value)
+        return self.renderWidget(self.getStoredValue())
 
     security.declareProtected(SilvaPermissions.View,
         'renderPublicWidget')
     def renderPublicWidget(self):
-        value = self.getValue() or ''
-        return self.renderWidget(value)
+        raise ValueError(u"Cannot render path widgets for the public")
 
     security.declareProtected(SilvaPermissions.ChangeSilvaContent,
         'renderWidget')
     def renderWidget(self, value):
-        if value is None:
-            value = ""
         name = self.criterion.getName()
+        if value is None:
+            title = _(u'not set')
+            url = '#'
+            icon = ''
+            content_value = ''
+        else:
+            title = value.get_title_or_id()
+            url = absoluteURL(value, self.request)
+            icon = get_icon_url(value, self.request)
+            content_value = get_content_id(value)
         return EDIT_TEMPLATE % {
             'name': name,
             'widget_id': "field-%s" % name,
             'url': self.query.get_root_url(),
             'interfaces': 'silva.core.interfaces.content.IContainer',
-            'target_display': self.getValue(),
-            'value': self.getStoredValue()}
+            'target_title': title,
+            'target_url': url,
+            'icon_url': icon,
+            'value': content_value}
 
     security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
