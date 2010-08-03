@@ -57,7 +57,6 @@ class CreateSilvaFindTestCase(SilvaFunctionalTestCase):
         self.failUnless('search_test' in ids)
         sb.click_href_labeled('search_test')
 
-        browser = sb.browser
         form = sb.browser.getForm(index=0)
         form.getControl(
             name='show_meta_type:bool').value = ['checked']
@@ -67,7 +66,7 @@ class CreateSilvaFindTestCase(SilvaFunctionalTestCase):
             name='show_silva-extra-keywords:bool').value = ['checked']
         form.getControl(
             name='silva-extra.keywords:record').value = 'test-keyword'
-        form.submit()
+        form.getControl('save', index=0).click()
         form = sb.browser.getForm(index=0)
         self.failUnless('Changes saved.' in sb.browser.contents)
         self.assertEquals(
@@ -138,7 +137,7 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
             name='show_silva-extra-keywords:bool').value = ['checked']
         form.getControl(
             name='silva-extra.keywords:record').value = keyword
-        form.submit()
+        form.getControl('save', index=0).click()
         form = sb.browser.getForm(index=0)
         self.assertEquals(
             form.getControl(name='show_meta_type:bool').value,
