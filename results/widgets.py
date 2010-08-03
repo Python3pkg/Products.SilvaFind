@@ -365,8 +365,9 @@ class MetadataResultView(ResultView):
 
         if metadata_element.metadata_in_catalog_p:
             # If the metadata is available on the brain, directly use it
-            metadataKey = '%s%s' % (self.set_name, self.element_name)
-            self.getValue = lambda item: getattr(item, metadataKey)
+            metadata_key = '%s%s' % (
+                metadata_set.metadata_prefix, metadata_element.id)
+            self.getValue = lambda item: getattr(item, metadata_key)
         else:
             self.getValue = lambda item: service.getMetadataValue(
                 item.getObject(), self.set_name, self.element_name)
