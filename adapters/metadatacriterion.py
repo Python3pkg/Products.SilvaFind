@@ -3,74 +3,22 @@
 # $Id$
 
 # Zope
-from AccessControl import ClassSecurityInfo
-from Acquisition import Implicit
-from App.class_init import InitializeClass
 from DateTime import DateTime
 
 # Silva
-from Products.Silva import SilvaPermissions
-from Products.SilvaFind.adapters.criterion import (
-    StoreCriterion, IndexedCriterion)
+from Products.SilvaFind.adapters.criterion import StoreCriterion, CriterionView
 from Products.SilvaFind.i18n import translate as _
-from Products.SilvaMetadata.Index import createIndexId
 
 
-class BaseMetadataCriterion:
+class MetadataCriterionView(CriterionView):
 
-    security = ClassSecurityInfo()
-
-    def __init__(self, criterion, root):
-        self.criterion = criterion
-        self.root = root
-
-    def _getMetadataElement(self):
-        collection = self.root.service_metadata.getCollection()
-        set = collection[self.criterion.getMetadataSet()]
-        element = getattr(set, self.criterion.getMetadataId())
-        return element
-
-    def getIndexId(self):
-        indexId = createIndexId(self._getMetadataElement())
-        return indexId
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'canBeShown')
     def canBeShown(self):
         return True
 
-    security.declareProtected(SilvaPermissions.View,
-        'getName')
-    def getName(self):
-        return self.criterion.getName()
-
-    security.declareProtected(SilvaPermissions.View,
-        'getDescription')
-    def getDescription(self):
-        element = self._getMetadataElement()
-        return element.Description()
-
-InitializeClass(BaseMetadataCriterion)
-
-
-class MetadataCriterionView(Implicit, BaseMetadataCriterion):
-
-    security = ClassSecurityInfo()
-
-    def __init__(self, criterion, query, request):
-        root = query.get_root()
-        BaseMetadataCriterion.__init__(self, criterion, root)
-        self.query = query
-        self.request = request
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         # we don't want to show widgets for stored values...
         value = self.getStoredValue()
@@ -83,26 +31,21 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
             return self.renderValue(value)
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderValue')
     def renderValue(self, value):
         if type(value) == list:
             value = ", ".join(value)
         return "<strong>%s</strong>" % value
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
-        element = self._getMetadataElement()
+        element = self.criterion.getMetadataElement()
         return element.field.render(value)
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         value = self.getStoredValue()
         if value:
             return value
-        set_name = self.criterion.getMetadataSet()
-        field_name = self.criterion.getMetadataId()
+        set_name = self.criterion.getSetName()
+        field_name = self.criterion.getElementName()
         set_values = self.request.get(set_name, None)
         if set_values is None:
             return
@@ -117,7 +60,6 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
 
     getIndexValue = getValue
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         if type(value) == list:
@@ -127,27 +69,10 @@ class MetadataCriterionView(Implicit, BaseMetadataCriterion):
                 return None
         return value
 
-    security.declareProtected(SilvaPermissions.View, 'getTitle')
-    def getTitle(self):
-        element = self._getMetadataElement()
-        return element.Title()
-
-InitializeClass(MetadataCriterionView)
-
-class IndexedMetadataCriterion(BaseMetadataCriterion):
-    def __init__(self, criterion, root):
-        BaseMetadataCriterion.__init__(self, criterion, root)
-        self.catalog = root.service_catalog
-
-    def checkIndex(self):
-        id = self.getIndexId()
-        if id not in self.catalog.indexes():
-            raise ValueError('Name "%s" not indexed by service_catalog' % id)
-
 class StoreMetadataCriterion(StoreCriterion):
     def store(self, request):
-        set_name = self.criterion.getMetadataSet()
-        field_name = self.criterion.getMetadataId()
+        set_name = self.criterion.getSetName()
+        field_name = self.criterion.getElementName()
         set_values = request.get(set_name, None)
         if set_values is None:
             return
@@ -163,16 +88,10 @@ class StoreMetadataCriterion(StoreCriterion):
 
 class IntegerRangeMetadataCriterionView(MetadataCriterionView):
 
-    security = ClassSecurityInfo()
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
         if value:
             value_lower, value_upper = value
@@ -207,8 +126,6 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
             'and': _('and'),
             'intg': _('only integers'),}
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         # we don't want to show widgets for stored values...
         value = self.getStoredValue()
@@ -238,12 +155,9 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
                 'and': _('and'),
                 'intg': _('only integers'),}
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderValue')
     def renderValue(self, value):
         return "<strong>%s - %s</strong>" % value
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         field_name = self.criterion.getName()
         value_lower = self.request.get(field_name+'_lower', None)
@@ -271,7 +185,6 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
         value_lower, value_upper = self.getValue()
         return self.constructQuery(value_lower, value_upper)
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         if value is None:
@@ -303,7 +216,6 @@ class IntegerRangeMetadataCriterionView(MetadataCriterionView):
                     return {'query':lower, 'range':'min'}
                 return {'query':[lower, upper], 'range':'min:max'}
 
-InitializeClass(IntegerRangeMetadataCriterionView)
 
 
 class StoreIntegerRangeMetadataCriterion(StoreCriterion):
@@ -323,16 +235,10 @@ class StoreIntegerRangeMetadataCriterion(StoreCriterion):
 
 class DateRangeMetadataCriterionView(MetadataCriterionView):
 
-    security = ClassSecurityInfo()
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
         if value:
             value_begin, value_end = value
@@ -367,8 +273,6 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
                          'from': _('from'),
                          'to': _('to'),}
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         # we don't want to show widgets for stored values...
         value = self.getStoredValue()
@@ -398,12 +302,9 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
                 'from': _('from'),
                 'to': _('to'),}
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderValue')
     def renderValue(self, value):
         return "<strong>%s - %s</strong>" % value
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         field_name = self.criterion.getName()
         value_begin = self.request.get(field_name+'_begin', None)
@@ -431,7 +332,6 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
         value_begin, value_end = self.getValue()
         return self.constructQuery(value_begin, value_end)
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         if value is None:
@@ -465,8 +365,6 @@ class DateRangeMetadataCriterionView(MetadataCriterionView):
                     else:
                         return {}
                 return {'query':[date_begin, date_end], 'range':'min:max'}
-
-InitializeClass(DateRangeMetadataCriterionView)
 
 class StoreDateRangeMetadataCriterion(StoreCriterion):
     def store(self, request):

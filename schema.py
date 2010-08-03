@@ -2,8 +2,6 @@
 # See also LICENSE.txt
 # $Id$
 
-import re
-
 from zope.interface import implements
 from Products.SilvaFind import interfaces
 
@@ -45,75 +43,28 @@ class ResultsSchema(Schema):
     implements(interfaces.IResultsSchema)
 
 
-class BaseMetadataCriterionField:
-
-    def __init__(self, metadataSet, metadataId):
-        self.metadataSet = metadataSet
-        self.metadataId = metadataId
-
-    def getMetadataSet(self):
-        return self.metadataSet
-
-    def getMetadataId(self):
-        return self.metadataId
-
-    def getName(self):
-        return "%s-%s" % (self.getMetadataSet(), self.getMetadataId())
-
-
-class MetadataCriterionField(BaseMetadataCriterionField):
-    implements(interfaces.IMetadataCriterionField)
-
-
-class DateRangeMetadataCriterionField(BaseMetadataCriterionField):
-    implements(interfaces.IDateRangeMetadataCriterionField)
-
-
-class IntegerRangeMetadataCriterionField(BaseMetadataCriterionField):
-    implements(interfaces.IIntegerRangeMetadataCriterionField)
-
-
-class FullTextCriterionField(object):
-    implements(interfaces.IFullTextCriterionField)
-
-    def getName(self):
-        return "fulltext"
-
-
-class MetatypeCriterionField(object):
-    implements(interfaces.IMetatypeCriterionField)
-
-    def getName(self):
-        return "meta_type"
-
-
-class PathCriterionField(object):
-    implements(interfaces.IPathCriterionField)
-
-    def getName(self):
-        return "path"
-
-
-class AutomaticMetaDataCriterionField(object):
-    """This class is a marker to put in the schemalist.
-    This class will automaticly be replaced in the list
-    with all possible metadata values
-    """
-    pass
-
 
 # BBB
-from Products.SilvaFind.results.results import ResultField
-from Products.SilvaFind.results.results import MetatypeResultField
-from Products.SilvaFind.results.results import RankingResultField
-from Products.SilvaFind.results.results import TotalResultCountField
-from Products.SilvaFind.results.results import ResultCountField
-from Products.SilvaFind.results.results import LinkResultField
-from Products.SilvaFind.results.results import DateResultField
-from Products.SilvaFind.results.results import ThumbnailResultField
-from Products.SilvaFind.results.results import FullTextResultField
-from Products.SilvaFind.results.results import BreadcrumbsResultField
-from Products.SilvaFind.results.results import MetadataResultField
-from Products.SilvaFind.results.results import AutomaticMetaDataResultField
+from Products.SilvaFind.criterion import MetadataCriterionField
+from Products.SilvaFind.criterion import DateRangeMetadataCriterionField
+from Products.SilvaFind.criterion import IntegerRangeMetadataCriterionField
+from Products.SilvaFind.criterion import FullTextCriterionField
+from Products.SilvaFind.criterion import MetatypeCriterionField
+from Products.SilvaFind.criterion import PathCriterionField
+from Products.SilvaFind.criterion import AutomaticMetaDataCriterionField
+
+
+from Products.SilvaFind.results import ResultField
+from Products.SilvaFind.results import MetatypeResultField
+from Products.SilvaFind.results import RankingResultField
+from Products.SilvaFind.results import TotalResultCountField
+from Products.SilvaFind.results import ResultCountField
+from Products.SilvaFind.results import LinkResultField
+from Products.SilvaFind.results import DateResultField
+from Products.SilvaFind.results import ThumbnailResultField
+from Products.SilvaFind.results import FullTextResultField
+from Products.SilvaFind.results import BreadcrumbsResultField
+from Products.SilvaFind.results import MetadataResultField
+from Products.SilvaFind.results import AutomaticMetaDataResultField
 
 IconResultField = MetatypeResultField

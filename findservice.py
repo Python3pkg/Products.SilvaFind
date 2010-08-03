@@ -14,12 +14,12 @@ from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaFind.interfaces import IFindService
 from Products.SilvaFind.globalschema import (
     globalSearchFields, globalResultsFields)
-from Products.SilvaFind.results.results import AutomaticMetaDataResultField
-from Products.SilvaFind.results.results import MetadataResultField
-from Products.SilvaFind.schema import AutomaticMetaDataCriterionField
-from Products.SilvaFind.schema import DateRangeMetadataCriterionField
-from Products.SilvaFind.schema import IntegerRangeMetadataCriterionField
-from Products.SilvaFind.schema import MetadataCriterionField
+from Products.SilvaFind.results import AutomaticMetaDataResultField
+from Products.SilvaFind.results import MetadataResultField
+from Products.SilvaFind.criterion import AutomaticMetaDataCriterionField
+from Products.SilvaFind.criterion import DateRangeMetadataCriterionField
+from Products.SilvaFind.criterion import IntegerRangeMetadataCriterionField
+from Products.SilvaFind.criterion import MetadataCriterionField
 from Products.SilvaFind.schema import ResultsSchema
 from Products.SilvaFind.schema import SearchSchema
 

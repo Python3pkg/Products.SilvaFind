@@ -3,13 +3,6 @@
     xmlns:five="http://namespaces.zope.org/five">
 
   <adapter
-    for="Products.SilvaFind.interfaces.IResultField
-         silva.core.interfaces.IRoot"
-    provides=".interfaces.ICatalogMetadataSetup"
-    factory=".criterion.CatalogMetadataSetup"
-    />
-
-  <adapter
     for="Products.SilvaFind.interfaces.IMetadataCriterionField
          Products.SilvaFind.interfaces.ISilvaQuery
          zope.publisher.interfaces.browser.IBrowserRequest"
@@ -32,12 +25,6 @@
     factory=".metadatacriterion.StoreMetadataCriterion"
     />
 
-  <adapter
-    for="Products.SilvaFind.interfaces.IMetadataCriterionField
-         silva.core.interfaces.IRoot"
-    provides=".interfaces.IIndexedField"
-    factory=".metadatacriterion.IndexedMetadataCriterion"
-    />
 
   <adapter
     for="Products.SilvaFind.interfaces.IMetatypeCriterionField
@@ -62,12 +49,6 @@
     factory=".metatypecriterion.StoreMetatypeCriterion"
   />
 
-  <adapter
-    for="Products.SilvaFind.interfaces.IMetatypeCriterionField
-      silva.core.interfaces.IRoot"
-    provides=".interfaces.IIndexedField"
-    factory=".metatypecriterion.IndexedMetatypeCriterion"
-  />
 
   <adapter
     for="Products.SilvaFind.interfaces.IPathCriterionField
@@ -92,12 +73,6 @@
     factory=".pathcriterion.StorePathCriterion"
   />
 
-  <adapter
-    for="Products.SilvaFind.interfaces.IPathCriterionField
-      silva.core.interfaces.IRoot"
-    provides=".interfaces.IIndexedField"
-    factory=".pathcriterion.IndexedPathCriterion"
-  />
 
   <adapter
     for="Products.SilvaFind.interfaces.IDateRangeMetadataCriterionField
@@ -166,13 +141,6 @@
          Products.SilvaFind.interfaces.ISilvaQuery"
     provides=".interfaces.IStoreCriterion"
     factory=".fulltextcriterion.StoreFullTextCriterion"
-    />
-
-  <adapter
-    for="Products.SilvaFind.interfaces.IFullTextCriterionField
-         silva.core.interfaces.IRoot"
-    provides=".interfaces.IIndexedField"
-    factory=".fulltextcriterion.IndexedFullTextCriterion"
     />
 
 </configure>

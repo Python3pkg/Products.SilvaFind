@@ -2,6 +2,8 @@
 # See also LICENSE.txt
 # $Id$
 
+import operator
+
 # Zope
 from AccessControl import ClassSecurityInfo, getSecurityManager
 from App.class_init import InitializeClass
@@ -77,27 +79,15 @@ class SilvaFind(Query, Content, SimpleItem):
         """
         return 0
 
-    security.declareProtected(SilvaPermissions.View, 'getFieldViews')
-    def getFieldViews(self, request):
-        result = []
-        for field in self.getSearchSchema().getFields():
-            searchFieldView = getMultiAdapter((field, self, request),
-                ICriterionView)
-            # wrapped to enable security checks
-            searchFieldView = searchFieldView.__of__(self)
-            result.append(searchFieldView)
-        return result
-
-    security.declareProtected(SilvaPermissions.View, 'getPublicFieldViews')
-    def getPublicFieldViews(self, request):
-        return filter(
-            lambda view: self.isCriterionShown(view.getName()),
-            self.getFieldViews(request))
-
     security.declareProtected(SilvaPermissions.View, 'getPublicResultFields')
     def getPublicResultFields(self):
         return filter(lambda field: self.isResultShown(field.getName()),
                       self.getResultFields())
+
+    security.declareProtected(SilvaPermissions.View, 'getPublicSearchFields')
+    def getPublicSearchFields(self):
+        return filter(lambda field: self.isCriterionShown(field.getName()),
+                      self.getSearchFields())
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -109,10 +99,7 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'isFormNeeded')
     def isFormNeeded(self):
-        for value in self.shownFields.values():
-            if value:
-                return True
-        return False
+        return reduce(operator.or_, self.shownFields.values())
 
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
@@ -178,25 +165,25 @@ class SilvaFind(Query, Content, SimpleItem):
 
     #HELPERS
     def storeCriterionValues(self, request):
-        for field in self.getSearchSchema().getFields():
+        for field in self.getSearchFields():
             storeCriterion = getMultiAdapter((field, self), IStoreCriterion)
             storeCriterion.store(request)
 
     def storeShownCriterion(self, request):
-        for field in self.getSearchSchema().getFields():
+        for field in self.getSearchFields():
             fieldName = field.getName()
             self.shownFields[fieldName] = bool(
                 request.form.get('show_' + fieldName, False))
 
     def storeShownResult(self, request):
-        for field in self.getResultsSchema().getFields():
+        for field in self.getResultFields():
             fieldName = field.getName()
             self.shownResultsFields[fieldName] = bool(
                 request.form.get('show_result_' + fieldName, False))
 
     def getCatalogSearchArguments(self, request):
         searchArguments = {}
-        for field in self.getSearchSchema().getFields():
+        for field in self.getSearchFields():
             name = field.getName()
             if (self.shownFields.get(name, False) or name == 'path'):
                 queryPart = getMultiAdapter((field, self, request), IQueryPart)
@@ -229,6 +216,14 @@ class SilvaFindEditView(silvasmi.SMIPage):
     tab = 'edit'
 
     def update(self):
+        self.search_widgets = []
+        for field in self.context.getSearchFields():
+            widget = getMultiAdapter((
+                    field, self.context, self.request), ICriterionView)
+            self.search_widgets.append(widget)
+
+        self.title = self.context.get_title_or_id()
+
         if 'silvafind_save' in self.request.form:
             message, message_type = self.context._edit(self.request)
             self.send_message(message, message_type)
@@ -240,6 +235,7 @@ class SilvaFindView(silvaviews.View):
     grok.context(IFind)
 
     def update(self):
+        # Do search
         checkPermission = getSecurityManager().checkPermission
         results, self.message = \
             self.context.searchResultsWithDescription(self.request)
@@ -253,12 +249,19 @@ class SilvaFindView(silvaviews.View):
         self.batch = u''
         if self.results:
             for result in self.context.getPublicResultFields():
-                result_widget = getMultiAdapter((
+                widget = getMultiAdapter((
                         self.context, result, self.request), IResultView)
-                result_widget.update(self.results)
-                self.result_widgets.append(result_widget)
+                widget.update(self.results)
+                self.result_widgets.append(widget)
 
             self.batch = component.getMultiAdapter(
                 (self.context, self.results, self.request), IBatching)()
+
+        # Search Widgets
+        self.search_widgets = []
+        for field in self.context.getPublicSearchFields():
+            widget = getMultiAdapter((
+                    field, self.context, self.request), ICriterionView)
+            self.search_widgets.append(widget)
 
 

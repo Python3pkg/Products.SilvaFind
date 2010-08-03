@@ -48,8 +48,8 @@ class MetadataCriterionFieldTestCase(unittest.TestCase):
 
     def test_metadata(self):
         self.failIf(self.field is None)
-        self.assertEquals('meta-set', self.field.getMetadataSet())
-        self.assertEquals('field-id', self.field.getMetadataId())
+        self.assertEquals('meta-set', self.field.getSetName())
+        self.assertEquals('field-id', self.field.getElementName())
 
 
 def test_suite():

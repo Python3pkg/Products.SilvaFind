@@ -19,6 +19,9 @@ class Query(object):
     def getResultsSchema(self):
         return getUtility(IFindService).getResultsSchema()
 
+    def getSearchFields(self):
+        return self.getSearchSchema().getFields()
+
     def getResultFields(self):
         return self.getResultsSchema().getFields()
 

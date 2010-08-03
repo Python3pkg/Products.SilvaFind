@@ -2,15 +2,7 @@
 # See also LICENSE.txt
 # $Id$
 
-# Zope
-from AccessControl import ClassSecurityInfo
-from Acquisition import Implicit
-from App.class_init import InitializeClass
-
-# Silva
-from Products.Silva import SilvaPermissions
-from Products.SilvaFind.adapters.criterion import (
-    StoreCriterion, IndexedCriterion)
+from Products.SilvaFind.adapters.criterion import StoreCriterion, CriterionView
 from Products.SilvaFind.i18n import translate as _
 
 
@@ -34,28 +26,15 @@ class StoreMetatypeCriterion(StoreCriterion):
         self.query.setCriterionValue(field_name, criterion_value)
 
 
-class MetatypeCriterionView(Implicit):
+class MetatypeCriterionView(CriterionView):
 
-    security = ClassSecurityInfo()
-
-    def __init__(self, criterion, query, request):
-        self.criterion = criterion
-        self.query = query
-        self.request = request
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'canBeShown')
     def canBeShown(self):
         return True
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue()
         select_all_text = _('All Types')
@@ -65,8 +44,6 @@ class MetatypeCriterionView(Implicit):
                 'field_type': self.__class__.__name__,
                 'select_all_text': select_all_text,}
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
         if value is None:
             value = ''
@@ -91,7 +68,6 @@ class MetatypeCriterionView(Implicit):
         html += '</select>'
         return html
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         field_name = self.criterion.getName()
         value = self.request.get(field_name, None)
@@ -105,29 +81,8 @@ class MetatypeCriterionView(Implicit):
         return self.query.service_catalog.uniqueValuesFor(
             self.getIndexId())
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         return self.query.getCriterionValue(self.criterion.getName())
 
-    security.declareProtected(SilvaPermissions.View, 'getTitle')
-    def getTitle(self):
-        return 'content type'
-
-    def getIndexId(self):
-        return 'meta_type'
-
-    security.declareProtected(SilvaPermissions.View, 'getName')
-    def getName(self):
-        return self.criterion.getName()
-
-    security.declareProtected(SilvaPermissions.View, 'getDescription')
-    def getDescription(self):
-        return _('Search for the selected content types.')
-
-InitializeClass(MetatypeCriterionView)
 
 
-class IndexedMetatypeCriterion(IndexedCriterion):
-
-    def getIndexId(self):
-        return 'meta_type'

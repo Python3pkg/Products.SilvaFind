@@ -2,16 +2,8 @@
 # See also LICENSE.txt
 # $Id$
 
-# Zope
-from AccessControl import ClassSecurityInfo
-from Acquisition import Implicit
-from App.class_init import InitializeClass
-
 # Silva
-from Products.Silva import SilvaPermissions
-from Products.SilvaFind.i18n import translate as _
-from Products.SilvaFind.adapters.criterion import (
-    StoreCriterion, IndexedCriterion)
+from Products.SilvaFind.adapters.criterion import StoreCriterion, CriterionView
 
 
 class StoreFullTextCriterion(StoreCriterion):
@@ -24,36 +16,22 @@ class StoreFullTextCriterion(StoreCriterion):
         self.query.setCriterionValue(field_name, criterion_value)
 
 
-class FullTextCriterionView(Implicit):
+class FullTextCriterionView(CriterionView):
 
-    security = ClassSecurityInfo()
 
-    def __init__(self, criterion, query, request):
-        self.criterion = criterion
-        self.query = query
-        self.request = request
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'canBeShown')
     def canBeShown(self):
         return True
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         value = self.getStoredValue()
         return self.renderWidget(value)
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         value = self.getValue()
         return {'name': self.criterion.getName(),
                 'field_type': self.__class__.__name__,
                 'value': value,}
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
         if value is None:
             value = ""
@@ -64,7 +42,6 @@ class FullTextCriterionView(Implicit):
                        self.criterion.getName(),
                        value)
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         field_name = self.criterion.getName()
         value = self.request.get(field_name, None)
@@ -76,32 +53,8 @@ class FullTextCriterionView(Implicit):
 
     getIndexValue = getValue
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         value = self.query.getCriterionValue(self.criterion.getName())
         return value
 
-    security.declareProtected(SilvaPermissions.View, 'getTitle')
-    def getTitle(self):
-        return _('full text')
 
-    def getIndexId(self):
-        return 'fulltext'
-
-    security.declareProtected(SilvaPermissions.View,
-        'getDescription')
-    def getDescription(self):
-        return _('Search the full text.')
-
-    security.declareProtected(SilvaPermissions.View,
-        'getName')
-    def getName(self):
-        return self.criterion.getName()
-
-InitializeClass(FullTextCriterionView)
-
-
-class IndexedFullTextCriterion(IndexedCriterion):
-
-    def getIndexId(self):
-        return 'fulltext'

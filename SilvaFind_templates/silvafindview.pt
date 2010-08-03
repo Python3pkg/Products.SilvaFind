@@ -7,10 +7,10 @@
   </h2>
 
   <div class="searchform" tal:condition="context/isFormNeeded">
-    <form name="search_form" tal:attributes="action context/absolute_url">
+    <form name="search_form" tal:attributes="action context/@@absolute_url">
       <table class="silvatable plain">
         <tbody>
-          <tr tal:repeat="fieldView python: context.getPublicFieldViews(request)">
+          <tr tal:repeat="fieldView view/search_widgets">
             <td class="searchform-title"
                 tal:content="fieldView/getTitle"
                 i18n:translate="">

@@ -12,6 +12,7 @@ from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IResultView
 from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaMetadata.interfaces import IMetadataElement
+from Products.SilvaMetadata.Index import createIndexId
 from Products.ZCTextIndex.ParseTree import ParseError
 from five import grok
 from silva.core.interfaces import ISilvaObject, IVersion, IImage
@@ -365,8 +366,7 @@ class MetadataResultView(ResultView):
 
         if metadata_element.metadata_in_catalog_p:
             # If the metadata is available on the brain, directly use it
-            metadata_key = '%s%s' % (
-                metadata_set.metadata_prefix, metadata_element.id)
+            metadata_key = createIndexId(metadata_element)
             self.getValue = lambda item: getattr(item, metadata_key)
         else:
             self.getValue = lambda item: service.getMetadataValue(

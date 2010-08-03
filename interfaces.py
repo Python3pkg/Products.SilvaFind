@@ -63,55 +63,80 @@ class IResultsSchema(ISchema):
     """Result schema.
     """
 
+# Search criterions
 
-class IMetadataCriterionField(Interface):
-    '''
-    Criterion corresponding to indexed SilvaMetadata fields
-    '''
-    def getMetadataSet():
-        '''returns Silva MetadataSet id'''
+class ICriterionField(Interface):
+    """A criterion describes a field that can be used in a search
+    query.
+    """
 
-    def getMetadataId():
-        '''returns Silva MetadataSet element id'''
+    def getName():
+        """Return a unique name for the criterion.
+        """
+
+    def getTitle():
+        """Return a title identifying the criterion.
+        """
+
+    def getDescription():
+        """Return a description.
+        """
+
+    def getIndexId():
+        """Return the index id in the catalog to do a search on this
+        criterion.
+        """
+
+
+class IMetadataCriterionField(ICriterionField):
+    """Criterion to search on an indexed metadata element.
+    """
+
+    def getSetName():
+        """Return the set name of the metadata element
+        """
+
+    def getElementName():
+        """Return the name of the element inside its set.
+        """
+
+    def getMetadataElement():
+        """Return the metadata element.
+        """
 
 
 class IDateRangeMetadataCriterionField(IMetadataCriterionField):
-    '''
-    Criterion corresponding to indexed SilvaMetadata fields
-    date
-    '''
+    """Criterion to search an indexed metadata date element.
+    """
 
 
 class IIntegerRangeMetadataCriterionField(IMetadataCriterionField):
-    '''
-    Criterion corresponding to indexed SilvaMetadata fields
-    date
-    '''
+    """Criterion to search on a indexed range of integer.
+    """
 
 
-class IFullTextCriterionField(Interface):
-    '''
-    Criterion corresponding to the Silva full text index
-    '''
+class IFullTextCriterionField(ICriterionField):
+    """Criterion to do full text search.
+    """
 
 
-class IMetatypeCriterionField(Interface):
-    '''
-    Criterion corresponding to the Silva Meta Type of an object
-    '''
+class IMetatypeCriterionField(ICriterionField):
+    """Criterion to restrict the search to some Silva metatype.
+    """
 
 
-class IPathCriterionField(Interface):
-    '''
-    Criterion used to restrict searchresults so they start with a specific path
-    '''
+class IPathCriterionField(ICriterionField):
+    """Criterion to restrict the search on content located inside an other.
+    """
 
+
+# Search results
 
 class IResultField(Interface):
-    """This describe an included field to appear in the results. That
-    can either a special field like a breadcrumb, the last
-    modification time, a link to the content, or an arbitrary metadata
-    field.
+    """This describe a field which is able to appear in the
+    results. That can either a special field like a breadcrumb, the
+    last modification time, a link to the content, or an arbitrary
+    metadata field.
     """
 
     def getId():

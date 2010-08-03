@@ -60,22 +60,3 @@ class IQueryPart(Interface):
         If not found, stored value is used.
         '''
 
-class IIndexedField(Interface):
-    '''
-    Check if index corresponding to field in schema is setup.
-    '''
-    def checkIndex():
-        '''checks if a corresponding index exists;
-        raise an exception if not
-        '''
-
-class ICatalogMetadataSetup(Interface):
-    '''
-    Setup of metadata columns in Silva catalog
-    '''
-    def setUp():
-        '''
-        Setup of metadata columns in Silva catalog
-        '''
-
-

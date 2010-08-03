@@ -5,15 +5,7 @@
 from zope.component import getUtility
 from zope.traversing.browser import absoluteURL
 
-# Zope
-from AccessControl import ClassSecurityInfo
-from Acquisition import Implicit
-from App.class_init import InitializeClass
-
-# Silva
-from Products.Silva import SilvaPermissions
-from Products.SilvaFind.adapters.criterion import (
-    StoreCriterion, IndexedCriterion)
+from Products.SilvaFind.adapters.criterion import StoreCriterion, CriterionView
 from Products.SilvaFind.i18n import translate as _
 from Products.Silva.icon import get_icon_url
 from silva.core.references.interfaces import IReferenceService
@@ -64,32 +56,17 @@ class StorePathCriterion(StoreCriterion):
             ref.set_target_id(target_id)
 
 
-class PathCriterionView(Implicit):
+class PathCriterionView(CriterionView):
 
-    security = ClassSecurityInfo()
-
-    def __init__(self, criterion, query, request):
-        self.criterion = criterion
-        self.query = query
-        self.request = request
-
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'canBeShown')
     def canBeShown(self):
         return False
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderEditWidget')
     def renderEditWidget(self):
         return self.renderWidget(self.getStoredValue())
 
-    security.declareProtected(SilvaPermissions.View,
-        'renderPublicWidget')
     def renderPublicWidget(self):
         raise ValueError(u"Cannot render path widgets for the public")
 
-    security.declareProtected(SilvaPermissions.ChangeSilvaContent,
-        'renderWidget')
     def renderWidget(self, value):
         name = self.criterion.getName()
         if value is None:
@@ -112,7 +89,6 @@ class PathCriterionView(Implicit):
             'icon_url': icon,
             'value': content_value}
 
-    security.declareProtected(SilvaPermissions.View, 'getValue')
     def getValue(self):
         content = self.getStoredValue()
         if content is None:
@@ -121,7 +97,6 @@ class PathCriterionView(Implicit):
 
     getIndexValue = getValue
 
-    security.declareProtected(SilvaPermissions.View, 'getStoredValue')
     def getStoredValue(self):
         name = unicode(self.criterion.getName())
         service = getUtility(IReferenceService)
@@ -130,25 +105,5 @@ class PathCriterionView(Implicit):
             return ref.target
         return None
 
-    security.declareProtected(SilvaPermissions.View, 'getTitle')
-    def getTitle(self):
-        return _('below path')
-
-    def getIndexId(self):
-        return 'path'
-
-    security.declareProtected(SilvaPermissions.View, 'getName')
-    def getName(self):
-        return self.criterion.getName()
-
-    security.declareProtected(SilvaPermissions.View, 'getDescription')
-    def getDescription(self):
-        return _('Only search below this location (a path from the site root).')
-
-InitializeClass(PathCriterionView)
 
 
-class IndexedPathCriterion(IndexedCriterion):
-
-    def getIndexId(self):
-        return 'path'

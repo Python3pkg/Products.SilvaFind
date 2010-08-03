@@ -9,30 +9,21 @@ class StoreCriterion(object):
         self.query = query
 
 
-class IndexedCriterion(object):
-    def __init__(self, criterion, root):
+class CriterionView(object):
+
+    def __init__(self, criterion, query, request):
         self.criterion = criterion
-        self.root = root
-        self.catalog = root.service_catalog
+        self.query = query
+        self.request = request
+
+    def getTitle(self):
+        return self.criterion.getTitle()
 
     def getIndexId(self):
-        raise NotImplementedError
+        return self.criterion.getIndexId()
 
-    def checkIndex(self):
-        index = self.getIndexId()
-        if index not in self.catalog.indexes():
-            raise ValueError(u'Name "%s" not indexed by the catalog' % index)
+    def getDescription(self):
+        return self.criterion.getDescription()
 
-
-class CatalogMetadataSetup(object):
-
-    def __init__(self, field, root):
-        self.field = field
-        self.root = root
-        self.catalog = root.service_catalog
-
-    def setUp(self):
-        id = self.field.getColumnId()
-        if not id in self.catalog.schema():
-            self.catalog.addColumn(id)
-
+    def getName(self):
+        return self.criterion.getName()

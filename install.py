@@ -2,13 +2,14 @@
 """
 
 # zope3
-from zope.component import getMultiAdapter
+from zope.component import getUtility
 
 # Silva
 from Products.Silva.install import add_fss_directory_view
 
 # SilvaFind
-from Products.SilvaFind.adapters.interfaces import IIndexedField
+from Products.SilvaFind.interfaces import IFindService
+from silva.core.services.interfaces import ICatalogService
 
 
 def install(root):
@@ -57,8 +58,11 @@ def setupService(root):
 def checkIndexes(root):
     """check that all searchSchema fields are indexed
     """
-
-    for field in root.service_find.getSearchSchema().getFields():
-        indexedField = getMultiAdapter((field, root), IIndexedField)
-        indexedField.checkIndex()
+    catalog = getUtility(ICatalogService)
+    indexes = set(catalog.indexes())
+    for field in getUtility(IFindService).getSearchSchema().getFields():
+        field_index = field.getIndexId()
+        if field_index not in indexes:
+            raise ValueError(
+                u'Name "%s" not indexed by the catalog' % field_index)
 
