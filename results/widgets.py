@@ -185,7 +185,6 @@ class FullTextResultView(ResultView):
     grok.adapts(ISilvaObject, schema.FullTextResultField, Interface)
 
     def render(self, item):
-        content = item.getObject()
         ellipsis = '&#8230;'
         maxwords = 40
         searchterm = unicode(self.request.form.get('fulltext', ''), 'utf8')
@@ -195,6 +194,8 @@ class FullTextResultView(ResultView):
         if not fulltext:
             # no fulltext available, probably an image
             return ''
+
+        content = item.getObject()
 
         # since fulltext always starts with id and title, lets remove that
         idstring = content.id
