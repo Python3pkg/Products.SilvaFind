@@ -6,96 +6,22 @@
     title
   </h2>
 
-  <div class="searchform" tal:condition="context/isFormNeeded">
+  <div class="searchform" tal:condition="context/havePublicSearchFields">
     <form name="search_form" tal:attributes="action context/@@absolute_url">
       <table class="silvatable plain">
         <tbody>
-          <tr tal:repeat="fieldView view/search_widgets">
+          <tr tal:repeat="widget view/widgets">
             <td class="searchform-title"
-                tal:content="fieldView/getTitle"
+                tal:content="widget/getTitle"
                 i18n:translate="">
-              a search object
+              field title
             </td>
-            <tal:block tal:define="widget_data fieldView/renderPublicWidget"
-                       tal:condition="python: 'field_type' not in widget_data or nothing">
-              <td class="store" tal:content="structure widget_data"></td>
-            </tal:block>
-            <tal:block tal:define="widget_data fieldView/renderPublicWidget"
-                       tal:condition="widget_data/field_type|nothing">
-              <td tal:condition="python:widget_data['field_type'] == 'MetatypeCriterionView'">
-                <tal:block tal:define="name widget_data/name;
-                                       name python:name +':list'">
-                  <div class="silvafind-widget">
-                    <select class="store" multiple="multiple" size="5"
-                            tal:attributes="name name;
-                                            id widget_data/name">
-                      <option tal:condition="python: widget_data['value'] and widget_data['value'] != ['']"
-                              tal:content="widget_data/select_all_text"
-                              value="" />
-                      <option tal:condition="python: not widget_data['value'] or
-                                             widget_data['value'] == ['']"
-                              tal:content="widget_data/select_all_text"
-                              selected="selected"
-                              value=""/>
-                      <tal:block tal:repeat="meta_type widget_data/meta_types">
-                        <option tal:condition="python:meta_type in widget_data['value']"
-                                tal:content="python:meta_type.replace('Silva', '')"
-                                tal:attributes="value meta_type"
-                                selected="selected"/>
-                        <option tal:condition="python:meta_type not in widget_data['value']"
-                                tal:content="python:meta_type.replace('Silva', '')"
-                                tal:attributes="value meta_type" />
-                      </tal:block>
-                    </select>
-                  </div>
-                </tal:block>
-              </td>
-              <td tal:condition="python:widget_data['field_type'] == 'FullTextCriterionView'">
-                <div class="silvafind-widget">
-                  <input class="store" type="text" size="20"
-                         tal:attributes="name widget_data/name;
-                                         id widget_data/name;
-                                         value widget_data/value" />
-                </div>
-              </td>
-              <td tal:condition="python:widget_data['field_type'] == 'IntegerRangeMetadataCriterionView'">
-                <tal:block tal:define="input_name widget_data/name;
-                                       name_lower python: input_name + '_lower';
-                                       name_upper python: input_name + '_upper'">
-                  <div class="silvafind-widget">
-                    <span tal:content="widget_data/between"></span>
-                    <input type="text"
-                           tal:attributes="name name_lower;
-                                           value widget_data/lower" />
-                    <span tal:content="widget_data/and"></span>
-                    <input type="text"
-                           tal:attributes="name name_upper;
-                                           value widget_data/upper" />
-                    <small>* <span tal:content="widget_data/intg"></span></small>
-                  </div>
-                </tal:block>
-              </td>
-              <td tal:condition="python:widget_data['field_type'] == 'DateRangeMetadataCriterionView'">
-                <tal:block tal:define="input_name widget_data/name;
-                                       name_begin python: input_name + '_begin';
-                                       name_end python: input_name + '_end'">
-                  <div class="silvafind-widget">
-                    <span tal:content="widget_data/from"></span>
-                    <input type="text"
-                           tal:attributes="name name_begin;
-                                           id widget_data/idname;
-                                           value widget_data/begin"/>
-                    <span tal:content="widget_data/to"></span>
-                    <input type="text"
-                           tal:attributes="name name_end;
-                                           value widget_data/end"/>
-                    <small>* yyyy/mm/dd</small>
-                  </div>
-                </tal:block>
-              </td>
-            </tal:block>
+            <td class="store"
+                tal:content="structure widget/renderPublicWidget">
+              field widget
+            </td>
             <td class="searchform-description"
-                tal:content="structure fieldView/getDescription">
+                tal:content="structure widget/getDescription">
               field description
             </td>
           </tr>
@@ -119,44 +45,42 @@
     </form>
   </div>
 
-  <tal:block tal:condition="request/form/keys">
+  <div class="searchresults"
+       tal:condition="request/form/keys">
 
-    <div class="searchresults">
+    <h3 class="heading" i18n:translate=""
+        tal:condition="view/results">Search Results</h3>
 
-      <h3 class="heading" i18n:translate=""
-          tal:condition="view/results">Search Results</h3>
+    <tal:batch tal:replace="structure view/batch" />
 
-      <tal:batch tal:replace="structure view/batch" />
-
-      <ul tal:condition="view/results">
-        <li tal:repeat="item view/results">
-          <tal:block tal:define="ix repeat/item/index;"
-                     tal:condition="view/result_widgets">
-            <div class="searchresult">
-              <tal:block repeat="widget view/result_widgets">
-                <span class="searchresult-counter"
-                      tal:define="num python:str(view.results.start + ix + 1)"
-                      tal:condition="python:widget.result.getName() == 'resultcount'"
-                      tal:content="string:${num}.">
-                  count
-                </span>
-                <span tal:replace="structure python:widget.render(item)" />
-              </tal:block>
-            </div>
-          </tal:block>
-        </li>
-      </ul>
-
-      <tal:batch tal:replace="structure view/batch" />
-
-      <p class="searchresult-nomatch searchresult-header"
-         tal:condition="python:not view.results">
-        <tal:block condition="view/message" content="view/message"/>
-        <tal:block condition="not:view/message" i18n:translate="">
-          No items matched your search.
+    <ul tal:condition="view/results">
+      <li tal:repeat="item view/results">
+        <tal:block tal:define="ix repeat/item/index;"
+                   tal:condition="view/result_widgets">
+          <div class="searchresult">
+            <tal:block repeat="widget view/result_widgets">
+              <span class="searchresult-counter"
+                    tal:define="num python:str(view.results.start + ix + 1)"
+                    tal:condition="python:widget.result.getName() == 'resultcount'"
+                    tal:content="string:${num}.">
+                count
+              </span>
+              <span tal:replace="structure python:widget.render(item)" />
+            </tal:block>
+          </div>
         </tal:block>
-      </p>
-    </div>
+      </li>
+    </ul>
 
-  </tal:block>
+    <tal:batch tal:replace="structure view/batch" />
+
+    <p class="searchresult-nomatch searchresult-header"
+       tal:condition="python:not view.results">
+      <tal:block condition="view/message" content="view/message"/>
+      <tal:block condition="not:view/message" i18n:translate="">
+        No items matched your search.
+      </tal:block>
+    </p>
+  </div>
+
 </tal:block>

@@ -5,21 +5,40 @@
 from zope.interface import Interface
 from silva.core import interfaces
 
-'''
-A query is a set of criteria.
+"""
+A query is a set of criterion.
 A criterion is made both of an indexed field of content items
 and of value(s) that will be searched for in the catalog.
-'''
+"""
 
 
-class ISilvaQuery(Interface):
-    '''Persistent query'''
+class IQuery(Interface):
+    """Store values used by a query.
+    """
 
-    def getCriterionValue(schemaField):
-        '''returns stored value for schemaField'''
+    def getCriterionValue(name):
+        """Returns stored value for the field named name.
+        """
+
+    def setCriterionValue(name, value):
+        """Store the given value for the named name criterion.
+        """
+
+class IQueryPart(Interface):
+    """Adaptor on a criterion, query and request to provide a piece of
+    a full catalog query.
+    """
+
+    def getIndexId():
+        """Catalog Index to be queried.
+        """
+
+    def getIndexValue():
+        """Return the value to passe the Catalog Index for the query.
+        """
 
 
-class IFind(interfaces.IContent, ISilvaQuery):
+class IFind(interfaces.IContent, IQuery):
     """A Silva find object.
     """
 
@@ -29,11 +48,11 @@ class IFindService(interfaces.ISilvaService):
     """
 
     def getSearchSchema():
-        """Return a search schema.
+        """Return the default search schema
         """
 
     def getResultsSchema():
-        """Return a result schema.
+        """Return the default result schema
         """
 
 
@@ -127,6 +146,29 @@ class IMetatypeCriterionField(ICriterionField):
 
 class IPathCriterionField(ICriterionField):
     """Criterion to restrict the search on content located inside an other.
+    """
+
+
+class ICriterionData(Interface):
+    """Manage access to stored criterion data.
+    """
+
+    def getValue():
+        """Return the value.
+        """
+
+    def setValue(value):
+        """Change criterion value.
+        """
+
+class ICriterionView(IQueryPart):
+    """Render/extract value for a criterion for both data input and
+    build a query (it is basically two different way to render a
+    criterion).
+
+    For data input, two widgets can be rendered:
+    - edit view (default criterion value)
+    - public view (value to be searched)
     """
 
 

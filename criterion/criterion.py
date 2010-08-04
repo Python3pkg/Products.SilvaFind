@@ -16,6 +16,8 @@ from Products.SilvaMetadata.interfaces import IMetadataService
 class MetadataCriterionField(persistent.Persistent):
     implements(interfaces.IMetadataCriterionField)
 
+    publicField = True
+
     def __init__(self, metadataSet, metadataId):
         self.setName = metadataSet
         self.elementName = metadataId
@@ -57,6 +59,8 @@ class IntegerRangeMetadataCriterionField(MetadataCriterionField):
 class FullTextCriterionField(object):
     implements(interfaces.IFullTextCriterionField)
 
+    publicField = True
+
     def getName(self):
         return "fulltext"
 
@@ -73,6 +77,8 @@ class FullTextCriterionField(object):
 class MetatypeCriterionField(object):
     implements(interfaces.IMetatypeCriterionField)
 
+    publicField = True
+
     def getName(self):
         return "meta_type"
 
@@ -88,6 +94,8 @@ class MetatypeCriterionField(object):
 
 class PathCriterionField(object):
     implements(interfaces.IPathCriterionField)
+
+    publicField = False
 
     def getName(self):
         return "path"

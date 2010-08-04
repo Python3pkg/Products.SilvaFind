@@ -9,13 +9,13 @@ import localdatetime
 
 from Products.Silva.icon import get_icon_url
 from Products.SilvaFind import schema
-from Products.SilvaFind.interfaces import IResultField, IResultView
+from Products.SilvaFind.interfaces import IResultField, IQuery, IResultView
 from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaMetadata.interfaces import IMetadataElement
 from Products.SilvaMetadata.Index import createIndexId
 from Products.ZCTextIndex.ParseTree import ParseError
 from five import grok
-from silva.core.interfaces import ISilvaObject, IVersion, IImage
+from silva.core.interfaces import IVersion, IImage
 from silva.core.views.interfaces import IVirtualSite
 from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
@@ -25,10 +25,10 @@ from zope.traversing.browser.interfaces import IAbsoluteURL
 
 class ResultView(grok.MultiAdapter):
     grok.implements(IResultView)
-    grok.adapts(ISilvaObject, IResultField, Interface)
+    grok.adapts(IResultField, IQuery, Interface)
     grok.provides(IResultView)
 
-    def __init__(self, context, result, request):
+    def __init__(self, result, context, request):
         self.context = context
         self.result = result
         self.request = request
@@ -37,7 +37,7 @@ class ResultView(grok.MultiAdapter):
         pass
 
     def render(self, item):
-        value = getattr(item.getObject(), self.id)()
+        value = getattr(item.getObject(), self.result.getName())()
         if not value:
             return
 
@@ -53,7 +53,7 @@ class ResultView(grok.MultiAdapter):
 
 
 class MetatypeResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.MetatypeResultField, Interface)
+    grok.adapts(schema.MetatypeResultField, IQuery, Interface)
 
     def render(self, item):
         content = item.getObject()
@@ -65,7 +65,7 @@ class MetatypeResultView(ResultView):
 
 
 class RankingResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.RankingResultField, Interface)
+    grok.adapts(schema.RankingResultField, IQuery, Interface)
 
     def __init__(self, *args):
         super(RankingResultView, self).__init__(*args)
@@ -102,7 +102,7 @@ class RankingResultView(ResultView):
 
 
 class TotalResultCountView(ResultView):
-    grok.adapts(ISilvaObject, schema.TotalResultCountField, Interface)
+    grok.adapts(schema.TotalResultCountField, IQuery, Interface)
 
     def render(self, item):
         # the actual count is calculated in the pagetemplate
@@ -117,7 +117,7 @@ class TotalResultCountView(ResultView):
 
 
 class ResultCountView(ResultView):
-    grok.adapts(ISilvaObject, schema.ResultCountField, Interface)
+    grok.adapts(schema.ResultCountField, IQuery, Interface)
 
     def render(self, item):
         # the actual count is calculated in the pagetemplate
@@ -127,7 +127,7 @@ class ResultCountView(ResultView):
 
 
 class LinkResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.LinkResultField, Interface)
+    grok.adapts(schema.LinkResultField, IQuery, Interface)
 
     def render(self, item):
         content = item.getObject()
@@ -143,7 +143,7 @@ class LinkResultView(ResultView):
 
 
 class DateResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.DateResultField, Interface)
+    grok.adapts(schema.DateResultField, IQuery, Interface)
 
     def update(self, results):
         self.locale = localdatetime.get_locale_info(self.request)
@@ -165,7 +165,7 @@ class DateResultView(ResultView):
 
 
 class ThumbnailResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.ThumbnailResultField, Interface)
+    grok.adapts(schema.ThumbnailResultField, IQuery, Interface)
 
     def render(self, item):
         content = item.getObject()
@@ -182,7 +182,7 @@ class ThumbnailResultView(ResultView):
 
 
 class FullTextResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.FullTextResultField, Interface)
+    grok.adapts(schema.FullTextResultField, IQuery, Interface)
 
     def render(self, item):
         ellipsis = '&#8230;'
@@ -341,7 +341,7 @@ class FullTextResultView(ResultView):
 
 
 class BreadcrumbsResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.BreadcrumbsResultField, Interface)
+    grok.adapts(schema.BreadcrumbsResultField, IQuery, Interface)
 
     def render(self, item):
         content = item.getObject()
@@ -354,7 +354,7 @@ class BreadcrumbsResultView(ResultView):
 
 
 class MetadataResultView(ResultView):
-    grok.adapts(ISilvaObject, schema.MetadataResultField, Interface)
+    grok.adapts(schema.MetadataResultField, IQuery, Interface)
 
     def update(self, results):
         self.set_name, self.element_name = self.result.getId().split(':')

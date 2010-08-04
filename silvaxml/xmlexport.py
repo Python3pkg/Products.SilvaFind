@@ -8,7 +8,7 @@ from five import grok
 
 from Products.SilvaFind import interfaces
 from Products.SilvaFind.silvaxml import NS_SILVA_FIND
-from Products.SilvaFind.adapters.interfaces import ICriterionView
+from Products.SilvaFind.interfaces import ICriterionData
 from Products.Silva.silvaxml.xmlexport import SilvaBaseProducer, theXMLExporter
 
 theXMLExporter.registerNamespace('silva-find', NS_SILVA_FIND)
@@ -27,8 +27,8 @@ class FindProducer(SilvaBaseProducer):
         def searchValues(field_id):
             field = schema.getField(field_id)
             view = component.getMultiAdapter(
-                (field, self.context, request), ICriterionView)
-            view.serializeXML(self, self.context.searchValues.get(field_id))
+                (field, self.context, request), ICriterionData)
+            view.serializeXML(self)
 
         def serializeOptions(name, options, handler=None):
             self.startElementNS(NS_SILVA_FIND, name)

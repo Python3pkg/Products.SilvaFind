@@ -1,0 +1,12 @@
+<tal:widget tal:define="name criterion.getName()"
+            i18n:domain="silvafind">
+  <label for="field-${name}-begin" i18n:translate="">from</label>*
+  <input type="date" name="${name}-begin" id="field-${name}-begin"
+         value="${view.begining}" />
+  <br />
+  <label for="field-${name}-end" i18n:translate="">to</label>*
+  <input type="date" name="${name}-end" id="field-${name}-begin"
+         value="${view.end}" />
+  <br />
+  <small>* yyyy-mm-dd</small>
+</tal:widget>

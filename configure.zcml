@@ -5,7 +5,8 @@
     i18n_domain="silvafind">
 
   <include package="five.grok" />
-  <include package="Products.SilvaFind.adapters" />
+  <include package="silva.core.conf" />
+  <include package="silva.core.views" />
   <include package="silva.batch" />
 
   <i18n:registerTranslations directory="i18n" />

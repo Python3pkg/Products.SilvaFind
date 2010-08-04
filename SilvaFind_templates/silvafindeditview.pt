@@ -41,7 +41,7 @@
         </tr>
       </thead>
       <tbody>
-        <tal:block tal:repeat="fieldView view/search_widgets">
+        <tal:block tal:repeat="fieldView view/widgets">
           <tr tal:define="iterate repeat/fieldView/odd"
               tal:attributes="class python:iterate and 'odd' or 'even'">
             <td class="align-center">
