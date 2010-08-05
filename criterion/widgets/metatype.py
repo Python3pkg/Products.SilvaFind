@@ -18,7 +18,7 @@ class MetatypeCriterionView(CriterionTemplateView):
     template = ChameleonPageTemplate(filename='templates/metatypecriterion.cpt')
 
     def updateWidget(self, value):
-        self.selected = value
+        self.selected = value or []
         self.types = self.getAvailableMetaTypes()
 
     def extractWidgetValue(self):
