@@ -11,57 +11,12 @@ A criterion is made both of an indexed field of content items
 and of value(s) that will be searched for in the catalog.
 """
 
-
-class IQuery(Interface):
-    """Store values used by a query.
-    """
-
-    def getCriterionValue(name):
-        """Returns stored value for the field named name.
-        """
-
-    def setCriterionValue(name, value):
-        """Store the given value for the named name criterion.
-        """
-
-class IQueryPart(Interface):
-    """Adaptor on a criterion, query and request to provide a piece of
-    a full catalog query.
-    """
-
-    def getIndexId():
-        """Catalog Index to be queried.
-        """
-
-    def getIndexValue():
-        """Return the value to passe the Catalog Index for the query.
-        """
-
-
-class IFind(interfaces.IContent, IQuery):
-    """A Silva find object.
-    """
-
-
-class IFindService(interfaces.ISilvaService):
-    """Silva find service
-    """
-
-    def getSearchSchema():
-        """Return the default search schema
-        """
-
-    def getResultsSchema():
-        """Return the default result schema
-        """
-
-
 class ISchema(Interface):
-    """A find schema.
+    """A schema contains fields.
     """
 
     def getFields():
-        """Return fields of the schema.
+        """Return all the fields of the schema as a list.
         """
 
     def hasField(name):
@@ -81,6 +36,48 @@ class ISearchSchema(ISchema):
 class IResultsSchema(ISchema):
     """Result schema.
     """
+
+
+class IQuery(Interface):
+    """Store fields and values used by a query.
+    """
+
+    def getCriterionValue(name):
+        """Returns stored value for the field named name.
+        """
+
+    def setCriterionValue(name, value):
+        """Store the given value for the named name criterion.
+        """
+
+    def getSearchSchema():
+        """Return the schema describing the fields of the search form
+        for this query.
+        """
+
+    def getResultsSchema():
+        """Return the schema describing the fields to appear in the
+        result listing for this query.
+        """
+
+
+class IFind(interfaces.IContent, IQuery):
+    """A Silva find object.
+    """
+
+
+class IFindService(interfaces.ISilvaService):
+    """Silva find service: provides default global search/result schema.
+    """
+
+    def getSearchSchema():
+        """Return the default search schema for all query.
+        """
+
+    def getResultsSchema():
+        """Return the default result schema for all query.
+        """
+
 
 # Search criterions
 
@@ -151,6 +148,9 @@ class IPathCriterionField(ICriterionField):
 
 class ICriterionData(Interface):
     """Manage access to stored criterion data.
+
+    This is used by ICriterionView/IQueryPart to store and retrieve
+    default data.
     """
 
     def getValue():
@@ -161,6 +161,21 @@ class ICriterionData(Interface):
         """Change criterion value.
         """
 
+
+class IQueryPart(Interface):
+    """Implemented as an adaptor on a criterion, query and request to
+    provide a piece of a full catalog query.
+    """
+
+    def getIndexId():
+        """Catalog Index to be queried.
+        """
+
+    def getIndexValue():
+        """Return the value to passe the Catalog Index for the query.
+        """
+
+
 class ICriterionView(IQueryPart):
     """Render/extract value for a criterion for both data input and
     build a query (it is basically two different way to render a
@@ -170,6 +185,31 @@ class ICriterionView(IQueryPart):
     - edit view (default criterion value)
     - public view (value to be searched)
     """
+
+    def canBeShown():
+        """Return True or False whenever it is possible to show a
+        widget for the public.
+        """
+
+    def extractWidgetValue():
+        """Return the value of the widget contained in the request.
+        """
+
+    def getWidgetValue():
+        """Return the value of the widget contained or the request or
+        the default stored in the query if there is nothing in the
+        request.
+        """
+
+    def renderPublicWidget():
+        """Render a widget for the public to input search data to use
+        in the query.
+        """
+
+    def renderEditWidget():
+        """Render a widget for editors to input default search data to
+        be used by the query.
+        """
 
 
 # Search results
@@ -209,5 +249,3 @@ class IResultView(Interface):
     def render(item):
         """renders result field for an item
         """
-
-

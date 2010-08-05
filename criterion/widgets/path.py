@@ -33,6 +33,10 @@ class PathCriterionData(CriterionData):
         return None
 
     def setValue(self, value):
+        if value is None:
+            self.service.delete_reference(self.query, name=self.name)
+            return
+
         assert isinstance(value, int)
         reference = self.service.get_reference(
             self.query, name=self.name, add=True)
@@ -76,9 +80,5 @@ class PathCriterionView(CriterionTemplateView):
     def getIndexValue(self):
         content = self.data.getValue()
         if content is None:
-            return ''
+            return None
         return "/".join(content.getPhysicalPath())
-
-
-
-

@@ -47,7 +47,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
         view.update(self.documents)
         # XXX difficult to test, contain a date
@@ -63,7 +62,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -83,7 +81,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -103,7 +100,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -116,7 +112,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -138,7 +133,6 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, self.request), IResultView)
-        self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
