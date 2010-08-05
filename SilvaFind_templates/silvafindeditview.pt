@@ -25,7 +25,7 @@
           </td>
         </tr>
         <tr>
-          <th i18n:translate="" width="2%"></th>
+          <th width="2%"></th>
           <th class="align-right"
               width="12%"
               i18n:translate="">
@@ -41,28 +41,24 @@
         </tr>
       </thead>
       <tbody>
-        <tal:block tal:repeat="fieldView view/widgets">
-          <tr tal:define="iterate repeat/fieldView/odd"
+        <tal:block tal:repeat="field view/widgets">
+          <tr tal:define="iterate repeat/field/odd"
               tal:attributes="class python:iterate and 'odd' or 'even'">
             <td class="align-center">
               <input type="checkbox"
-                     tal:condition="fieldView/canBeShown"
-                     tal:attributes="
-                                     name string:show_${fieldView/getName}:bool;
-                                     checked python:context.isCriterionShown(fieldView.getName());
-                                     " />
+                     tal:condition="field/canBeShown"
+                     tal:attributes="name string:show_${field/getName}:bool;
+                                     checked python:context.isCriterionShown(field.getName());" />
             </td>
             <td class="align-right">
-              <label tal:content="fieldView/getTitle"
-                     i18n:translate="">
+              <label tal:content="field/getTitle">
                 a search object
               </label>
             </td>
-            <td tal:content="structure fieldView/renderEditWidget">
+            <td tal:content="structure field/renderEditWidget">
               a search object
             </td>
-            <td tal:content="structure fieldView/getDescription"
-                i18n:translate="">
+            <td tal:content="structure field/getDescription">
               element description
             </td>
           </tr>
@@ -75,7 +71,7 @@
           </td>
         </tr>
         <tr>
-          <td class="divider" colspan="4" style="background: rgb(197, 212, 202) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial;">
+          <td class="divider" colspan="4" style="background-color:#c5d4ca;">
           </td>
         </tr>
         <tr class="top-controls">
@@ -113,16 +109,14 @@
             </td>
             <td class="align-right">
               <label tal:content="result/getTitle"
-                     tal:attributes="for string:show_result_${name}"
-                     i18n:translate="">
+                     tal:attributes="for string:show_result_${name}">
                 a search object
               </label>
             </td>
             <td tal:content="result/getId">
               a search object
             </td>
-            <td tal:content="structure result/getDescription"
-                i18n:translate="">
+            <td tal:content="structure result/getDescription">
               element description
             </td>
           </tr>

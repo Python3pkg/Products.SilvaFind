@@ -35,6 +35,8 @@ class CriterionData(grok.MultiAdapter):
     def setValue(self, value):
         if value:
             self.query.setCriterionValue(self.name, value)
+        else:
+            self.query.deleteCriterionValue(self.name)
 
     def serializeXML(self, handler):
         raise NotImplementedError

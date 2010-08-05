@@ -34,6 +34,12 @@ class Query(object):
                 'No field named %s defined in search schema' %
                 name)
 
+    def deleteCriterionValue(self, name):
+        searchSchema = self.getSearchSchema()
+        if searchSchema.hasField(name):
+            if name in self.searchValues:
+                del self.searchValues[name]
+
     def setCriterionValue(self, name, value):
         searchSchema = self.getSearchSchema()
         if searchSchema.hasField(name):
