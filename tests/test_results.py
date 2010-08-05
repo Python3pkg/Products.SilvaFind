@@ -46,7 +46,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
         view.update(self.documents)
@@ -62,7 +62,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
@@ -82,7 +82,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
@@ -102,7 +102,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), 'Small version of the image')
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
@@ -115,7 +115,7 @@ class ResultTestCase(unittest.TestCase):
         self.failUnless(verifyObject(IResultField, result))
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
@@ -137,7 +137,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), 'Content creator')
 
         view = queryMultiAdapter(
-            (self.root.search, result, self.request), IResultView)
+            (result, self.root.search, self.request), IResultView)
         self.assertNotEqual(view, None)
         self.failUnless(verifyObject(IResultView, view))
 
