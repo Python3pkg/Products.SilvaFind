@@ -20,14 +20,12 @@ class FindProducer(SilvaBaseProducer):
     grok.adapts(interfaces.IFind, Interface)
 
     def sax(self):
-
         schema = self.context.getSearchSchema()
-        request = self.getSettings().request
 
         def searchValues(field_id):
             field = schema.getField(field_id)
             view = component.getMultiAdapter(
-                (field, self.context, request), ICriterionData)
+                (field, self.context), ICriterionData)
             view.serializeXML(self)
 
         def serializeOptions(name, options, handler=None):
