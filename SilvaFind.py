@@ -102,7 +102,8 @@ class SilvaFind(Query, Content, SimpleItem):
 
     security.declareProtected(SilvaPermissions.View, 'havePublicSearchFields')
     def havePublicSearchFields(self):
-        return reduce(operator.or_, self.shownFields.values())
+        # BBB map(bool) is here for previously non-boolean stored values
+        return reduce(operator.or_, map(bool, self.shownFields.values()))
 
     security.declareProtected(SilvaPermissions.View,
                              'searchResultsWithDescription')
