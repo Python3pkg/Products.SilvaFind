@@ -69,6 +69,22 @@ class XMLExportTestCase(SilvaXMLTestCase):
         self.assertEqual(info.getZexpPaths(), [])
         self.assertEqual(info.getAssetPaths(), [])
 
+    def test_invalid_path(self):
+        """Try to export a Silva Find content that have a path outside
+        of the export tree.
+        """
+        search = self.root.folder.search
+        fields = search.getSearchSchema()
+        data = queryMultiAdapter((fields['path'], search), ICriterionData)
+        data.setValue(get_content_id(self.root.folder))
+
+        # We only export the find object, the folder selected as path
+        # is not in the export so it fails with a nice exception
+        self.assertRaises(
+            xmlexport.ExternalReferenceError,
+            xmlexport.exportToString,
+            search)
+
 
 def test_suite():
     suite = unittest.TestSuite()
