@@ -2,6 +2,8 @@
 # See also LICENSE.txt
 # $Id$
 
+import operator
+
 from zope.interface import Interface
 from zope import component
 from five import grok
@@ -20,30 +22,36 @@ class FindProducer(SilvaBaseProducer):
     grok.adapts(interfaces.IFind, Interface)
 
     def sax(self):
-        schema = self.context.getSearchSchema()
 
-        def searchValues(field_id):
-            field = schema.getField(field_id)
+        def searchValues(field):
             view = component.getMultiAdapter(
                 (field, self.context), ICriterionData)
             view.serializeXML(self)
 
-        def serializeOptions(name, options, handler=None):
-            self.startElementNS(NS_SILVA_FIND, name)
-            for field_id, activated in options.items():
-                if activated:
+        def serializeOptions(prefix, fields, states, handler=None):
+            self.startElementNS(NS_SILVA_FIND, prefix)
+            for field in fields:
+                name = field.getName()
+                if not operator.xor(
+                    getattr(field, 'publicField', True),
+                    states.get(name, False)):
                     self.startElementNS(
-                        NS_SILVA_FIND, 'field', {'name': field_id})
+                        NS_SILVA_FIND, 'field', {'name': name})
                     if handler is not None:
-                        handler(field_id)
+                        handler(field)
                     self.endElementNS(
                         NS_SILVA_FIND, 'field')
-            self.endElementNS(NS_SILVA_FIND, name)
+            self.endElementNS(NS_SILVA_FIND, prefix)
 
         self.startElement('find', {'id': self.context.id})
         self.metadata()
-        serializeOptions('search', self.context.shownFields, searchValues)
-        serializeOptions('display', self.context.shownResultsFields)
-        self.startElementNS(NS_SILVA_FIND, 'default')
-        self.endElementNS(NS_SILVA_FIND, 'default')
+        serializeOptions(
+            'criterion',
+            self.context.getSearchFields(),
+            self.context.shownFields,
+            searchValues)
+        serializeOptions(
+            'results',
+            self.context.getResultFields(),
+            self.context.shownResultsFields)
         self.endElement('find')

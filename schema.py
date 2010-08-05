@@ -25,6 +25,8 @@ class Schema:
             raise KeyError(name)
         return default
 
+    __getitem__ = getField
+
     def getFields(self):
         return self.fields
 

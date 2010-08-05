@@ -263,5 +263,3 @@ class SilvaFindView(silvaviews.View):
             widget = getMultiAdapter((
                     field, self.context, self.request), ICriterionView)
             self.widgets.append(widget)
-
-

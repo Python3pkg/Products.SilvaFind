@@ -13,6 +13,7 @@ from Products.SilvaFind.criterion.widgets.default import CriterionData
 from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
+from Products.SilvaFind.silvaxml import NS_SILVA_FIND
 
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
@@ -37,6 +38,12 @@ class PathCriterionData(CriterionData):
             self.query, name=self.name, add=True)
         if reference.target_id != value:
             reference.set_target_id(value)
+
+    def serializeXML(self, handler):
+        value = handler.reference(self.name)
+        if value is not None:
+            handler.startElementNS(NS_SILVA_FIND, 'value', {'value': value})
+            handler.endElementNS(NS_SILVA_FIND, 'value')
 
 
 class PathCriterionView(CriterionTemplateView):
