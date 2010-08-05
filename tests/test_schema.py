@@ -38,6 +38,10 @@ class SchemaTestCase(unittest.TestCase):
             self.schema.getField('meta-set-field-id1'),
             self.field1)
 
+        self.assertEqual(
+            self.schema['meta-set-field-id1'],
+            self.field1)
+
         self.assertRaises(KeyError, self.schema.getField, 'carambar')
 
 

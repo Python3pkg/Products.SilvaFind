@@ -92,6 +92,14 @@
      </set>
     </metadata>
     <silva-find:criterion>
+     <silva-find:field name="meta_type">
+      <silva-find:value value="Silva Document">
+      </silva-find:value>
+      <silva-find:value value="Silva Folder">
+      </silva-find:value>
+      <silva-find:value value="Silva File">
+      </silva-find:value>
+     </silva-find:field>
      <silva-find:field name="fulltext">
       <silva-find:value value="silva">
       </silva-find:value>

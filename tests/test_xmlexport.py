@@ -52,15 +52,19 @@ class XMLExportTestCase(SilvaXMLTestCase):
         self.assertEqual(info.getAssetPaths(), [])
 
     def test_shown_widgets_with_defaults(self):
-        """Display some extra widgets with some default text.
+        """Display some extra widgets with some default values (test a
+        simple string, a path and a list).
         """
         search = self.root.folder.search
         search.shownFields['fulltext'] = True
+        search.shownFields['meta_type'] = True
         fields = search.getSearchSchema()
         data = queryMultiAdapter((fields['fulltext'], search), ICriterionData)
         data.setValue('silva')
         data = queryMultiAdapter((fields['path'], search), ICriterionData)
         data.setValue(get_content_id(self.root.folder))
+        data = queryMultiAdapter((fields['meta_type'], search), ICriterionData)
+        data.setValue(['Silva Document', 'Silva Folder', 'Silva File'])
 
         # We need to export the folder with it not do get an reference error.
         xml, info = xmlexport.exportToString(self.root.folder)
