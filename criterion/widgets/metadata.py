@@ -87,7 +87,7 @@ class RangeMetadataCriterionTemplateView(CriterionTemplateView):
         return (value_begin, value_end)
 
     def getIndexValue(self):
-         return self.constructQuery(self.data.getValue())
+         return self.constructQuery(self.getWidgetValue())
 
     def constructQuery(self, value):
         if value is None:
