@@ -2,13 +2,13 @@
 # See also LICENSE.txt
 # $Id$
 
-from zope.interface import Interface
 from five import grok
 from megrok.chameleon.components import ChameleonPageTemplate
+from zope.interface import Interface
 
 from Products.Silva.ExtensionRegistry import extensionRegistry
-from Products.SilvaFind.adapters.criterion import CriterionTemplateView
-from Products.SilvaFind.adapters.criterion import convertValue
+from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
+from Products.SilvaFind.criterion.widgets.default import convertValue
 from Products.SilvaFind.interfaces import IMetatypeCriterionField, IQuery
 
 

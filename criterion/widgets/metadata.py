@@ -4,18 +4,17 @@
 
 # Zope
 from DateTime import DateTime
-from zope.interface import Interface
 from five import grok
 from megrok.chameleon.components import ChameleonPageTemplate
+from zope.interface import Interface
 
 # Silva
-from Products.SilvaFind.interfaces import IMetadataCriterionField, IQuery
+from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
+from Products.SilvaFind.criterion.widgets.default import CriterionView
+from Products.SilvaFind.criterion.widgets.default import convertValue
 from Products.SilvaFind.interfaces import IDateRangeMetadataCriterionField
 from Products.SilvaFind.interfaces import IIntegerRangeMetadataCriterionField
-from Products.SilvaFind.adapters.criterion import convertValue
-from Products.SilvaFind.adapters.criterion import CriterionView
-from Products.SilvaFind.adapters.criterion import CriterionTemplateView
-from Products.SilvaFind.i18n import translate as _
+from Products.SilvaFind.interfaces import IMetadataCriterionField, IQuery
 
 
 class MetadataCriterionView(CriterionView):

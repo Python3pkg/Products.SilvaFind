@@ -5,7 +5,7 @@
 from five import grok
 from zope.interface import Interface
 
-from Products.SilvaFind.adapters.criterion import CriterionView
+from Products.SilvaFind.criterion.widgets.default import CriterionView
 from Products.SilvaFind.interfaces import IQuery, IFullTextCriterionField
 
 

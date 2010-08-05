@@ -1,1 +1,0 @@
-# SilvaFind.adapters package

@@ -2,17 +2,17 @@
 # See also LICENSE.txt
 # $Id$
 
+from five import grok
+from megrok.chameleon.components import ChameleonPageTemplate
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.traversing.browser import absoluteURL
-from five import grok
-from megrok.chameleon.components import ChameleonPageTemplate
 
-from Products.SilvaFind.adapters.criterion import CriterionData
-from Products.SilvaFind.adapters.criterion import CriterionTemplateView
+from Products.Silva.icon import get_icon_url
+from Products.SilvaFind.criterion.widgets.default import CriterionData
+from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
-from Products.Silva.icon import get_icon_url
 
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
