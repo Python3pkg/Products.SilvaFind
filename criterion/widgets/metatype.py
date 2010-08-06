@@ -22,14 +22,12 @@ class MetatypeCriterionView(CriterionTemplateView):
         self.types = self.getAvailableMetaTypes()
 
     def extractWidgetValue(self):
-        return convertValue(self.request.get(self.name, None))
+        return convertValue(self.request.form.get(self.name, None))
 
     def getAvailableMetaTypes(self):
         meta_types = []
         for content in extensionRegistry.get_addables():
-            meta_types.append({"title": content['name'].replace('Silva ', ''),
-                               "value": content['name']})
+            meta_types.append(
+                {"title": content['name'].replace('Silva ', ''),
+                 "value": content['name']})
         return meta_types
-
-
-

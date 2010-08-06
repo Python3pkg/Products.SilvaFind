@@ -71,7 +71,7 @@ class PathCriterionView(CriterionTemplateView):
             self.value = get_content_id(value)
 
     def extractWidgetValue(self):
-        value = self.request.get(self.name, None)
+        value = self.request.form.get(self.name, None)
         try:
             return int(value)
         except (ValueError, TypeError):

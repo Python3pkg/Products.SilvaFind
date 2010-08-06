@@ -33,7 +33,7 @@ class CriterionTestCase(unittest.TestCase):
 
 
 class FulltextCriterionTestCase(CriterionTestCase):
-    """Test criterion and criterion implementation.
+    """Test fulltext criterion.
     """
 
     def test_criterion(self):
@@ -104,7 +104,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
     def test_view_default_value(self):
         search = self.root.search
         field = criterion.FullTextCriterionField()
-        request = TestRequest()
+        request = TestRequest(form={"fulltext": ""})
         data = component.queryMultiAdapter(
             (field, search), ICriterionData)
         data.setValue(u"Disco night")
@@ -125,7 +125,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
 
 
 class PathCriterionTestCase(CriterionTestCase):
-    """Test criterion and criterion implementation.
+    """Test path criterion.
     """
 
     def test_criterion(self):
@@ -190,8 +190,77 @@ class PathCriterionTestCase(CriterionTestCase):
         self.assertEqual(data.getValue(), None)
 
 
+class MetaTypeCriterionTestCase(CriterionTestCase):
+    """Test metatype criterion implementation.
+    """
+
+    def test_criterion(self):
+        field = criterion.MetatypeCriterionField()
+
+        self.failUnless(verifyObject(ICriterionField, field))
+        self.assertEqual(field.getName(), "meta_type")
+        self.assertEqual(field.getIndexId(), "meta_type")
+
+    def test_data(self):
+        search = self.root.search
+        field = criterion.MetatypeCriterionField()
+
+        data = component.queryMultiAdapter((field, search), ICriterionData)
+        self.failUnless(verifyObject(ICriterionData, data))
+
+        data.setValue([u"Silva Document", u"Silva Folder"])
+        self.assertEqual(data.getValue(), [u"Silva Document", u"Silva Folder"])
+
+        # empty string or empty list is like None
+        data.setValue(u'')
+        self.assertEqual(data.getValue(), None)
+        data.setValue(u'')
+        self.assertEqual(data.getValue(), None)
+
+    def test_view(self):
+        search = self.root.search
+        field = criterion.MetatypeCriterionField()
+        request = TestRequest()
+        data = component.queryMultiAdapter(
+            (field, search), ICriterionData)
+        view = component.queryMultiAdapter(
+            (field, search, request), ICriterionView)
+
+        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertEqual(view.canBeShown(), True)
+        self.assertEqual(view.getWidgetValue(), None)
+
+        self.assertEqual(view.getIndexId(), "meta_type")
+        self.assertEqual(view.getIndexValue(), None)
+
+        self.assertEqual(data.getValue(), None)
+        view.saveWidgetValue()
+        self.assertEqual(data.getValue(), None)
+
+    def test_view_request_value(self):
+        search = self.root.search
+        field = criterion.MetatypeCriterionField()
+        request = TestRequest(
+            form={"meta_type": ["Silva Link", u"", "Silva Ghost"]})
+        data = component.queryMultiAdapter(
+            (field, search), ICriterionData)
+        view = component.queryMultiAdapter(
+            (field, search, request), ICriterionView)
+
+        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertEqual(view.getWidgetValue(), [u"Silva Link", u"Silva Ghost"])
+
+        self.assertEqual(view.getIndexId(), "meta_type")
+        self.assertEqual(view.getIndexValue(), [u"Silva Link", u"Silva Ghost"])
+
+        self.assertEqual(data.getValue(), None)
+        view.saveWidgetValue()
+        self.assertEqual(data.getValue(), [u"Silva Link", u"Silva Ghost"])
+
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(FulltextCriterionTestCase))
     suite.addTest(unittest.makeSuite(PathCriterionTestCase))
+    suite.addTest(unittest.makeSuite(MetaTypeCriterionTestCase))
     return suite

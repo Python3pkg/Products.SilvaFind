@@ -22,8 +22,7 @@ class FullTextCriterionView(CriterionView):
         return HTML % (self.name, self.name, value)
 
     def extractWidgetValue(self):
-        value = self.request.get(self.name, None)
-        if value is None:
+        value = self.request.form.get(self.name, None)
+        if not value:
             return None
         return unicode(value, 'UTF-8')
-
