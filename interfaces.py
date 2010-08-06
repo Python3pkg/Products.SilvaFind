@@ -2,7 +2,7 @@
 # See also LICENSE.txt
 # $Id$
 
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
 from silva.core import interfaces
 
 """
@@ -85,6 +85,9 @@ class ICriterionField(Interface):
     """A criterion describes a field that can be used in a search
     query.
     """
+    publicField = Attribute(
+        u"Boolean to authorize display of the field on"
+        u"the public search form")
 
     def getName():
         """Return a unique name for the criterion.
@@ -159,6 +162,16 @@ class ICriterionData(Interface):
 
     def setValue(value):
         """Change criterion value.
+        """
+
+    def serializeXML(handler):
+        """Serialize current value for the given XML handler. This return a
+        list of value that will be integrated in the XML.
+        """
+
+    def setXMLValue(handler, value):
+        """Set value (which is a list) as current value. Handler is
+        the XML handler who read those values.
         """
 
 

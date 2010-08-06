@@ -49,11 +49,11 @@
     </silva-extra:subject>
    </set>
   </metadata>
-  <silva-find:search>
+  <silva-find:criterion>
    <silva-find:field name="fulltext">
    </silva-find:field>
-  </silva-find:search>
-  <silva-find:display>
+  </silva-find:criterion>
+  <silva-find:results>
    <silva-find:field name="ranking">
    </silva-find:field>
    <silva-find:field name="icon">
@@ -70,8 +70,6 @@
    </silva-find:field>
    <silva-find:field name="textsnippet">
    </silva-find:field>
-  </silva-find:display>
-  <silva-find:default>
-  </silva-find:default>
+  </silva-find:results>
  </find>
 </silva>

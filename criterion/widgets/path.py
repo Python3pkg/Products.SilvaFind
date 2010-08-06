@@ -9,11 +9,11 @@ from zope.interface import Interface
 from zope.traversing.browser import absoluteURL
 
 from Products.Silva.icon import get_icon_url
+from Products.Silva.silvaxml.xmlimport import resolve_path
 from Products.SilvaFind.criterion.widgets.default import CriterionData
 from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
-from Products.SilvaFind.silvaxml import NS_SILVA_FIND
 
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
@@ -44,10 +44,12 @@ class PathCriterionData(CriterionData):
             reference.set_target_id(value)
 
     def serializeXML(self, handler):
-        value = handler.reference(self.name)
-        if value is not None:
-            handler.startElementNS(NS_SILVA_FIND, 'value', {'value': value})
-            handler.endElementNS(NS_SILVA_FIND, 'value')
+        return [handler.reference(self.name)]
+
+    def setXMLValue(self, handler, value):
+        info = handler.getInfo()
+        setter = lambda content: self.setValue(get_content_id(content))
+        info.addAction(resolve_path, [setter, info, value[0]])
 
 
 class PathCriterionView(CriterionTemplateView):

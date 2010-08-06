@@ -45,16 +45,15 @@ class CriterionData(grok.MultiAdapter):
     def serializeXML(self, handler):
         # BBB convertValue is here for previously non-properly stored values
         value = convertValue(self.getValue())
-
-        def serializeValue(value):
-            handler.startElementNS(NS_SILVA_FIND, 'value', {'value': value})
-            handler.endElementNS(NS_SILVA_FIND, 'value')
-
         if isinstance(value, list) or isinstance(value, tuple):
-            for item in value:
-                serializeValue(item)
-        elif value is not None:
-            serializeValue(value)
+            return value
+        return [value]
+
+    def setXMLValue(self, handler, value):
+        if len(value) == 1:
+            value = value[0]
+        self.setValue(value)
+
 
 class CriterionView(grok.MultiAdapter):
     grok.implements(ICriterionView)

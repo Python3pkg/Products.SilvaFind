@@ -9,6 +9,10 @@ from Products.SilvaFind import interfaces
 # old style classes because the unpickling is different and it breaks
 # if the inherit from object
 
+# XXX: This is based on a list implementation so it is slow on large
+# schemas. Don't do large schemas.
+
+
 _marker = object()
 
 class Schema:
@@ -25,13 +29,14 @@ class Schema:
             raise KeyError(name)
         return default
 
+    def hasField(self, name):
+        return name in self.getFieldNames()
+
     __getitem__ = getField
+    __contains__ = hasField
 
     def getFields(self):
         return self.fields
-
-    def hasField(self, name):
-        return name in self.getFieldNames()
 
     def getFieldNames(self):
         return [field.getName() for field in self.getFields()]
