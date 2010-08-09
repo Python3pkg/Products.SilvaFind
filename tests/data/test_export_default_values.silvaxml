@@ -105,7 +105,7 @@
       </silva-find:value>
      </silva-find:field>
      <silva-find:field name="path">
-      <silva-find:value value="folder/.">
+      <silva-find:value value="folder">
       </silva-find:value>
      </silva-find:field>
     </silva-find:criterion>
