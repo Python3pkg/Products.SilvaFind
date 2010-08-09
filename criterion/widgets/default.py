@@ -5,7 +5,6 @@
 from zope.component import getMultiAdapter
 from five import grok
 
-from Products.SilvaFind.silvaxml import NS_SILVA_FIND
 from Products.SilvaFind.interfaces import (
     ICriterionField, IQuery, ICriterionData, ICriterionView)
 
@@ -43,10 +42,11 @@ class CriterionData(grok.MultiAdapter):
             self.query.deleteCriterionValue(self.name)
 
     def serializeXML(self, handler):
-        # BBB convertValue is here for previously non-properly stored values
-        value = convertValue(self.getValue())
-        if isinstance(value, list) or isinstance(value, tuple):
-            return value
+        value = self.getValue()
+        if value is None:
+            return []
+        elif isinstance(value, list) or isinstance(value, tuple):
+            return [item if item is not None else u'' for item in value]
         return [value]
 
     def setXMLValue(self, handler, value):

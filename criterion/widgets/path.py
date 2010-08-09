@@ -44,7 +44,10 @@ class PathCriterionData(CriterionData):
             reference.set_target_id(value)
 
     def serializeXML(self, handler):
-        return [handler.reference(self.name)]
+        value = handler.reference(self.name)
+        if value is None:
+            return []
+        return [value]
 
     def setXMLValue(self, handler, value):
         info = handler.getInfo()

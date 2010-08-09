@@ -104,6 +104,12 @@
       <silva-find:value value="silva">
       </silva-find:value>
      </silva-find:field>
+     <silva-find:field name="silva-extra-publicationtime">
+       <silva-find:value value="2010-01-01">
+       </silva-find:value>
+       <silva-find:value value="">
+       </silva-find:value>
+     </silva-find:field>
      <silva-find:field name="path">
       <silva-find:value value="folder">
       </silva-find:value>

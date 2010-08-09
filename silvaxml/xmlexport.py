@@ -27,11 +27,8 @@ class FindProducer(SilvaBaseProducer):
             view = component.getMultiAdapter(
                 (field, self.context), ICriterionData)
             for value in view.serializeXML(self):
-                if value is not None:
-                    self.startElementNS(
-                        NS_SILVA_FIND, 'value', {'value': value})
-                    self.endElementNS(
-                        NS_SILVA_FIND, 'value')
+                self.startElementNS(NS_SILVA_FIND, 'value', {'value': value})
+                self.endElementNS(NS_SILVA_FIND, 'value')
 
         def serializeOptions(prefix, fields, states, handler=None):
             self.startElementNS(NS_SILVA_FIND, prefix)

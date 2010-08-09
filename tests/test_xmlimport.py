@@ -95,7 +95,6 @@ class XMLImportTestCase(SilvaXMLTestCase):
             data.getValue(),
             None)
 
-
     def test_field_shown_and_default_values(self):
         """Import a Silva Find content that some search fields shown
         field default values.
