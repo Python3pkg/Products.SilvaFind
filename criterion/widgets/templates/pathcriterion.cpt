@@ -8,7 +8,7 @@
          title="target"
          class="ui-widget reference-dialog">
     </div>
-    <a target="_blank" id="${id}-link" href="{view.url}">
+    <a target="_blank" id="${id}-link" href="${view.url}">
       <img src="${view.icon}" />
       ${view.title}
     </a>
