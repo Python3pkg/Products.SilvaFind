@@ -165,8 +165,6 @@ class SilvaFindAddForm(silvaforms.SMIAddForm):
     grok.name(u'Silva Find')
     grok.context(IFind)
 
-    description = SilvaFind.__doc__
-
 
 class SilvaFindEditView(silvasmi.SMIPage):
     """Edit a Silva Find
