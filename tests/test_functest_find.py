@@ -2,11 +2,13 @@
 # See also LICENSE.txt
 # $Id$
 
-import os
 import unittest
+
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
 from Products.Silva.tests.SilvaBrowser import SilvaBrowser
-from Products.Silva.tests.SilvaTestCase import SilvaFunctionalTestCase
+from Products.Silva.tests.helpers import open_test_file
+from Products.Silva.testing import FunctionalLayer
+
 
 test_fixture = {
     'the_great_figure': {
@@ -39,73 +41,66 @@ test_fixture = {
 }
 
 
-class CreateSilvaFindTestCase(SilvaFunctionalTestCase):
+class CreateSilvaFindTestCase(unittest.TestCase):
     """Test the Silva find creation.
     """
+    layer = FunctionalLayer
 
     def test_create_silvafind(self):
         """Create and configure a silva find object.
         """
 
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         sb.make_content('Silva Find', id='search_test', title='Search test')
 
-        ids = sb.get_content_ids()
-        self.failUnless('search_test' in ids)
+        self.assertTrue('search_test' in sb.get_content_ids())
         sb.click_href_labeled('search_test')
 
-        form = sb.browser.getForm(index=0)
-        form.getControl(
-            name='show_meta_type:bool').value = ['checked']
-        form.getControl(
-            name='show_silva-content-maintitle:bool').value = ['checked']
-        form.getControl(
-            name='show_silva-extra-keywords:bool').value = ['checked']
-        form.getControl(
-            name='silva-extra.keywords:record').value = 'test-keyword'
-        form.getControl('save', index=0).click()
-        form = sb.browser.getForm(index=0)
-        self.failUnless('Changes saved.' in sb.browser.contents)
+        form = sb.browser.get_form('silva_find_edit')
+        form.get_control('show_meta_type:bool').checked = True
+        form.get_control('show_silva-content-maintitle:bool').checked = True
+        form.get_control('show_silva-extra-keywords:bool').checked = True
+        form.get_control('silva-extra.keywords:record').value = 'test-keyword'
+        form.get_control('silvafind_save').click()
+        self.assertEqual(sb.get_status_feedback(), 'Changes saved.')
+        form = sb.browser.get_form('silva_find_edit')
         self.assertEquals(
-            form.getControl(name='show_meta_type:bool').value,
-            True)
+            form.get_control('show_meta_type:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='show_silva-content-maintitle:bool').value,
-            True)
+            form.get_control('show_silva-content-maintitle:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='show_silva-extra-keywords:bool').value,
-            True)
+            form.get_control('show_silva-extra-keywords:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='silva-extra.keywords:record').value,
+            form.get_control('silva-extra.keywords:record').value,
             'test-keyword')
 
 
-
-class SilvaFindTestCase(SilvaFunctionalTestCase):
+class SilvaFindTestCase(unittest.TestCase):
     """Check if machine has pdftotext. If pdftotext is present run all
     tests, if not leave out pdftotext tests. Test search results of
     SilvaFind.
     """
+    layer = FunctionalLayer
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.root = self.layer.get_application()
+        self.layer.login('manager')
         self.root.manage_addProduct['SilvaFind'].manage_addSilvaFind(
             'search_test', 'Search Test')
 
     def createFile(self, sb, doc):
         """Helper to create a Silva File with the given data.
         """
-        directory = os.path.dirname(__file__)
-        file_handle = open(os.path.join(directory, 'data', doc['file']))
-        self.root.manage_addProduct['Silva'].manage_addFile(
-            doc['id'], doc['title'], file_handle)
-        file_handle.close()
+        factory = self.root.manage_addProduct['Silva']
+        with open_test_file(doc['file'], globals()) as file:
+            factory.manage_addFile(doc['id'], doc['title'], file)
 
         sb.go(sb.smi_url())
         ids = sb.get_content_ids()
-        self.failUnless(doc['id'] in ids)
+        self.assertTrue(doc['id'] in ids)
 
     def changeMetadata(self, sb, doc):
         """Edit metadata of an object.
@@ -113,14 +108,13 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.go(sb.smi_url())
         sb.click_href_labeled(doc['id'])
         sb.click_tab_named('properties')
-        sb.browser.getControl(
-            name='silva-extra.keywords:record').value = doc['keywords']
-        sb.browser.getControl(name='save_metadata:method', index=0).click()
-        feedback = sb.get_status_feedback()
-        self.failUnless(
-            feedback.startswith('Metadata saved.'))
+        form = sb.browser.get_form('form')
+        form.get_control('silva-extra.keywords:record').value = doc['keywords']
+        form.get_control('save_metadata:method').click()
+        self.assertEqual(sb.get_status_feedback(), 'Metadata saved.')
+        form = sb.browser.get_form('form')
         self.assertEquals(
-            sb.browser.getControl(name='silva-extra.keywords:record').value,
+            form.get_control('silva-extra.keywords:record').value,
             doc['keywords'])
 
     def configureSearch(self, sb, keyword):
@@ -128,29 +122,21 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         """
         sb.go(sb.smi_url())
         sb.click_href_labeled('search_test')
-        form = sb.browser.getForm(index=0)
-        form.getControl(
-            name='show_meta_type:bool').value = ['checked']
-        form.getControl(
-            name='show_silva-content-maintitle:bool').value = ['checked']
-        form.getControl(
-            name='show_silva-extra-keywords:bool').value = ['checked']
-        form.getControl(
-            name='silva-extra.keywords:record').value = keyword
-        form.getControl('save', index=0).click()
-        form = sb.browser.getForm(index=0)
+        form = sb.browser.get_form('silva_find_edit')
+        form.get_control('show_meta_type:bool').checked = True
+        form.get_control('show_silva-content-maintitle:bool').checked = True
+        form.get_control('show_silva-extra-keywords:bool').checked = True
+        form.get_control('silva-extra.keywords:record').value = keyword
+        form.get_control('silvafind_save').click()
+        form = sb.browser.get_form('silva_find_edit')
         self.assertEquals(
-            form.getControl(name='show_meta_type:bool').value,
-            True)
+            form.get_control('show_meta_type:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='show_silva-content-maintitle:bool').value,
-            True)
+            form.get_control('show_silva-content-maintitle:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='show_silva-extra-keywords:bool').value,
-            True)
+            form.get_control('show_silva-extra-keywords:bool').checked, True)
         self.assertEquals(
-            form.getControl(name='silva-extra.keywords:record').value,
-            keyword)
+            form.get_control('silva-extra.keywords:record').value, keyword)
 
     def search(self, sb, doc):
         """Search terms documents.
@@ -158,23 +144,22 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.go(sb.smi_url())
         sb.click_href_labeled('search_test')
         sb.click_href_labeled('view...')
+        form = sb.browser.get_form('search_form')
         test_fulltext = (doc['format'] != 'pdf' or PDF_TO_TEXT_AVAILABLE)
         if test_fulltext:
-            sb.browser.getControl(name='fulltext').value = doc['fulltext']
-        sb.browser.getControl(
-            name='silva-content.maintitle:record').value = doc['title']
-        sb.browser.handleErrors = False
-        sb.click_button_labeled('Search')
-        link = sb.browser.getLink(doc['title'])
+            form.get_control('fulltext').value = doc['fulltext']
+        form.get_control('silva-content.maintitle:record').value = doc['title']
+        self.assertEqual(200, form.submit(name='search_submit'))
+        link = sb.browser.get_link(doc['title'])
         if test_fulltext:
-            self.failUnless(doc['fulltext'] in sb.contents)
-        self.failUnless(link.text in sb.contents)
+            self.assertTrue(doc['fulltext'] in sb.contents)
+        self.assertTrue(link.html.text_content() in sb.contents)
 
     def test_empty_search(self):
         """Test to search just by clicking on the search button.
         """
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         msg = 'You need to fill at least one field in the search form.'
@@ -183,14 +168,15 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         sb.click_href_labeled('view...')
         self.failIf(msg in sb.contents)
 
-        sb.click_button_labeled('Search')
-        self.failUnless(msg in sb.contents)
+        form = sb.browser.get_form('search_form')
+        self.assertEqual(200, form.submit(name='search_submit'))
+        self.assertTrue(msg in sb.contents)
 
     def test_noresult_search(self):
         """Try to make a search which match no results at all.
         """
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         msg = 'No items matched your search.'
@@ -200,16 +186,16 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
         self.failIf(msg in sb.contents)
 
         # I don't think by default you will have document with that
-        sb.browser.getControl(name='fulltext').value = 'blablaxyz'
-        sb.click_button_labeled('Search')
-        self.failUnless(msg in sb.contents)
+        form = sb.browser.get_form('search_form')
+        form.get_control('fulltext').value = 'blablaxyz'
+        form.submit('search_submit')
+        self.assertTrue(msg in sb.contents)
 
     def test_search_in_pdf(self):
         """Test search inside a PDF file.
         """
-
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         pdf = test_fixture['the_great_figure']
@@ -220,9 +206,8 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
     def test_search(self):
         """Test search with a regular file.
         """
-
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         doc = test_fixture['the_raven']
@@ -233,9 +218,8 @@ class SilvaFindTestCase(SilvaFunctionalTestCase):
     def test_search_keywords(self):
         """Test search using metadata keywords
         """
-
         sb = SilvaBrowser()
-        status, url = sb.login('manager', 'secret', sb.smi_url())
+        status, url = sb.login('manager', 'manager', sb.smi_url())
         self.assertEquals(status, 200)
 
         doc = test_fixture['the_second_coming']
