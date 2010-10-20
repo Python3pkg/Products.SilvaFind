@@ -13,7 +13,11 @@ from Products.SilvaMetadata.Index import createIndexId
 from Products.SilvaMetadata.interfaces import IMetadataService
 
 
-class MetadataCriterionField(persistent.Persistent):
+# XXX: BaseMetadata criterion has been changed back to
+# old style classes because the unpickling is different and it breaks
+# if the inherit from object
+
+class MetadataCriterionField:
     implements(interfaces.IMetadataCriterionField)
 
     publicField = True
