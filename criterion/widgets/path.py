@@ -16,6 +16,7 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
 
 from silva.core.interfaces import IContainer
+from silva.core.views.interfaces import IVirtualSite
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
 
@@ -68,15 +69,19 @@ class PathCriterionView(CriterionTemplateView):
         raise ValueError(u"Cannot render path widgets for the public")
 
     def updateWidget(self, value):
-        self.title = _(u'not set')
-        self.url = '#'
-        self.icon = ''
-        self.value = ''
         if value is not None:
             self.title = value.get_title_or_id()
             self.url = absoluteURL(value, self.request)
             self.icon = get_icon_url(value, self.request)
             self.value = get_content_id(value)
+        else:
+            self.title = _(u'not set')
+            self.url = '#'
+            self.icon = '/'.join((
+                    IVirtualSite(self.request).get_root_url(),
+                    '++resource++Products.Silva/exclamation.png'))
+            self.value = ''
+
 
     def extractWidgetValue(self):
         value = self.request.form.get(self.name, None)
