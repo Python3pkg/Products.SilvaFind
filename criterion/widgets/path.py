@@ -15,6 +15,7 @@ from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
 from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
 
+from silva.core.interfaces import IContainer
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
 
@@ -29,7 +30,9 @@ class PathCriterionData(CriterionData):
     def getValue(self):
         reference = self.service.get_reference(self.query, name=self.name)
         if reference is not None:
-            return reference.target
+            target = reference.target
+            if IContainer.providedBy(target):
+                return target
         return None
 
     def setValue(self, value):
