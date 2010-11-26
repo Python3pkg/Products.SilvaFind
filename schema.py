@@ -227,7 +227,7 @@ class DateResultField(ResultField):
     def render(self, context, item, request):
         object = item.getObject()
         date = None
-        if IPublishable.providedBy(object):
+        if IVersion.providedBy(object):
             date = object.publication_datetime()
         if date == None:
             date = object.get_modification_datetime()
