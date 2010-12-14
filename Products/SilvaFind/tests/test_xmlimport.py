@@ -46,10 +46,10 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.assertEqual(binding.get('silva-extra', 'lastauthor'), u'paul')
 
         # Actually those are the fields by default ...
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownFields,
             ['fulltext'])
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownResultsFields,
             ['breadcrumbs', 'date', 'icon', 'link', 'ranking',
              'resultcount', 'textsnippet', 'thumbnail'])
@@ -77,10 +77,10 @@ class XMLImportTestCase(SilvaXMLTestCase):
             binding.get('silva-extra', 'lastauthor'),
             u'wim the roxor')
 
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownFields,
             [f.getName() for f in search.getSearchFields() if f.publicField])
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownResultsFields,
             [field.getName() for field in search.getResultFields()])
 
@@ -110,10 +110,10 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.failUnless(verifyObject(IFolder, folder))
         search = folder.search
         self.failUnless(verifyObject(IFind, search))
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownFields,
             ['fulltext', 'meta_type'])
-        self.assertListEqual(
+        self.assertItemsEqual(
             search.shownResultsFields,
             ['breadcrumbs', 'date', 'icon', 'link', 'ranking',
              'resultcount', 'textsnippet', 'thumbnail'])
