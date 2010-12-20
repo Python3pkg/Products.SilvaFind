@@ -6,7 +6,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.3.1dev'
+version = '1.2.2dev'
 
 setup(name='Products.SilvaFind',
       version=version,
@@ -28,23 +28,15 @@ setup(name='Products.SilvaFind',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-              'Products.FileSystemSite',
               'Products.Silva',
-              'Products.SilvaMetadata',
               'five.grok',
               'setuptools',
-              'silva.batch',
               'silva.core.conf',
               'silva.core.interfaces',
-              'silva.core.references',
               'silva.core.services',
               'silva.core.views',
-              'zeam.utils.batch',
               'zope.component',
-              'zope.event',
-              'zope.i18nmessageid',
               'zope.interface',
-              'zope.lifecycleevent',
               'zope.traversing',
               ],
       )
