@@ -6,13 +6,14 @@
     </button>
     <div id="${id}-dialog"
          title="target"
+         style="display: none"
          class="ui-widget reference-dialog">
          <div class="content-list-actions">
            <div class="content-list-action content-list-action-refresh">
              <a href="#" name="refresh" i18n:translate="">refresh</a>
            </div>
            <div class="content-list-action content-list-action-add">
-             <select>
+             <select disabled="disabled">
                <option value="" i18n:translate="">select:</option>
              </select>
              <a href="#" name="add" i18n:translate="">add</a>
