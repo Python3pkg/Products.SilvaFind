@@ -1,10 +1,10 @@
 Changes
 =======
 
-1.3.1 (unreleased)
+1.3.1 (2010/12/20)
 ------------------
 
-- ...
+- Fix bugs on reference path criteria (selection of invalid value, export).
 
 1.3 (2010/10/18)
 ----------------
