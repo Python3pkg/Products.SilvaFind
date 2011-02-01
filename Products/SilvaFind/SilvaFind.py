@@ -25,9 +25,10 @@ from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 
 from silva.core import conf as silvaconf
+from silva.core.smi import smi as silvasmi
+from silva.core.smi.interfaces import IEditTabIndex
 from silva.core.views import views as silvaviews
 from silva.core.views.httpheaders import HTTPResponseHeaders
-from silva.core.smi import smi as silvasmi
 from zeam.form import silva as silvaforms
 from zeam.utils.batch import batch
 from zeam.utils.batch.interfaces import IBatching
@@ -172,6 +173,7 @@ class SilvaFindEditView(silvasmi.SMIPage):
     grok.context(IFind)
     grok.name('tab_edit')
     grok.require('silva.ChangeSilvaContent')
+    grok.implements(IEditTabIndex)
 
     tab = 'edit'
 
