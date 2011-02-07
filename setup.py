@@ -6,7 +6,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.3.2'
+version = '1.3.3dev'
 
 setup(name='Products.SilvaFind',
       version=version,
