@@ -28,7 +28,6 @@ setup(name='Products.SilvaFind',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-              'Products.FileSystemSite',
               'Products.Silva',
               'Products.SilvaMetadata',
               'five.grok',

@@ -4,19 +4,13 @@
 # zope3
 from zope.component import getUtility
 
-# Silva
-from Products.Silva.install import add_fss_directory_view
-
 # SilvaFind
 from Products.SilvaFind.interfaces import IFindService
 from silva.core.services.interfaces import ICatalogService
 
 
 def install(root):
-    # create the core views from filesystem
-    add_fss_directory_view(root.service_resources,
-                           'SilvaFind', __file__, 'resources')
-
+    # XXX Check CSS resources
     # security
     root.manage_permission('Add Silva Finds',
                            ['Editor', 'ChiefEditor', 'Manager'])
@@ -30,7 +24,6 @@ def install(root):
 
 
 def uninstall(root):
-    root.service_resources.manage_delObjects(['SilvaFind'])
     root.manage_delObjects(['service_find'])
 
 
