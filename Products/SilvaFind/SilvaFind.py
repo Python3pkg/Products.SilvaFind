@@ -27,7 +27,7 @@ from Products.Silva import SilvaPermissions
 from silva.core import conf as silvaconf
 from silva.core.views import views as silvaviews
 from silva.core.views.httpheaders import HTTPResponseHeaders
-from silva.core.smi import smi as silvasmi
+from silva.ui.rest import PageWithTemplateREST
 from zeam.form import silva as silvaforms
 from zeam.utils.batch import batch
 from zeam.utils.batch.interfaces import IBatching
@@ -166,14 +166,12 @@ class SilvaFindAddForm(silvaforms.SMIAddForm):
     grok.context(IFind)
 
 
-class SilvaFindEditView(silvasmi.SMIPage):
+class SilvaFindEditView(PageWithTemplateREST):
     """Edit a Silva Find
     """
     grok.context(IFind)
-    grok.name('tab_edit')
+    grok.name('silva.ui.content')
     grok.require('silva.ChangeSilvaContent')
-
-    tab = 'edit'
 
     def save(self):
         """Store fields values
