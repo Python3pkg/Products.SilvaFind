@@ -20,6 +20,6 @@
            value="${view.interface}" />
     <input type="hidden"
            id="${id}-base"
-           value="${query.get_root_url()}" />
+           value="${view.base_url}" />
   </div>
 </tal:widget>
