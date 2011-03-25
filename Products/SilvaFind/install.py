@@ -20,7 +20,7 @@ def install(root):
 
     setupService(root)
     checkIndexes(root)
-    configureAddables(root)
+    configureAddables(root, ['Silva Find'])
 
 
 def uninstall(root):
@@ -31,13 +31,13 @@ def is_installed(root):
     return hasattr(root, 'service_find')
 
 
-def configureAddables(root):
-    addables = ['Silva Find']
-    new_addables = root.get_silva_addables_allowed_in_container()
-    for a in addables:
-        if a not in new_addables:
-            new_addables.append(a)
-    root.set_silva_addables_allowed_in_container(new_addables)
+def configureAddables(root, meta_types):
+    addables = root.get_silva_addables_allowed_in_container()
+    if addables:
+        for meta_type in meta_type:
+            if meta_type not in addables:
+                addables.append(meta_type)
+        root.set_silva_addables_allowed_in_container(addables)
 
 
 def setupService(root):
