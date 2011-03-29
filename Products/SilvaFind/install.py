@@ -34,7 +34,7 @@ def is_installed(root):
 def configureAddables(root, meta_types):
     addables = root.get_silva_addables_allowed_in_container()
     if addables:
-        for meta_type in meta_type:
+        for meta_type in meta_types:
             if meta_type not in addables:
                 addables.append(meta_type)
         root.set_silva_addables_allowed_in_container(addables)
