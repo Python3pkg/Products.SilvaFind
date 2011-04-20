@@ -5,6 +5,7 @@
 
 import unittest
 
+from zope.publisher.browser import TestRequest
 from zope.component import queryMultiAdapter
 from zope.interface.verify import verifyObject
 from zeam.utils.batch.batch import batch
@@ -22,19 +23,17 @@ class ResultTestCase(unittest.TestCase):
     def setUp(self):
         self.root = self.layer.get_application()
         self.layer.login('author')
-        # XXX should be a test request, but it sucks too much
-        self.request = self.root.REQUEST
+
         factory = self.root.manage_addProduct['SilvaFind']
         factory.manage_addSilvaFind('search', 'Search your Site')
-
         factory = self.root.manage_addProduct['Silva']
         factory.manage_addFolder('folder', 'Folder')
-        factory = self.root.folder.manage_addProduct['SilvaDocument']
-        factory.manage_addDocument('info', 'Information')
+        factory = self.root.folder.manage_addProduct['Silva']
+        factory.manage_addMockupVersionedContent('info', 'Information')
 
         self.documents = batch(
             self.root.service_catalog(
-                meta_type=['Silva Document'], path='/root/folder'))
+                meta_type=['Mockup VersionedContent'], path='/root/folder'))
         self.empty = batch([])
 
     def test_date(self):
@@ -46,7 +45,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
         view.update(self.documents)
         # XXX difficult to test, contain a date
@@ -61,15 +60,15 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
         self.assertEqual(
             view.render(self.documents[0]),
             u'<img class="searchresult-icon" '
-            u'src="http://localhost/root/misc_/SilvaDocument/silvadoc.gif" '
-            u'alt="Silva Document" />')
+            u'src="http://localhost/root/globals/silvageneric.gif" '
+            u'alt="Mockup VersionedContent" />')
 
     def test_link(self):
         result = schema.LinkResultField('link', 'Link to result')
@@ -80,7 +79,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), '')
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -99,7 +98,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), 'Small version of the image')
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
@@ -111,10 +110,12 @@ class ResultTestCase(unittest.TestCase):
         self.failUnless(verifyObject(IResultField, result))
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)
+        # XXX This fails because request is a TestRequest, so we don't
+        # have the same absolute_url
         self.assertEqual(
             view.render(self.documents[0]),
             u'<span class="searchresult-breadcrumb">'
@@ -132,7 +133,7 @@ class ResultTestCase(unittest.TestCase):
         self.assertEqual(result.getDescription(), 'Content creator')
 
         view = queryMultiAdapter(
-            (result, self.root.search, self.request), IResultView)
+            (result, self.root.search, TestRequest()), IResultView)
         self.failUnless(verifyObject(IResultView, view))
 
         view.update(self.documents)

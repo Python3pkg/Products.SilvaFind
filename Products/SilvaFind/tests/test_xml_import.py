@@ -10,7 +10,7 @@ from zope.interface.verify import verifyObject
 from zope.component import getMultiAdapter
 
 from Products.SilvaFind.interfaces import IFind, ICriterionData
-from Products.Silva.tests.test_xmlimport import SilvaXMLTestCase
+from Products.Silva.tests.test_xml_import import SilvaXMLTestCase
 
 from silva.core.interfaces.events import IContentImported
 from silva.core.interfaces import IFolder
