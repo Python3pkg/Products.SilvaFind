@@ -6,10 +6,11 @@
 import unittest
 
 from zope.component import getUtility
-from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.Silva.converters import PDF_TO_TEXT_AVAILABLE
+from Products.Silva.testing import smi_settings
 from Products.Silva.tests.helpers import open_test_file
-from Products.Silva.testing import FunctionalLayer, smi_settings
+from Products.SilvaFind.testing import FunctionalLayer
+from Products.SilvaMetadata.interfaces import IMetadataService
 
 
 test_fixture = {

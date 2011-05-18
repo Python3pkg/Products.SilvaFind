@@ -7,6 +7,7 @@ import unittest
 from zope.component import queryMultiAdapter
 from silva.core.references.reference import get_content_id
 
+from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind.interfaces import ICriterionData
 from Products.Silva.silvaxml import xmlexport
 from Products.Silva.tests.test_xml_export import SilvaXMLTestCase
@@ -15,6 +16,7 @@ from Products.Silva.tests.test_xml_export import SilvaXMLTestCase
 class XMLExportTestCase(SilvaXMLTestCase):
     """Test some silva find features.
     """
+    layer = FunctionalLayer
 
     def setUp(self):
         super(XMLExportTestCase, self).setUp()

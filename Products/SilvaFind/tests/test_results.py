@@ -12,7 +12,7 @@ from zeam.utils.batch.batch import batch
 
 from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IResultView
-from Products.Silva.testing import FunctionalLayer
+from Products.SilvaFind.testing import FunctionalLayer
 
 
 class ResultTestCase(unittest.TestCase):

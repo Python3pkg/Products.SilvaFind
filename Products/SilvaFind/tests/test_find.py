@@ -7,8 +7,9 @@ import unittest
 from zope.interface.verify import verifyObject
 from zope.component import getUtility
 
-from Products.Silva.testing import FunctionalLayer, get_event_names
+from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind import interfaces
+from Products.Silva.testing import get_event_names
 
 
 class SilvaFindTestCase(unittest.TestCase):

@@ -5,7 +5,6 @@
 from Products.SilvaFind import install
 from silva.core import conf as silvaconf
 
-
 silvaconf.extension_name('SilvaFind')
 silvaconf.extension_title('Silva Find')
 silvaconf.extension_default()

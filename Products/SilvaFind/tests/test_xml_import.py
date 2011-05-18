@@ -9,6 +9,7 @@ from Acquisition import aq_chain
 from zope.interface.verify import verifyObject
 from zope.component import getMultiAdapter
 
+from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind.interfaces import IFind, ICriterionData
 from Products.Silva.tests.test_xml_import import SilvaXMLTestCase
 
@@ -19,6 +20,7 @@ from silva.core.interfaces import IFolder
 class XMLImportTestCase(SilvaXMLTestCase):
     """Test import of Silva Find.
     """
+    layer = FunctionalLayer
 
     def test_default(self):
         """Import a default Silva Find object, With no special data in it.
