@@ -28,6 +28,7 @@ from silva.core import conf as silvaconf
 from silva.core.views import views as silvaviews
 from silva.core.views.httpheaders import HTTPResponseHeaders
 from silva.ui.rest import Screen, PageWithTemplateREST
+from silva.core.messages.interfaces import IMessageService
 from zeam.form import silva as silvaforms
 from zeam.utils.batch import batch
 from zeam.utils.batch.interfaces import IBatching
@@ -172,6 +173,10 @@ class SilvaFindEditView(PageWithTemplateREST):
     grok.adapts(Screen, IFind)
     grok.name('content')
     grok.require('silva.ChangeSilvaContent')
+
+    def send_message(self, message, type=u""):
+        service = component.getUtility(IMessageService)
+        service.send(message, self.request, namespace=type)
 
     def save(self):
         """Store fields values
