@@ -25,6 +25,7 @@ from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 
 from silva.core import conf as silvaconf
+from silva.core.smi.content import IEditScreen
 from silva.core.views import views as silvaviews
 from silva.core.views.httpheaders import HTTPResponseHeaders
 from silva.ui.rest import Screen, PageWithTemplateREST
@@ -173,6 +174,7 @@ class SilvaFindEditView(PageWithTemplateREST):
     grok.adapts(Screen, IFind)
     grok.name('content')
     grok.require('silva.ChangeSilvaContent')
+    grok.implements(IEditScreen)
 
     def send_message(self, message, type=u""):
         service = component.getUtility(IMessageService)
