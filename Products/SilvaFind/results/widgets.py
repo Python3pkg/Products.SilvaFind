@@ -7,15 +7,16 @@ import re
 
 import localdatetime
 
-from Products.Silva.icon import get_icon_url
 from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IQuery, IResultView
 from Products.SilvaMetadata.interfaces import IMetadataService
 from Products.SilvaMetadata.interfaces import IMetadataElement
 from Products.SilvaMetadata.Index import createIndexId
 from Products.ZCTextIndex.ParseTree import ParseError
+
 from five import grok
 from silva.core.interfaces import IVersion, IImage
+from silva.core.interfaces.adapters import IIconResolver
 from silva.core.views.interfaces import IVirtualSite
 from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
@@ -59,9 +60,7 @@ class MetatypeResultView(ResultView):
         content = item.getObject()
         if IVersion.providedBy(content):
             content = content.get_content()
-        return '<img class="searchresult-icon" src="%s" alt="%s" />' % (
-            get_icon_url(content, self.request),
-            getattr(content, 'meta_type', ''))
+        return IIconResolver(self.request).get_tag(content)
 
 
 class RankingResultView(ResultView):

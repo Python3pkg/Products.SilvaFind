@@ -10,7 +10,6 @@ from zope.traversing.browser import absoluteURL
 
 from Acquisition import aq_parent
 
-from Products.Silva.icon import get_icon_url
 from Products.Silva.silvaxml.xmlimport import resolve_path
 from Products.SilvaFind.criterion.widgets.default import CriterionData
 from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
@@ -18,6 +17,7 @@ from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
 
 from silva.core.interfaces import IContainer
+from silva.core.interfaces.adapters import IIconResolver
 from silva.core.views.interfaces import IVirtualSite
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
@@ -75,7 +75,7 @@ class PathCriterionView(CriterionTemplateView):
         if value is not None:
             self.title = value.get_title_or_id()
             self.url = absoluteURL(value, self.request)
-            self.icon = get_icon_url(value, self.request)
+            self.icon = IIconResolver(self.request).get_tag(value)
             self.value = get_content_id(value)
         else:
             self.title = _(u'not set')

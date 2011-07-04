@@ -6,10 +6,16 @@
     </button>
     <div id="${id}-dialog"
          title="target"
+         style="display: none"
          class="ui-widget reference-dialog">
+      <div class="path-list"></div>
+      <table class="content-list source-list">
+      </table>
+      <table class="content-list selection-list">
+      </table>
     </div>
     <a target="_blank" id="${id}-link" href="${view.url}">
-      <img src="${view.icon}" />
+      <img tal:replace="structure view.icon" />
       ${view.title}
     </a>
     <input type="hidden"
