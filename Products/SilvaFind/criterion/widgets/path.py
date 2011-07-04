@@ -18,7 +18,6 @@ from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
 
 from silva.core.interfaces import IContainer
 from silva.core.interfaces.adapters import IIconResolver
-from silva.core.views.interfaces import IVirtualSite
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
 
@@ -72,17 +71,15 @@ class PathCriterionView(CriterionTemplateView):
 
     def updateWidget(self, value):
         self.base_url = absoluteURL(aq_parent(self.query), self.request)
+        # None has an icon (it is missing)
+        self.icon = IIconResolver(self.request).get_tag(value)
         if value is not None:
             self.title = value.get_title_or_id()
             self.url = absoluteURL(value, self.request)
-            self.icon = IIconResolver(self.request).get_tag(value)
             self.value = get_content_id(value)
         else:
-            self.title = _(u'not set')
+            self.title = _(u'no reference selected')
             self.url = '#'
-            self.icon = '/'.join((
-                    IVirtualSite(self.request).get_root_url(),
-                    '++resource++Products.Silva/exclamation.png'))
             self.value = ''
 
 
