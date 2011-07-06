@@ -1,7 +1,7 @@
 <tal:widget tal:define="name criterion.getName()"
             i18n:domain="silvafind">
   <select id="field-${name}" name="${name}:list" multiple="multiple"
-          class="store" size="5">
+          class="field" size="5">
     <option value=""
             tal:attributes="selected not view.selected or view.selected == [''] and 'selected' or None">
       All Types

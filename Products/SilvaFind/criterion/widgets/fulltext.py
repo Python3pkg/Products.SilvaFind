@@ -19,7 +19,7 @@ HTML_CHARACTERS = {
 
 escape = lambda string: ''.join(HTML_CHARACTERS.get(c) or c for c in string)
 
-HTML = u"""<input class="store" type="text"
+HTML = u"""<input class="field" type="text"
                   name="%s" id="%s" value="%s" size="20" />"""
 
 
