@@ -3,10 +3,18 @@
    tal:define="name criterion.getName();
                id string:field-${name}">
   <div id="${id}" class="reference-widget">
-    <a target="_blank" id="${id}-link" href="${view.url}"
+    <a class="open-screen reference-dialog-edit-link" rel="content"
+       title="Edit content"
+       id="#" href="#"
+       tal:attributes="id string:${id}-edit-link;
+                       style view.value_path or 'display: none';
+                       href view.value_path"
+       i18n:attributes="title">
+    </a>
+    <a target="_blank" id="${id}-link" href="${view.value_url}"
        class="reference-dialog-content">
-      <img tal:replace="structure view.icon" />
-      ${view.title}
+      <img tal:replace="structure view.value_icon" />
+      ${view.value_title}
     </a>
     <br clear="both" />
     <a class="form-button reference-dialog-trigger ui-state-default"
@@ -17,7 +25,7 @@
            i18n:name="icon"></ins>
       Lookup
     </a>
-  <br clear="both" />
+    <br clear="both" />
     <input type="hidden"
            name="${name}"
            id="${id}-value" value="${view.value}" />
@@ -26,6 +34,6 @@
            value="${view.interface}" />
     <input type="hidden"
            id="${id}-base"
-           value="${view.base_url}" />
+           value="${view.context_lookup_url}" />
   </div>
 </tal:widget>

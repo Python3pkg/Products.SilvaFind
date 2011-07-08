@@ -6,20 +6,16 @@ from five import grok
 from megrok.chameleon.components import ChameleonPageTemplate
 from zope.component import getUtility
 from zope.interface import Interface
-from zope.traversing.browser import absoluteURL
-
-from Acquisition import aq_parent
 
 from Products.Silva.silvaxml.xmlimport import resolve_path
 from Products.SilvaFind.criterion.widgets.default import CriterionData
 from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
-from Products.SilvaFind.i18n import translate as _
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
 
 from silva.core.interfaces import IContainer
-from silva.core.interfaces.adapters import IIconResolver
 from silva.core.references.interfaces import IReferenceService
 from silva.core.references.reference import get_content_id
+from silva.core.references.widgets import ReferenceInfoResolver
 
 
 class PathCriterionData(CriterionData):
@@ -70,18 +66,8 @@ class PathCriterionView(CriterionTemplateView):
         raise ValueError(u"Cannot render path widgets for the public")
 
     def updateWidget(self, value):
-        self.base_url = absoluteURL(aq_parent(self.query), self.request)
-        # None has an icon (it is missing)
-        self.icon = IIconResolver(self.request).get_tag(value)
-        if value is not None:
-            self.title = value.get_title_or_id()
-            self.url = absoluteURL(value, self.request)
-            self.value = get_content_id(value)
-        else:
-            self.title = _(u'no reference selected')
-            self.url = '#'
-            self.value = ''
-
+        resolver = ReferenceInfoResolver(self.request)
+        resolver(self, self.query, value=value, interface=self.interface)
 
     def extractWidgetValue(self):
         value = self.request.form.get(self.name, None)
