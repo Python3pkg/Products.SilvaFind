@@ -39,14 +39,12 @@
     <silva-extra:modificationtime>
      2010-04-25T14:42:42
     </silva-extra:modificationtime>
-    <silva-extra:publicationtime>
-    </silva-extra:publicationtime>
     <silva-extra:subject>
     </silva-extra:subject>
    </set>
   </metadata>
   <content>
-   <find id="search">
+   <silva-find:find id="search">
     <metadata>
      <set id="silva-content">
       <silva-content:maintitle>
@@ -88,8 +86,6 @@
       <silva-extra:modificationtime>
        2010-04-25T14:00:59
       </silva-extra:modificationtime>
-      <silva-extra:publicationtime>
-      </silva-extra:publicationtime>
       <silva-extra:subject>
        Best breed Belgium finder
       </silva-extra:subject>
@@ -131,7 +127,7 @@
      <silva-find:field name="breadcrumbs">
      </silva-find:field>
     </silva-find:results>
-   </find>
+   </silva-find:find>
   </content>
  </folder>
 </silva>

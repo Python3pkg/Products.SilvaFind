@@ -8,7 +8,7 @@ import unittest
 from zope.publisher.browser import TestRequest
 from zope.component import queryMultiAdapter
 from zope.interface.verify import verifyObject
-from zeam.utils.batch.batch import batch
+from zeam.utils.batch import Batch
 
 from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IResultView
@@ -31,10 +31,10 @@ class ResultTestCase(unittest.TestCase):
         factory = self.root.folder.manage_addProduct['Silva']
         factory.manage_addMockupVersionedContent('info', 'Information')
 
-        self.documents = batch(
+        self.documents = Batch(
             self.root.service_catalog(
                 meta_type=['Mockup VersionedContent'], path='/root/folder'))
-        self.empty = batch([])
+        self.empty = Batch([])
 
     def test_date(self):
         result = schema.DateResultField('date', 'Publication Date')

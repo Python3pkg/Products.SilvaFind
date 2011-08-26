@@ -9,11 +9,11 @@ from silva.core import conf as silvaconf
 from sprout.saxext.xmlimport import BaseHandler
 from zope.component import getMultiAdapter
 
-from Products.Silva.silvaxml.xmlimport import NS_URI, SilvaBaseHandler
-from Products.SilvaFind.silvaxml import NS_SILVA_FIND
+from Products.Silva.silvaxml.xmlimport import SilvaBaseHandler
+from Products.SilvaFind.silvaxml import NS_FIND_URI
 from Products.SilvaFind.interfaces import ICriterionData
 
-silvaconf.namespace(NS_URI)
+silvaconf.namespace(NS_FIND_URI)
 logger = logging.getLogger('silva.xml')
 
 
@@ -26,19 +26,19 @@ class CriterionField(BaseHandler):
         self.field = None
 
     def startElementNS(self, name, qname, attrs):
-        if name == (NS_SILVA_FIND, 'field'):
+        if name == (NS_FIND_URI, 'field'):
             name = attrs[(None, 'name')].encode('utf-8')
             self.fields[name] = []
             self.field = name
-        if name == (NS_SILVA_FIND, 'value'):
+        if name == (NS_FIND_URI, 'value'):
             assert self.field is not None
             value = attrs[(None, 'value')].encode('utf-8')
             self.fields[self.field].append(value)
 
     def endElementNS(self, name, qname):
-        if name == (NS_SILVA_FIND, 'name'):
+        if name == (NS_FIND_URI, 'name'):
             self.field = None
-        if name == (NS_SILVA_FIND, self.category):
+        if name == (NS_FIND_URI, self.category):
             self.parentHandler().setFields(self.category, self.fields)
 
 
@@ -55,22 +55,21 @@ class FindHandler(SilvaBaseHandler):
 
     def getOverrides(self):
         return {
-            (NS_SILVA_FIND, 'criterion'): CriterionField,
-            (NS_SILVA_FIND, 'results'): ResultsField,
-            }
+            (NS_FIND_URI, 'criterion'): CriterionField,
+            (NS_FIND_URI, 'results'): ResultsField,}
 
     def setFields(self, category, fields):
         self.fields[category] = fields
 
     def startElementNS(self, name, qname, attrs):
-        if name == (NS_URI, 'find'):
+        if name == (NS_FIND_URI, 'find'):
             uid = self.generateOrReplaceId(attrs[(None, 'id')].encode('utf-8'))
             factory = self.parent().manage_addProduct['SilvaFind']
             factory.manage_addSilvaFind(uid, '')
             self.setResultId(uid)
 
     def endElementNS(self, name, qname):
-        if name == (NS_URI, 'find'):
+        if name == (NS_FIND_URI, 'find'):
             find = self.result()
             if 'results' in self.fields:
                 schema = find.getResultsSchema()

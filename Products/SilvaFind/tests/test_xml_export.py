@@ -60,7 +60,6 @@ class XMLExportTestCase(SilvaXMLTestCase):
         search = self.root.folder.search
         search.shownFields['fulltext'] = True
         search.shownFields['meta_type'] = True
-        search.shownFields['silva-extra-publicationtime'] = True
         fields = search.getSearchSchema()
         data = queryMultiAdapter((fields['fulltext'], search), ICriterionData)
         data.setValue('silva')
@@ -68,9 +67,6 @@ class XMLExportTestCase(SilvaXMLTestCase):
         data.setValue(get_content_id(self.root.folder))
         data = queryMultiAdapter((fields['meta_type'], search), ICriterionData)
         data.setValue(['Silva Document', 'Silva Folder', 'Silva File'])
-        data = queryMultiAdapter(
-            (fields['silva-extra-publicationtime'], search), ICriterionData)
-        data.setValue(('2010-01-01', None))
 
         # We need to export the folder with it not do get an reference error.
         xml, info = xmlexport.exportToString(self.root.folder)

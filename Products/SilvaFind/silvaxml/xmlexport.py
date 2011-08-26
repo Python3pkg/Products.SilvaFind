@@ -9,11 +9,11 @@ from zope import component
 from five import grok
 
 from Products.SilvaFind import interfaces
-from Products.SilvaFind.silvaxml import NS_SILVA_FIND
+from Products.SilvaFind.silvaxml import NS_FIND_URI
 from Products.SilvaFind.interfaces import ICriterionData
 from Products.Silva.silvaxml.xmlexport import SilvaBaseProducer, theXMLExporter
 
-theXMLExporter.registerNamespace('silva-find', NS_SILVA_FIND)
+theXMLExporter.registerNamespace('silva-find', NS_FIND_URI)
 
 
 class FindProducer(SilvaBaseProducer):
@@ -27,25 +27,28 @@ class FindProducer(SilvaBaseProducer):
             view = component.getMultiAdapter(
                 (field, self.context), ICriterionData)
             for value in view.serializeXML(self):
-                self.startElementNS(NS_SILVA_FIND, 'value', {'value': value})
-                self.endElementNS(NS_SILVA_FIND, 'value')
+                self.startElementNS(
+                    NS_FIND_URI, 'value', {'value': value})
+                self.endElementNS(
+                    NS_FIND_URI, 'value')
 
         def serializeOptions(prefix, fields, states, handler=None):
-            self.startElementNS(NS_SILVA_FIND, prefix)
+            self.startElementNS(NS_FIND_URI, prefix)
             for field in fields:
                 name = field.getName()
                 if not operator.xor(
                     getattr(field, 'publicField', True),
                     states.get(name, False)):
                     self.startElementNS(
-                        NS_SILVA_FIND, 'field', {'name': name})
+                        NS_FIND_URI, 'field', {'name': name})
                     if handler is not None:
                         handler(field)
                     self.endElementNS(
-                        NS_SILVA_FIND, 'field')
-            self.endElementNS(NS_SILVA_FIND, prefix)
+                        NS_FIND_URI, 'field')
+            self.endElementNS(NS_FIND_URI, prefix)
 
-        self.startElement('find', {'id': self.context.id})
+        self.startElementNS(
+            NS_FIND_URI, 'find', {'id': self.context.id})
         self.metadata()
         serializeOptions(
             'criterion',
@@ -56,4 +59,5 @@ class FindProducer(SilvaBaseProducer):
             'results',
             self.context.getResultFields(),
             self.context.shownResultsFields)
-        self.endElement('find')
+        self.endElementNS(
+            NS_FIND_URI, 'find')

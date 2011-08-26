@@ -24,8 +24,6 @@
     <silva-extra:creator>
      author
     </silva-extra:creator>
-    <silva-extra:expirationtime>
-    </silva-extra:expirationtime>
     <silva-extra:hide_from_tocs>
      do not hide
     </silva-extra:hide_from_tocs>
@@ -39,14 +37,12 @@
     <silva-extra:modificationtime>
      YYYY-MM-DDTHH:MM:SS
     </silva-extra:modificationtime>
-    <silva-extra:publicationtime>
-    </silva-extra:publicationtime>
     <silva-extra:subject>
     </silva-extra:subject>
    </set>
   </metadata>
   <content>
-   <find id="search">
+   <silva-find:find id="search">
     <metadata>
      <set id="silva-content">
       <silva-content:maintitle>
@@ -70,8 +66,6 @@
       <silva-extra:creator>
        author
       </silva-extra:creator>
-      <silva-extra:expirationtime>
-      </silva-extra:expirationtime>
       <silva-extra:hide_from_tocs>
        do not hide
       </silva-extra:hide_from_tocs>
@@ -85,8 +79,6 @@
       <silva-extra:modificationtime>
        YYYY-MM-DDTHH:MM:SS
       </silva-extra:modificationtime>
-      <silva-extra:publicationtime>
-      </silva-extra:publicationtime>
       <silva-extra:subject>
       </silva-extra:subject>
      </set>
@@ -103,12 +95,6 @@
      <silva-find:field name="fulltext">
       <silva-find:value value="silva">
       </silva-find:value>
-     </silva-find:field>
-     <silva-find:field name="silva-extra-publicationtime">
-       <silva-find:value value="2010-01-01">
-       </silva-find:value>
-       <silva-find:value value="">
-       </silva-find:value>
      </silva-find:field>
      <silva-find:field name="path">
       <silva-find:value value="folder">
@@ -133,7 +119,7 @@
      <silva-find:field name="breadcrumbs">
      </silva-find:field>
     </silva-find:results>
-   </find>
+   </silva-find:find>
   </content>
  </folder>
 </silva>
