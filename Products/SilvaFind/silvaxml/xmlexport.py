@@ -38,7 +38,7 @@ class FindProducer(SilvaBaseProducer):
                 name = field.getName()
                 if not operator.xor(
                     bool(getattr(field, 'publicField', True)),
-                    states.get(name, False)):
+                    bool(states.get(name, False))):
                     self.startElementNS(
                         NS_FIND_URI, 'field', {'name': name})
                     if handler is not None:
