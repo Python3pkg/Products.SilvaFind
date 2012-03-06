@@ -5,7 +5,7 @@
 # Zope
 from DateTime import DateTime
 from five import grok
-from megrok.chameleon.components import ChameleonPageTemplate
+from grokcore.chameleon.components import ChameleonPageTemplate
 from zope.interface import Interface
 
 # Silva

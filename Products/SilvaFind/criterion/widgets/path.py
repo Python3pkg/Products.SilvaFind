@@ -3,7 +3,7 @@
 # $Id$
 
 from five import grok
-from megrok.chameleon.components import ChameleonPageTemplate
+from grokcore.chameleon.components import ChameleonPageTemplate
 from zope.component import getUtility
 from zope.interface import Interface
 

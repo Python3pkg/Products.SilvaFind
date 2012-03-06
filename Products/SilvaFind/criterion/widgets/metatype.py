@@ -3,7 +3,7 @@
 # $Id$
 
 from five import grok
-from megrok.chameleon.components import ChameleonPageTemplate
+from grokcore.chameleon.components import ChameleonPageTemplate
 from zope.interface import Interface
 
 from Products.Silva.ExtensionRegistry import extensionRegistry
