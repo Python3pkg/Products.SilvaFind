@@ -34,7 +34,7 @@ class ResultView(grok.MultiAdapter):
         self.result = result
         self.request = request
 
-    def update(self, results):
+    def update(self, view):
         pass
 
     def render(self, item):
@@ -56,11 +56,14 @@ class ResultView(grok.MultiAdapter):
 class MetatypeResultView(ResultView):
     grok.adapts(schema.MetatypeResultField, IQuery, Interface)
 
+    def update(self, view):
+        self.get_icon = IIconResolver(self.request).get_tag
+
     def render(self, item):
         content = item.getObject()
         if IVersion.providedBy(content):
             content = content.get_content()
-        return IIconResolver(self.request).get_tag(content)
+        return self.get_icon(content)
 
 
 class RankingResultView(ResultView):
@@ -71,7 +74,7 @@ class RankingResultView(ResultView):
         self.rankings = {}
         self.highest = 1.0
 
-    def update(self, results):
+    def update(self, view):
         query = self.request.form.get('fulltext')
         self.highest = 1.0
         self.rankings = {}
@@ -81,7 +84,7 @@ class RankingResultView(ResultView):
             catalog = self.context.service_catalog
             index = catalog.Indexes['fulltext']
             try:
-                max_index = results.start + len(results) + 1
+                max_index = view.results.start + len(view.results) + 1
                 rankings = index.query(query, max_index)[0]
                 if rankings:
                     self.highest = rankings[0][1]/100.0
@@ -89,8 +92,7 @@ class RankingResultView(ResultView):
             except ParseError:
                 pass
 
-        self.img = '<img alt="Rank" src="%s/++resource++Products.SilvaFind/ranking.gif"/>' % (
-            IVirtualSite(self.request).get_root_url())
+        self.img = '<img alt="Rank" src="%s"/>' % view.static['ranking.gif']()
 
     def render(self, item):
         rid = item.getRID()
@@ -144,7 +146,7 @@ class LinkResultView(ResultView):
 class DateResultView(ResultView):
     grok.adapts(schema.DateResultField, IQuery, Interface)
 
-    def update(self, results):
+    def update(self, view):
         self.locale = localdatetime.get_locale_info(self.request)
 
     def render(self, item):
@@ -355,7 +357,7 @@ class BreadcrumbsResultView(ResultView):
 class MetadataResultView(ResultView):
     grok.adapts(schema.MetadataResultField, IQuery, Interface)
 
-    def update(self, results):
+    def update(self, view):
         self.set_name, self.element_name = self.result.getId().split(':')
         service = getUtility(IMetadataService)
         metadata_set = service.getMetadataSet(self.set_name)

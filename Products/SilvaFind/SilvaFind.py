@@ -251,10 +251,10 @@ class SilvaFindView(silvaviews.View):
         self.result_widgets = []
         self.batch = u''
         if self.results:
-            for result in self.context.getPublicResultFields():
-                widget = getMultiAdapter((
-                        result, self.context, self.request), IResultView)
-                widget.update(self.results)
+            for field in self.context.getPublicResultFields():
+                widget = getMultiAdapter(
+                    (field, self.context, self.request), IResultView)
+                widget.update(self)
                 self.result_widgets.append(widget)
 
             self.batch = component.getMultiAdapter(
