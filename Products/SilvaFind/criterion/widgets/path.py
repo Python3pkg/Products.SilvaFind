@@ -67,7 +67,8 @@ class PathCriterionView(CriterionTemplateView):
 
     def updateWidget(self, value):
         resolver = ReferenceInfoResolver(self.request)
-        resolver(self, self.query, value=value, interface=self.interface)
+        resolver.defaults(self, self.query, interface=self.interface)
+        resolver(self, value=value)
 
     def extractWidgetValue(self):
         value = self.request.form.get(self.name, None)

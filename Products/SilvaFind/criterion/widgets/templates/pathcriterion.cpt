@@ -28,7 +28,7 @@
     <br clear="both" />
     <input type="hidden"
            name="${name}"
-           id="${id}-value" value="${view.value}" />
+           id="${id}-value" value="${view.value_id}" />
     <input type="hidden"
            id="${id}-interface"
            value="${view.interface}" />
