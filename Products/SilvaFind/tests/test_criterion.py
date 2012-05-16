@@ -39,7 +39,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
     def test_criterion(self):
         field = criterion.FullTextCriterionField()
 
-        self.failUnless(verifyObject(ICriterionField, field))
+        self.assertTrue(verifyObject(ICriterionField, field))
         self.assertEqual(field.getName(), "fulltext")
         self.assertEqual(field.getIndexId(), "fulltext")
 
@@ -48,19 +48,19 @@ class FulltextCriterionTestCase(CriterionTestCase):
         field = criterion.FullTextCriterionField()
 
         data = component.queryMultiAdapter((field, search), ICriterionData)
-        self.failUnless(verifyObject(ICriterionData, data))
+        self.assertTrue(verifyObject(ICriterionData, data))
 
         data.setValue(u"I will go into the woods")
         self.assertEqual(data.getValue(), u"I will go into the woods")
         # XXX Should I test that here ?
-        self.failUnless("fulltext" in search.searchValues)
+        self.assertTrue("fulltext" in search.searchValues)
         self.assertEqual(
             search.searchValues["fulltext"],
             u"I will go into the woods")
 
         data.setValue(None)
         self.assertEqual(data.getValue(), None)
-        self.failIf("fulltext" in search.searchValues)
+        self.assertFalse("fulltext" in search.searchValues)
 
     def test_view(self):
         search = self.root.search
@@ -71,7 +71,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), True)
         self.assertEqual(view.getWidgetValue(), None)
 
@@ -91,7 +91,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.getWidgetValue(), u"Dancing fever")
 
         self.assertEqual(view.getIndexId(), "fulltext")
@@ -111,7 +111,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         # This fallback on stored value
         self.assertEqual(view.getWidgetValue(), u"Disco night")
 
@@ -131,7 +131,7 @@ class PathCriterionTestCase(CriterionTestCase):
     def test_criterion(self):
         field = criterion.PathCriterionField()
 
-        self.failUnless(verifyObject(ICriterionField, field))
+        self.assertTrue(verifyObject(ICriterionField, field))
         self.assertEqual(field.getName(), "path")
         self.assertEqual(field.getIndexId(), "path")
 
@@ -140,7 +140,7 @@ class PathCriterionTestCase(CriterionTestCase):
         field = criterion.PathCriterionField()
 
         data = component.queryMultiAdapter((field, search), ICriterionData)
-        self.failUnless(verifyObject(ICriterionData, data))
+        self.assertTrue(verifyObject(ICriterionData, data))
 
         self.assertRaises(AssertionError, data.setValue, u"What ?")
         data.setValue(get_content_id(self.root.folder))
@@ -159,7 +159,7 @@ class PathCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), False)
 
         self.assertEqual(view.getIndexId(), "path")
@@ -179,7 +179,7 @@ class PathCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
 
         self.assertEqual(view.getIndexId(), "path")
         self.assertEqual(view.getIndexValue(), '/root/folder')
@@ -197,7 +197,7 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
     def test_criterion(self):
         field = criterion.MetatypeCriterionField()
 
-        self.failUnless(verifyObject(ICriterionField, field))
+        self.assertTrue(verifyObject(ICriterionField, field))
         self.assertEqual(field.getName(), "meta_type")
         self.assertEqual(field.getIndexId(), "meta_type")
 
@@ -206,7 +206,7 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         field = criterion.MetatypeCriterionField()
 
         data = component.queryMultiAdapter((field, search), ICriterionData)
-        self.failUnless(verifyObject(ICriterionData, data))
+        self.assertTrue(verifyObject(ICriterionData, data))
 
         data.setValue([u"Silva Document", u"Silva Folder"])
         self.assertEqual(data.getValue(), [u"Silva Document", u"Silva Folder"])
@@ -226,7 +226,7 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), True)
         self.assertEqual(view.getWidgetValue(), None)
 
@@ -247,7 +247,7 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         view = component.queryMultiAdapter(
             (field, search, request), ICriterionView)
 
-        self.failUnless(verifyObject(ICriterionView, view))
+        self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.getWidgetValue(), [u"Silva Link", u"Silva Ghost"])
 
         self.assertEqual(view.getIndexId(), "meta_type")

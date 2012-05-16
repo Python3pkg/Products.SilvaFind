@@ -9,7 +9,7 @@ from zope.component import getUtility
 
 from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind import interfaces
-from Products.Silva.testing import get_event_names
+from Products.Silva.testing import assertTriggersEvents
 
 
 class SilvaFindTestCase(unittest.TestCase):
@@ -24,36 +24,33 @@ class SilvaFindTestCase(unittest.TestCase):
         factory.manage_addSilvaFind('search', 'Search your Site')
 
     def test_find(self):
-        self.failUnless('search' in self.root.objectIds())
+        self.assertTrue('search' in self.root.objectIds())
         search = self.root.search
-        self.failUnless(verifyObject(interfaces.IFind, search))
+        self.assertTrue(verifyObject(interfaces.IFind, search))
 
     def test_events(self):
         """Check that events are launch when a find object is
         added/modified.
         """
-        get_event_names()
 
-        factory = self.root.manage_addProduct['SilvaFind']
-        factory.manage_addSilvaFind('new_search', 'New Search')
-
-        self.assertEqual(
-            get_event_names(),
-            ['ObjectWillBeAddedEvent', 'ObjectAddedEvent',
-             'IntIdAddedEvent', 'ContainerModifiedEvent',
-             'ObjectCreatedEvent'])
+        with assertTriggersEvents(
+            'ObjectWillBeAddedEvent', 'ObjectAddedEvent',
+            'IntIdAddedEvent', 'ContainerModifiedEvent',
+            'MetadataModifiedEvent', 'ObjectCreatedEvent'):
+            factory = self.root.manage_addProduct['SilvaFind']
+            factory.manage_addSilvaFind('new_search', 'New Search')
 
     def test_service(self):
         """Test Silva Find service.
         """
         service = getUtility(interfaces.IFindService)
-        self.failUnless(verifyObject(interfaces.IFindService, service))
+        self.assertTrue(verifyObject(interfaces.IFindService, service))
 
         search_schema = service.getSearchSchema()
-        self.failUnless(verifyObject(interfaces.ISearchSchema, search_schema))
+        self.assertTrue(verifyObject(interfaces.ISearchSchema, search_schema))
 
         results_schema = service.getResultsSchema()
-        self.failUnless(verifyObject(interfaces.IResultsSchema, results_schema))
+        self.assertTrue(verifyObject(interfaces.IResultsSchema, results_schema))
 
 
 def test_suite():

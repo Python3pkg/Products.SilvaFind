@@ -21,7 +21,7 @@ class SchemaTestCase(unittest.TestCase):
     def test_schema(self):
         """Test Schema object.
         """
-        self.failUnless(verifyObject(ISchema, self.schema))
+        self.assertTrue(verifyObject(ISchema, self.schema))
 
         self.assertEqual(
             self.schema.getFields(),
@@ -31,10 +31,10 @@ class SchemaTestCase(unittest.TestCase):
             self.schema.getFieldNames(),
             ['meta-set-field-id1', 'meta-set-field-id2'])
 
-        self.failIf(self.schema.hasField('meta-set-field-id3'))
-        self.failIf('meta-set-field-id3' in self.schema)
-        self.failUnless(self.schema.hasField('meta-set-field-id1'))
-        self.failUnless('meta-set-field-id1' in self.schema)
+        self.assertFalse(self.schema.hasField('meta-set-field-id3'))
+        self.assertFalse('meta-set-field-id3' in self.schema)
+        self.assertTrue(self.schema.hasField('meta-set-field-id1'))
+        self.assertTrue('meta-set-field-id1' in self.schema)
 
         self.assertEqual(
             self.schema.getField('meta-set-field-id1'),
@@ -53,7 +53,7 @@ class MetadataCriterionFieldTestCase(unittest.TestCase):
         self.field = MetadataCriterionField('meta-set', 'field-id')
 
     def test_metadata(self):
-        self.failIf(self.field is None)
+        self.assertFalse(self.field is None)
         self.assertEquals('meta-set', self.field.getSetName())
         self.assertEquals('field-id', self.field.getElementName())
 

@@ -38,7 +38,7 @@ class ResultTestCase(unittest.TestCase):
 
     def test_date(self):
         result = schema.DateResultField('date', 'Publication Date')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
         self.assertEqual(result.getName(), 'publicationdate')
         self.assertEqual(result.getId(), 'date')
         self.assertEqual(result.getTitle(), 'Publication Date')
@@ -46,14 +46,14 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
         view.update(self.documents)
         # XXX difficult to test, contain a date
         self.assertNotEqual(view.render(self.documents[0]), '')
 
     def test_metatype(self):
         result = schema.MetatypeResultField('icon', 'Icon')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
         self.assertEqual(result.getName(), 'icon')
         self.assertEqual(result.getId(), 'icon')
         self.assertEqual(result.getTitle(), 'Icon')
@@ -61,18 +61,18 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
 
         view.update(self.documents)
         self.assertEqual(
             view.render(self.documents[0]),
-            u'<img class="searchresult-icon" '
-            u'src="http://localhost/root/globals/silvageneric.gif" '
+            u'<img height="16" width="16" '
+            u'src="http://localhost/root/++resource++icon-Mockup-VersionedContent.png" '
             u'alt="Mockup VersionedContent" />')
 
     def test_link(self):
         result = schema.LinkResultField('link', 'Link to result')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
         self.assertEqual(result.getName(), 'linktoresult')
         self.assertEqual(result.getId(), 'link')
         self.assertEqual(result.getTitle(), 'Link to result')
@@ -80,7 +80,7 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
 
         view.update(self.documents)
         self.assertEqual(
@@ -91,7 +91,7 @@ class ResultTestCase(unittest.TestCase):
     def test_thumbnail(self):
         result = schema.ThumbnailResultField(
             'thumb', 'Image Thumbnail', 'Small version of the image')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
         self.assertEqual(result.getName(), 'imagethumbnail')
         self.assertEqual(result.getId(), 'thumb')
         self.assertEqual(result.getTitle(), 'Image Thumbnail')
@@ -99,7 +99,7 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
 
         view.update(self.documents)
         self.assertEqual(
@@ -107,11 +107,11 @@ class ResultTestCase(unittest.TestCase):
 
     def test_breadcrumbs(self):
         result = schema.BreadcrumbsResultField('breadcrumbs', 'Breadcrumbs')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
 
         view.update(self.documents)
         # XXX This fails because request is a TestRequest, so we don't
@@ -126,7 +126,7 @@ class ResultTestCase(unittest.TestCase):
     def test_metadata(self):
         result = schema.MetadataResultField(
             'silva-extra:creator', 'Creator', 'Content creator')
-        self.failUnless(verifyObject(IResultField, result))
+        self.assertTrue(verifyObject(IResultField, result))
         self.assertEqual(result.getName(), 'creator')
         self.assertEqual(result.getId(), 'silva-extra:creator')
         self.assertEqual(result.getTitle(), 'Creator')
@@ -134,7 +134,7 @@ class ResultTestCase(unittest.TestCase):
 
         view = queryMultiAdapter(
             (result, self.root.search, TestRequest()), IResultView)
-        self.failUnless(verifyObject(IResultView, view))
+        self.assertTrue(verifyObject(IResultView, view))
 
         view.update(self.documents)
         self.assertEqual(

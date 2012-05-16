@@ -34,7 +34,7 @@ class XMLImportTestCase(SilvaXMLTestCase):
         search = self.root.search
         binding = self.metadata.getMetadata(search)
 
-        self.failUnless(verifyObject(IFind, search))
+        self.assertTrue(verifyObject(IFind, search))
         self.assertEqual(
             search.get_title(),
             u'Find something in your Site')
@@ -68,7 +68,7 @@ class XMLImportTestCase(SilvaXMLTestCase):
 
         search = self.root.search
         binding = self.metadata.getMetadata(search)
-        self.failUnless(verifyObject(IFind, search))
+        self.assertTrue(verifyObject(IFind, search))
         self.assertEqual(
             search.get_title(),
             u'Find something in your Site')
@@ -109,9 +109,9 @@ class XMLImportTestCase(SilvaXMLTestCase):
             IContentImported)
 
         folder = self.root.folder
-        self.failUnless(verifyObject(IFolder, folder))
+        self.assertTrue(verifyObject(IFolder, folder))
         search = folder.search
-        self.failUnless(verifyObject(IFind, search))
+        self.assertTrue(verifyObject(IFind, search))
         self.assertItemsEqual(
             search.shownFields,
             ['fulltext', 'meta_type'])
