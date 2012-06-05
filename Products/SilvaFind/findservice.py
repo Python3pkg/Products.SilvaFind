@@ -31,9 +31,9 @@ class FindService(SilvaService):
     """Find Service
     """
     security = ClassSecurityInfo()
-
     meta_type = "Silva Find Service"
     grok.implements(IFindService)
+    grok.name('service_find')
     silvaconf.icon('findservice.png')
 
     def __init__(self, id, title=None):
