@@ -48,8 +48,8 @@ class FindResponseHeaders(HTTPResponseHeaders):
     """
     grok.adapts(IBrowserRequest, IFind)
 
-    def cache_headers(self):
-        self.disable_cache()
+    def cachable(self):
+        return False
 
 
 class SilvaFind(Query, Content, SimpleItem):
