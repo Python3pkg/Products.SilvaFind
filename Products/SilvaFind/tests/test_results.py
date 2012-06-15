@@ -5,11 +5,11 @@
 
 import unittest
 
-from zope.publisher.browser import TestRequest
 from zope.component import queryMultiAdapter
 from zope.interface.verify import verifyObject
 from zeam.utils.batch import Batch
 
+from Products.Silva.testing import TestRequest
 from Products.SilvaFind import schema
 from Products.SilvaFind.interfaces import IResultField, IResultView
 from Products.SilvaFind.testing import FunctionalLayer

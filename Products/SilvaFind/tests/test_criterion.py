@@ -9,11 +9,11 @@ from Acquisition import aq_chain
 
 from zope import component
 from zope.interface.verify import verifyObject
-from zope.publisher.browser import TestRequest
 from silva.core.references.reference import get_content_id
 
-from Products.SilvaFind.testing import FunctionalLayer
+from Products.Silva.testing import TestRequest
 from Products.SilvaFind.criterion import criterion
+from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind.interfaces import (
     ICriterionField, ICriterionData, ICriterionView)
 
