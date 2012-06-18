@@ -7,7 +7,7 @@ import unittest
 
 from Acquisition import aq_chain
 
-from zope import component
+from zope.component import queryMultiAdapter
 from zope.interface.verify import verifyObject
 from silva.core.references.reference import get_content_id
 
@@ -47,7 +47,7 @@ class FulltextCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.FullTextCriterionField()
 
-        data = component.queryMultiAdapter((field, search), ICriterionData)
+        data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
         data.setValue(u"I will go into the woods")
@@ -66,10 +66,8 @@ class FulltextCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.FullTextCriterionField()
         request = TestRequest()
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        data = queryMultiAdapter((field, search), ICriterionData)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), True)
@@ -86,10 +84,8 @@ class FulltextCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.FullTextCriterionField()
         request = TestRequest(form={"fulltext": "Dancing fever"})
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        data = queryMultiAdapter((field, search), ICriterionData)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.getWidgetValue(), u"Dancing fever")
@@ -105,11 +101,9 @@ class FulltextCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.FullTextCriterionField()
         request = TestRequest(form={"fulltext": ""})
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
+        data = queryMultiAdapter((field, search), ICriterionData)
         data.setValue(u"Disco night")
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         # This fallback on stored value
@@ -139,7 +133,7 @@ class PathCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.PathCriterionField()
 
-        data = component.queryMultiAdapter((field, search), ICriterionData)
+        data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
         self.assertRaises(AssertionError, data.setValue, u"What ?")
@@ -154,10 +148,8 @@ class PathCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.PathCriterionField()
         request = TestRequest()
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        data = queryMultiAdapter((field, search), ICriterionData)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), False)
@@ -173,11 +165,9 @@ class PathCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.PathCriterionField()
         request = TestRequest()
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
+        data = queryMultiAdapter((field, search), ICriterionData)
         data.setValue(get_content_id(self.root.folder))
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
 
@@ -205,7 +195,7 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.MetatypeCriterionField()
 
-        data = component.queryMultiAdapter((field, search), ICriterionData)
+        data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
         data.setValue([u"Silva Document", u"Silva Folder"])
@@ -221,10 +211,8 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.MetatypeCriterionField()
         request = TestRequest()
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        data = queryMultiAdapter((field, search), ICriterionData)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.canBeShown(), True)
@@ -242,10 +230,8 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         field = criterion.MetatypeCriterionField()
         request = TestRequest(
             form={"meta_type": ["Silva Link", u"", "Silva Ghost"]})
-        data = component.queryMultiAdapter(
-            (field, search), ICriterionData)
-        view = component.queryMultiAdapter(
-            (field, search, request), ICriterionView)
+        data = queryMultiAdapter((field, search), ICriterionData)
+        view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         self.assertEqual(view.getWidgetValue(), [u"Silva Link", u"Silva Ghost"])

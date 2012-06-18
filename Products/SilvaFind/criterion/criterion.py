@@ -5,7 +5,6 @@
 
 from zope.interface import implements
 from zope.component import getUtility
-import persistent
 
 from Products.SilvaFind import interfaces
 from Products.SilvaFind.i18n import translate as _

@@ -10,11 +10,13 @@ from App.class_init import InitializeClass
 from OFS.SimpleItem import SimpleItem
 from Products.ZCTextIndex.ParseTree import ParseError
 from ZODB.PersistentMapping import PersistentMapping
+import Missing
 
 # Zope 3
 from five import grok
 from zope.component import getMultiAdapter
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.traversing.browser import absoluteURL
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.event import notify
 from zope import component
@@ -107,46 +109,41 @@ class SilvaFind(Query, Content, SimpleItem):
         # BBB map(bool) is here for previously non-boolean stored values
         return reduce(operator.or_, map(bool, self.shownFields.values()))
 
-    security.declareProtected(SilvaPermissions.View,
-                             'searchResultsWithDescription')
-    def searchResultsWithDescription(self, request={}):
-        if not request.has_key('search_submit'):
-            return ([], '')
-        searchArguments = self.getCatalogSearchArguments(request)
-        queryEmpty = True
-        for key, value in searchArguments.items():
-            if key in ['path', 'meta_type']:
-                # these fields do not count as a real search query
-                # they are always there to filter unwanted results
-                continue
-            if type(value) is unicode and value.strip():
-                queryEmpty = False
-                break
-            elif type(value) is list:
-                queryEmpty = False
-                break
-        searchArguments['version_status'] = ['public']
-        query = searchArguments.get('fulltext', '').strip()
-        if query and query[0] in ['?', '*']:
-            return ([], _(
-                    u'Search query can not start with wildcard character.'))
-        if queryEmpty:
-            return ([], _(
-                    u'You need to fill at least one field in the search form.'))
+    security.declareProtected(SilvaPermissions.View, 'searchResults')
+    def searchResults(self, request={}, validate=True):
+        options = self.getSearchCriterias(request)
+        if validate:
+            queryEmpty = True
+            for key, value in options.items():
+                if key in ['path', 'meta_type']:
+                    # these fields do not count as a real search query
+                    # they are always there to filter unwanted results
+                    continue
+                if type(value) is unicode and value.strip():
+                    queryEmpty = False
+                    break
+                elif type(value) is list:
+                    queryEmpty = False
+                    break
+            query = options.get('fulltext', '').strip()
+            if query and query[0] in ['?', '*']:
+                raise ValueError(
+                    _(u'Search query can not start with wildcard character.'))
+            if queryEmpty:
+                raise ValueError(
+                    _(u'You need to fill at least one field in the search form.'))
+        options['publication_status'] = ['public']
         catalog = self.get_root().service_catalog
         try:
-            results = catalog.searchResults(searchArguments)
+            results = catalog.searchResults(options)
         except ParseError:
-            return ([], _(
-                    u'Search query contains only common or reserved words.'))
+            raise ValueError(
+                _(u'Search query contains only common or reserved words.'))
 
-        if not results:
-            return ([], _(u'No items matched your search.'))
+        return results
 
-        return (results, '')
-
-    def getCatalogSearchArguments(self, request):
-        searchArguments = {}
+    def getSearchCriterias(self, request):
+        options = {}
         for field in self.getSearchFields():
             name = field.getName()
             if (self.shownFields.get(name, False) or name == 'path'):
@@ -154,21 +151,21 @@ class SilvaFind(Query, Content, SimpleItem):
                 value = queryPart.getIndexValue()
                 if value is None:
                     value = ''
-                searchArguments[queryPart.getIndexId()] = value
-        return searchArguments
+                options[queryPart.getIndexId()] = value
+        return options
 
 
 InitializeClass(SilvaFind)
 
 
-class SilvaFindAddForm(silvaforms.SMIAddForm):
+class FindAddForm(silvaforms.SMIAddForm):
     """Add form for Silva Find.
     """
     grok.name(u'Silva Find')
     grok.context(IFind)
 
 
-class SilvaFindEditView(PageWithTemplateREST):
+class FindEditView(PageWithTemplateREST):
     """Edit a Silva Find
     """
     grok.adapts(Screen, IFind)
@@ -232,33 +229,42 @@ class SilvaFindEditView(PageWithTemplateREST):
             self.save()
 
 
-class SilvaFindView(silvaviews.View):
+class FindView(silvaviews.View):
     """View a Silva Find.
     """
     grok.context(IFind)
 
     def update(self):
-        # Do search
-        checkPermission = getSecurityManager().checkPermission
-        results, self.message = \
-            self.context.searchResultsWithDescription(self.request)
-        # Filter results on View permission
-        # XXX This could be done more in a more lazy fashion
-        results = filter(
-            lambda b: checkPermission('View', b.getObject()),
-            results)
-        self.results = batch(results, count=20, request=self.request)
+        self.results = []
         self.result_widgets = []
+        self.message = u''
         self.batch = u''
-        if self.results:
-            for field in self.context.getPublicResultFields():
-                widget = getMultiAdapter(
-                    (field, self.context, self.request), IResultView)
-                widget.update(self)
-                self.result_widgets.append(widget)
+        # Search for results
+        if 'search_submit' in self.request.form:
+            try:
+                results = self.context.searchResults(self.request)
+            except ValueError as error:
+                self.message = error[0]
+            else:
+                # Filter results on View permission
+                # XXX This could be done more in a more lazy fashion
+                verify = getSecurityManager().checkPermission
+                self.results = batch(
+                    filter(lambda b: verify('View', b.getObject()), results),
+                    count=20,
+                    request=self.request)
 
-            self.batch = component.getMultiAdapter(
-                (self.context, self.results, self.request), IBatching)()
+                if self.results:
+                    for field in self.context.getPublicResultFields():
+                        widget = getMultiAdapter(
+                            (field, self.context, self.request), IResultView)
+                        widget.update(self)
+                        self.result_widgets.append(widget)
+
+                    self.batch = component.getMultiAdapter(
+                        (self.context, self.results, self.request), IBatching)()
+                else:
+                    self.message = _(u'No items matched your search.')
 
         # Search Widgets
         self.widgets = []
@@ -266,3 +272,29 @@ class SilvaFindView(silvaviews.View):
             widget = getMultiAdapter((
                     field, self.context, self.request), ICriterionView)
             self.widgets.append(widget)
+
+
+def brain_date(brain, key):
+    """Read a date out of a catalog brain.
+    """
+    if key in brain:
+        value = brain[key]
+        if value not in (Missing.Value, None):
+            return value.HTML4()
+    return ''
+
+
+class FindSitemap(grok.View):
+    grok.context(IFind)
+    grok.require('zope2.View')
+    grok.name('sitemap.xml')
+
+    def update(self):
+        self.results = []
+        for brain in self.context.searchResults(self.request, validate=False):
+            self.results.append(
+                {'url': absoluteURL(brain, self.request),
+                 'lastmod': brain_date(brain, 'silva-extramodificationtime')})
+        self.response.setHeader(
+            'Content-Type',
+            'application/xml;charset=utf-8')

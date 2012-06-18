@@ -4,12 +4,11 @@
 
 from five import grok
 from grokcore.chameleon.components import ChameleonPageTemplate
+from silva.core.interfaces import IAddableContents
 from zope.interface import Interface
 
-from Products.Silva.ExtensionRegistry import extensionRegistry
-from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
-from Products.SilvaFind.criterion.widgets.default import convertValue
-from Products.SilvaFind.interfaces import IMetatypeCriterionField, IQuery
+from .default import CriterionTemplateView, convertValue
+from ...interfaces import IMetatypeCriterionField, IQuery
 
 
 class MetatypeCriterionView(CriterionTemplateView):
@@ -25,9 +24,10 @@ class MetatypeCriterionView(CriterionTemplateView):
         return convertValue(self.request.form.get(self.name, None))
 
     def getAvailableMetaTypes(self):
+        container = self.query.get_container()
         meta_types = []
-        for content in extensionRegistry.get_addables():
+        for content in IAddableContents(container).get_all_addables():
             meta_types.append(
-                {"title": content['name'].replace('Silva ', ''),
-                 "value": content['name']})
+                {"title": content.replace('Silva ', ''),
+                 "value": content})
         return meta_types

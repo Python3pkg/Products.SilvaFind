@@ -65,6 +65,16 @@ class IFind(interfaces.IContent, IQuery):
     """A Silva find object.
     """
 
+    def searchResults(request={}, validate=True):
+        """Return a list of ZCatalog brains that match the given
+        request.
+        """
+
+    def getSearchCriterias(request):
+        """Return the search crieterias as defined in the request.
+        """
+
+
 
 class IFindService(interfaces.ISilvaService):
     """Silva find service: provides default global search/result schema.
