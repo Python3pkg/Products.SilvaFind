@@ -52,6 +52,8 @@
    </silva-find:field>
    <silva-find:field name="silva-extra-keywords">
    </silva-find:field>
+   <silva-find:field name="silva-extra-modificationtime">
+   </silva-find:field>
    <silva-find:field name="path">
    </silva-find:field>
   </silva-find:criterion>
