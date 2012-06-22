@@ -53,4 +53,4 @@ class SilvaFindUpgrader(BaseUpgrader):
                 del obj.searchValues[field_name]
         return obj
 
-silva_find_upgrader = SilvaFindUpgrader(VERSION_B1, "Silva Find")
+find_upgrader = SilvaFindUpgrader(VERSION_B1, "Silva Find")
