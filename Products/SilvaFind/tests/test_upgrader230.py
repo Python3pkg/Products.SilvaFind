@@ -8,7 +8,7 @@ from zope.component import getUtility
 from silva.core.references.interfaces import IReferenceService
 
 from Products.SilvaFind.testing import FunctionalLayer
-from Products.SilvaFind.upgrader.upgrade_230 import silva_find_upgrader
+from Products.SilvaFind.upgrader.upgrade_230 import find_upgrader
 
 
 class SilvaFindUpgraderTestCase(unittest.TestCase):
@@ -28,7 +28,7 @@ class SilvaFindUpgraderTestCase(unittest.TestCase):
         self.silva_find.setCriterionValue('path', '/root/pub')
 
     def test_upgrade_create_reference(self):
-        silva_find_upgrader.upgrade(self.silva_find)
+        find_upgrader.upgrade(self.silva_find)
         ref_service = getUtility(IReferenceService)
         refs = list(ref_service.get_references_to(self.root.pub))
         self.assertTrue(self.silva_find in [r.source for r in refs])
