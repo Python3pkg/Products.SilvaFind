@@ -48,7 +48,7 @@ class AuthorContentTestCase(unittest.TestCase):
     def test_create_and_edit(self):
         """An author can't create a SilvaFind by default.
         """
-        browser = self.layer.get_browser(smi_settings)
+        browser = self.layer.get_web_browser(smi_settings)
         browser.login(self.username, self.username)
 
         self.assertEqual(browser.open('/root/edit'), 200)
@@ -67,7 +67,7 @@ class EditorContentTestCase(AuthorContentTestCase):
     def test_create_and_edit(self):
         """Create and configure a silva find object.
         """
-        browser = self.layer.get_browser(smi_settings)
+        browser = self.layer.get_web_browser(smi_settings)
         browser.login(self.username, self.username)
         self.assertEqual(browser.open('/root/edit'), 200)
 
@@ -245,7 +245,7 @@ class SearchTestCase(unittest.TestCase):
     def test_search_keywords(self):
         """Test search using metadata keywords
         """
-        browser = self.layer.get_browser(smi_settings)
+        browser = self.layer.get_web_browser(smi_settings)
         browser.login('editor')
         self.assertEqual(browser.open('/root/search/edit'), 200)
 
