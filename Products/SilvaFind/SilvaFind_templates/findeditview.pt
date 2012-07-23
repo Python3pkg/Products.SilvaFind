@@ -15,7 +15,7 @@
   </div>
 
   <div class="form-body">
-    <div class="form-section" tal:repeat="field view/widgets">
+    <div class="form-section ui-helper-clearfix" tal:repeat="field view/widgets">
       <div class="form-label" tal:define="name field/getName">
         <input type="checkbox"
                tal:condition="field/canBeShown"
@@ -51,7 +51,7 @@
   </div>
 
   <div class="form-body">
-    <div class="form-section" tal:repeat="result context/getResultFields">
+    <div class="form-section ui-helper-clearfix" tal:repeat="result context/getResultFields">
 
       <div class="form-label" tal:define="name result/getName">
         <input type="checkbox" title="Check to show this field in the form"
