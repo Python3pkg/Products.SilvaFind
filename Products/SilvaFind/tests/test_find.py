@@ -34,9 +34,7 @@ class SilvaFindTestCase(unittest.TestCase):
         """
 
         with assertTriggersEvents(
-            'ObjectWillBeAddedEvent', 'ObjectAddedEvent',
-            'IntIdAddedEvent', 'ContainerModifiedEvent',
-            'MetadataModifiedEvent', 'ObjectCreatedEvent'):
+            'ObjectAddedEvent', 'ContentCreatedEvent'):
             factory = self.root.manage_addProduct['SilvaFind']
             factory.manage_addSilvaFind('new_search', 'New Search')
 
