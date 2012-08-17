@@ -66,9 +66,9 @@ class PathCriterionView(CriterionTemplateView):
         raise ValueError(u"Cannot render path widgets for the public")
 
     def updateWidget(self, value):
-        resolver = ReferenceInfoResolver(self.request)
-        resolver.defaults(self, self.query, interface=self.interface)
-        resolver(self, value=value)
+        resolver = ReferenceInfoResolver(self.request, self.query, self)
+        resolver.update(interface=self.interface)
+        resolver.add(value=value)
 
     def extractWidgetValue(self):
         value = self.request.form.get(self.name, None)
