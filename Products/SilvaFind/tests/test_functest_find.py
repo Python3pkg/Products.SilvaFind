@@ -7,7 +7,7 @@ import unittest
 
 from zope.component import getUtility
 from Products.Silva.File.converters import PDF_TO_TEXT_AVAILABLE
-from Products.Silva.testing import smi_settings
+from Products.Silva.ftesting import smi_settings
 from Products.Silva.tests.helpers import open_test_file
 from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaMetadata.interfaces import IMetadataService
