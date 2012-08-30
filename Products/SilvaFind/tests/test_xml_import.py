@@ -44,8 +44,6 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.assertEqual(
             binding.get('silva-content', 'maintitle'),
             u'Find something in your Site')
-        self.assertEqual(binding.get('silva-extra', 'creator'), u'author')
-        self.assertEqual(binding.get('silva-extra', 'lastauthor'), u'paul')
 
         # Actually those are the fields by default ...
         self.assertItemsEqual(
@@ -77,7 +75,7 @@ class XMLImportTestCase(SilvaXMLTestCase):
             u'Best breed Belgium finder')
         self.assertEqual(
             binding.get('silva-extra', 'lastauthor'),
-            u'wim the roxor')
+            u'editor')
 
         self.assertItemsEqual(
             search.shownFields,
