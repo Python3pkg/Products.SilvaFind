@@ -7,13 +7,23 @@ import unittest
 
 from zope.component import getUtility
 from Products.Silva.File.converters import PDF_TO_TEXT_AVAILABLE
-from Products.Silva.ftesting import smi_settings
-from Products.Silva.tests.helpers import open_test_file
+from Products.Silva.ftesting import smi_settings, public_settings
 from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaMetadata.interfaces import IMetadataService
 
 
-test_fixture = {
+def search_settings(browser):
+    public_settings(browser)
+    browser.inspect.add(
+        'search_feedback',
+        '//div[@class="searchresults"]/p')
+    browser.inspect.add(
+        'search_results',
+        '//div[@class="searchresults"]//a[@class="searchresult-link"]',
+        type='link')
+
+
+TEST_FIXTURE = {
     'the_great_figure': {
         'id': 'the_great_figure.pdf',
         'title': 'The Great Figure',
@@ -128,16 +138,6 @@ class ManagerContentTestCase(ChiefEditorContentTestCase):
     username = 'manager'
 
 
-def search_settings(browser):
-    browser.inspect.add(
-        'search_feedback',
-        '//div[@class="searchresults"]/p')
-    browser.inspect.add(
-        'search_results',
-        '//div[@class="searchresults"]//a[@class="searchresult-link"]',
-        type='link')
-
-
 class SearchTestCase(unittest.TestCase):
     """Check if machine has pdftotext. If pdftotext is present run all
     tests, if not leave out pdftotext tests. Test search results of
@@ -148,7 +148,6 @@ class SearchTestCase(unittest.TestCase):
     def setUp(self):
         self.root = self.layer.get_application()
         self.layer.login('manager')
-
         factory = self.root.manage_addProduct['SilvaFind']
         factory.manage_addSilvaFind('search', 'Search Test')
 
@@ -156,48 +155,52 @@ class SearchTestCase(unittest.TestCase):
         """Helper to create a Silva File with the given data.
         """
         factory = self.root.manage_addProduct['Silva']
-        with open_test_file(document['file'], globals()) as file:
-            factory.manage_addFile(document['id'], document['title'], file)
-            if document['keywords'] is not None:
-                content = getattr(self.root, document['id'])
-                metadata = getUtility(IMetadataService).getMetadata(content)
-                metadata.setValues(
-                    'silva-extra',
-                    {'keywords': document['keywords']},
-                    reindex=1)
+        with self.layer.open_fixture(document['file']) as stream:
+            factory.manage_addFile(document['id'], document['title'], stream)
+        if document['keywords'] is not None:
+            content = self.root._getOb( document['id'])
+            metadata = getUtility(IMetadataService).getMetadata(content)
+            metadata.setValues(
+                'silva-extra',
+                {'keywords': document['keywords']},
+                reindex=1)
 
     def test_empty_search(self):
         """Test to search just by clicking on the search button.
         """
-        browser = self.layer.get_browser(search_settings)
-        self.assertEqual(browser.open('/root/search'), 200)
+        with self.layer.get_browser(search_settings) as browser:
+            self.assertEqual(browser.open('/root/search'), 200)
+            self.assertEqual(browser.inspect.title, ["Search Test"])
+            self.assertIn("Search Test", browser.inspect.navigation)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(browser.inspect.search_results, [])
 
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, [])
-        form = browser.get_form('search_form')
-        self.assertEqual(form.inspect.actions, ['Search'])
-        self.assertEqual(form.inspect.actions['Search'].click(), 200)
-        self.assertEqual(
-            browser.inspect.search_feedback,
-            ['You need to fill at least one field in the search form.'])
-        self.assertEqual(browser.inspect.search_results, [])
+            form = browser.get_form('search_form')
+            self.assertEqual(form.inspect.actions, ['Search'])
+            self.assertEqual(form.inspect.actions['Search'].click(), 200)
+            self.assertEqual(
+                browser.inspect.search_feedback,
+                ['You need to fill at least one field in the search form.'])
+            self.assertEqual(browser.inspect.search_results, [])
 
     def test_no_result(self):
         """Try to make a search which match no results at all.
         """
-        browser = self.layer.get_browser(search_settings)
-        self.assertEqual(browser.open('/root/search'), 200)
+        with self.layer.get_browser(search_settings) as browser:
+            self.assertEqual(browser.open('/root/search'), 200)
+            self.assertEqual(browser.inspect.title, ["Search Test"])
+            self.assertIn("Search Test", browser.inspect.navigation)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(browser.inspect.search_results, [])
 
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, [])
-        form = browser.get_form('search_form')
-        form.get_control('fulltext').value = 'grrmuppfff tchak raz ma!'
-        self.assertEqual(form.inspect.actions, ['Search'])
-        self.assertEqual(form.inspect.actions['Search'].click(), 200)
-        self.assertEqual(
-            browser.inspect.search_feedback,
-            ['No items matched your search.'])
-        self.assertEqual(browser.inspect.search_results, [])
+            form = browser.get_form('search_form')
+            form.get_control('fulltext').value = 'grrmuppfff tchak raz ma!'
+            self.assertEqual(form.inspect.actions, ['Search'])
+            self.assertEqual(form.inspect.actions['Search'].click(), 200)
+            self.assertEqual(
+                browser.inspect.search_feedback,
+                ['No items matched your search.'])
+            self.assertEqual(browser.inspect.search_results, [])
 
     def test_search_pdf(self):
         """Test search inside a PDF file.
@@ -205,42 +208,46 @@ class SearchTestCase(unittest.TestCase):
         if not PDF_TO_TEXT_AVAILABLE:
             return
 
-        fixture = test_fixture['the_great_figure']
-        browser = self.layer.get_browser(search_settings)
-        self.assertEqual(browser.open('/root/search'), 200)
+        self.create_file(TEST_FIXTURE['the_great_figure'])
 
-        self.create_file(fixture)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, [])
-        form = browser.get_form('search_form')
-        form.get_control('fulltext').value = 'Gold'
-        self.assertEqual(form.inspect.actions, ['Search'])
-        self.assertEqual(form.inspect.actions['Search'].click(), 200)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, ['The Great Figure'])
-        self.assertEqual(
-            browser.inspect.search_results['The Great Figure'].url,
-            'http://localhost/root/the_great_figure.pdf')
+        with self.layer.get_browser(search_settings) as browser:
+            self.assertEqual(browser.open('/root/search'), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(browser.inspect.search_results, [])
+
+            form = browser.get_form('search_form')
+            form.get_control('fulltext').value = 'Gold'
+            self.assertEqual(form.inspect.actions, ['Search'])
+            self.assertEqual(form.inspect.actions['Search'].click(), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(
+                browser.inspect.search_results,
+                ['The Great Figure'])
+            self.assertEqual(
+                browser.inspect.search_results['The Great Figure'].url,
+                'http://localhost/root/the_great_figure.pdf')
 
     def test_search_fulltext(self):
         """Test search with a regular file.
         """
-        fixture = test_fixture['the_raven']
-        browser = self.layer.get_browser(search_settings)
-        self.assertEqual(browser.open('/root/search'), 200)
+        self.create_file(TEST_FIXTURE['the_raven'])
 
-        self.create_file(fixture)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, [])
-        form = browser.get_form('search_form')
-        form.get_control('fulltext').value = 'bleak'
-        self.assertEqual(form.inspect.actions, ['Search'])
-        self.assertEqual(form.inspect.actions['Search'].click(), 200)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, ['The Raven'])
-        self.assertEqual(
-            browser.inspect.search_results['The Raven'].url,
-            'http://localhost/root/the_raven.txt')
+        with self.layer.get_browser(search_settings) as browser:
+            self.assertEqual(browser.open('/root/search'), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(browser.inspect.search_results, [])
+
+            form = browser.get_form('search_form')
+            form.get_control('fulltext').value = 'bleak'
+            self.assertEqual(form.inspect.actions, ['Search'])
+            self.assertEqual(form.inspect.actions['Search'].click(), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(
+                browser.inspect.search_results,
+                ['The Raven'])
+            self.assertEqual(
+                browser.inspect.search_results['The Raven'].url,
+                'http://localhost/root/the_raven.txt')
 
     def test_search_keywords(self):
         """Test search using metadata keywords
@@ -257,22 +264,25 @@ class SearchTestCase(unittest.TestCase):
         form.get_control('silvafind_save').click()
         self.assertEqual(browser.inspect.feedback, ['Changes saved.'])
 
-        fixture = test_fixture['the_second_coming']
-        browser = self.layer.get_browser(search_settings)
+        self.create_file(TEST_FIXTURE['the_second_coming'])
 
-        self.create_file(fixture)
-        self.assertEqual(browser.open('/root/search'), 200)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, [])
-        form = browser.get_form('search_form')
-        form.get_control('fulltext').value = 'blood-dimmed tide'
-        self.assertEqual(form.inspect.actions, ['Search'])
-        self.assertEqual(form.inspect.actions['Search'].click(), 200)
-        self.assertEqual(browser.inspect.search_feedback, [])
-        self.assertEqual(browser.inspect.search_results, ['The Second Coming'])
-        self.assertEqual(
-            browser.inspect.search_results['The Second Coming'].url,
-            'http://localhost/root/the_second_coming.txt')
+        with self.layer.get_browser(search_settings) as browser:
+            self.assertEqual(browser.open('/root/search'), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(browser.inspect.search_results, [])
+
+            form = browser.get_form('search_form')
+            form.get_control('fulltext').value = 'blood-dimmed tide'
+            self.assertEqual(form.inspect.actions, ['Search'])
+            self.assertEqual(form.inspect.actions['Search'].click(), 200)
+            self.assertEqual(browser.inspect.search_feedback, [])
+            self.assertEqual(
+                browser.inspect.search_results,
+                ['The Second Coming'])
+            self.assertEqual(
+                browser.inspect.search_results['The Second Coming'].url,
+                'http://localhost/root/the_second_coming.txt')
+
 
 def test_suite():
     suite = unittest.TestSuite()
