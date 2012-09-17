@@ -375,7 +375,8 @@ class MetadataResultView(ResultView):
                 item.getObject(), self.set_name, self.element_name)
 
     def render(self, item):
-        result = self.renderValue(self.getValue(item))
+        # self.context should item.getObject()
+        result = self.renderValue(self.context, self.getValue(item))
         if not result:
             return
 
