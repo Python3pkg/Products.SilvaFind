@@ -12,14 +12,14 @@ limit to a preset value. Authors also can determine which fields should be
 displayed in the search results. All metadata set/fields are supported.
 
 If you can't add the *Silva Find* object in the SMI you should make sure it's
-checked in the *addables* section of the publication. If Silva Find is not 
-checked, check it and uncheck the inheritance checkbox (otherwise inheritance 
+checked in the *addables* section of the publication. If Silva Find is not
+checked, check it and uncheck the inheritance checkbox (otherwise inheritance
 will overrule it and uncheck it again).
 
-By default all possible custom search criterion fields and result fields are 
+By default all possible custom search criterion fields and result fields are
 available in the SMI. Besides that, the elements of all metadata sets are also
 available as result fields. If these fields are indexed in the catalog, they
-can also be used as search criterion fields. All available fields can be 
+can also be used as search criterion fields. All available fields can be
 enabled/disabled in the SMI.
 
 Besides this behavior, SilvaFind also allows you to manually override the list
@@ -55,7 +55,7 @@ For example the default global schema that SilvaFind installs
 The result schema defines what fields get shown in the list of results, by
 default as columns in a results table. There are currently 3 types of
 result fields (plain vanilla, metatype and metadata), and it is not hard to
-make your own. See schema.py for how that is done.
+make your own. See ``schema.py`` for how that is done.
 
 The following SearchField types exist for now, and of course it is possible
 to roll your own:
@@ -67,7 +67,7 @@ to roll your own:
 ``FulltextCriterionField``
      allows the fulltext of the content item to be searched.
 
-``MetadataCriterionField`` 
+``MetadataCriterionField``
      allows a specific metadata field of a specific metadata set to be
      searched.
 
@@ -111,9 +111,8 @@ that set searchable by putting them in your schema is easy::
 
         ])
 
-For a good example of how to customize and use SilvaFind from your own
-extension, see the Silva DLCMS, which you can find here::
+Code repository
+===============
 
-   svn co https://infrae.com/svn/dlcms/SilvaDLCMS/trunk/ SilvaDLCMS
-
-and look at ``searchschema.py``.
+You can find the code of this extension in Mercurial:
+https://hg.infrae.com/Products.SilvaFind/.
