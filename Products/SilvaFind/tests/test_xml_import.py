@@ -25,11 +25,10 @@ class XMLImportTestCase(SilvaXMLTestCase):
     def test_default(self):
         """Import a default Silva Find object, With no special data in it.
         """
-        self.import_file('test_import_default.silvaxml', globals())
-
-        self.assertEventsAre(
-            ['ContentImported for /root/search',],
-            IContentImported)
+        importer = self.assertImportFile(
+            'test_import_default.silvaxml',
+            ['/root/search'])
+        self.assertEqual(importer.getProblems(), [])
 
         search = self.root.search
         binding = self.metadata.getMetadata(search)
@@ -58,11 +57,9 @@ class XMLImportTestCase(SilvaXMLTestCase):
         """Try to import a Silva Find object that all search and
         result fields display, but no default search values.
         """
-        self.import_file('test_import_shown_all.silvaxml', globals())
-
-        self.assertEventsAre(
-            ['ContentImported for /root/search',],
-            IContentImported)
+        importer = self.assertImportFile(
+            'test_import_shown_all.silvaxml',
+            ['/root/search'])
 
         search = self.root.search
         binding = self.metadata.getMetadata(search)
@@ -76,13 +73,16 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.assertEqual(
             binding.get('silva-extra', 'lastauthor'),
             u'editor')
-
         self.assertItemsEqual(
             search.shownFields,
             [f.getName() for f in search.getSearchFields() if f.publicField])
         self.assertItemsEqual(
             search.shownResultsFields,
             [field.getName() for field in search.getResultFields()])
+        self.assertEqual(
+            importer.getProblems(),
+            [(u'Unknown result field publicationtime.', search),
+             (u'Unknown result field expirationtime.', search)])
 
         schema = search.getSearchSchema()
         data = getMultiAdapter((schema['meta_type'], search), ICriterionData)
@@ -99,12 +99,11 @@ class XMLImportTestCase(SilvaXMLTestCase):
         """Import a Silva Find content that some search fields shown
         field default values.
         """
-        self.import_file('test_import_default_values.silvaxml', globals())
-
-        self.assertEventsAre(
-            ['ContentImported for /root/folder',
-             'ContentImported for /root/folder/search'],
-            IContentImported)
+        importer = self.assertImportFile(
+            'test_import_default_values.silvaxml',
+            ['/root/folder',
+             '/root/folder/search'])
+        self.assertEqual(importer.getProblems(), [])
 
         folder = self.root.folder
         self.assertTrue(verifyObject(IFolder, folder))

@@ -9,7 +9,6 @@ from silva.core.references.reference import get_content_id
 
 from Products.SilvaFind.testing import FunctionalLayer
 from Products.SilvaFind.interfaces import ICriterionData
-from Products.Silva.silvaxml import xmlexport
 from Products.Silva.tests.test_xml_export import SilvaXMLTestCase
 
 
@@ -28,11 +27,11 @@ class XMLExportTestCase(SilvaXMLTestCase):
     def test_default(self):
         """Export a default created Silva Find content.
         """
-        xml, info = xmlexport.exportToString(self.root.folder.search)
-        self.assertExportEqual(
-            xml, 'test_export_default.silvaxml', globals())
-        self.assertEqual(info.getZexpPaths(), [])
-        self.assertEqual(info.getAssetPaths(), [])
+        exporter = self.assertExportEqual(
+            self.root.folder.search,
+            'test_export_default.silvaxml')
+        self.assertEqual(exporter.getZexpPaths(), [])
+        self.assertEqual(exporter.getAssetPaths(), [])
 
     def test_shown_widgets_and_results(self):
         """Display all available fields and widgets in a default
@@ -47,11 +46,11 @@ class XMLExportTestCase(SilvaXMLTestCase):
             if field.publicField:
                 search.shownFields[field.getName()] = True
 
-        xml, info = xmlexport.exportToString(search)
-        self.assertExportEqual(
-            xml, 'test_export_display_all.silvaxml', globals())
-        self.assertEqual(info.getZexpPaths(), [])
-        self.assertEqual(info.getAssetPaths(), [])
+        exporter = self.assertExportEqual(
+            search,
+            'test_export_display_all.silvaxml')
+        self.assertEqual(exporter.getZexpPaths(), [])
+        self.assertEqual(exporter.getAssetPaths(), [])
 
     def test_shown_widgets_with_defaults(self):
         """Display some extra widgets with some default values (test a
@@ -69,11 +68,11 @@ class XMLExportTestCase(SilvaXMLTestCase):
         data.setValue(['Silva Document', 'Silva Folder', 'Silva File'])
 
         # We need to export the folder with it not do get an reference error.
-        xml, info = xmlexport.exportToString(self.root.folder)
-        self.assertExportEqual(
-            xml, 'test_export_default_values.silvaxml', globals())
-        self.assertEqual(info.getZexpPaths(), [])
-        self.assertEqual(info.getAssetPaths(), [])
+        exporter = self.assertExportEqual(
+            self.root.folder,
+            'test_export_default_values.silvaxml')
+        self.assertEqual(exporter.getZexpPaths(), [])
+        self.assertEqual(exporter.getAssetPaths(), [])
 
     def test_invalid_path(self):
         """Try to export a Silva Find content that have a path outside
@@ -86,10 +85,7 @@ class XMLExportTestCase(SilvaXMLTestCase):
 
         # We only export the find object, the folder selected as path
         # is not in the export so it fails with a nice exception
-        self.assertRaises(
-            xmlexport.ExternalReferenceError,
-            xmlexport.exportToString,
-            search)
+        self.assertExportFail(search)
 
 
 def test_suite():

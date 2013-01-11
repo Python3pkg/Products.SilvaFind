@@ -7,7 +7,6 @@ from grokcore.chameleon.components import ChameleonPageTemplate
 from zope.component import getUtility
 from zope.interface import Interface
 
-from Products.Silva.silvaxml.xmlimport import resolve_path
 from Products.SilvaFind.criterion.widgets.default import CriterionData
 from Products.SilvaFind.criterion.widgets.default import CriterionTemplateView
 from Products.SilvaFind.interfaces import IPathCriterionField, IQuery
@@ -45,15 +44,18 @@ class PathCriterionData(CriterionData):
             reference.set_target_id(value)
 
     def serializeXML(self, handler):
-        value = handler.reference(self.name)
+        value = handler.get_reference(self.name)
         if value is None:
             return []
         return [value]
 
     def setXMLValue(self, handler, value):
-        info = handler.getInfo()
-        setter = lambda content: self.setValue(get_content_id(content))
-        info.addAction(resolve_path, [setter, info, value[0]])
+        find = handler.result()
+        importer = handler.getExtra()
+        importer.resolveImportedPath(
+            find,
+            lambda content: self.setValue(get_content_id(content)),
+            value[0])
 
 
 class PathCriterionView(CriterionTemplateView):

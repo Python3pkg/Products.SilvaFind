@@ -3,4 +3,7 @@
 # See also LICENSE.txt
 # This is a package.
 
+from silva.core.xml import registerNamespace
+
 NS_FIND_URI = 'http://infrae.com/namespace/silva-find'
+registerNamespace('silva-find', NS_FIND_URI)

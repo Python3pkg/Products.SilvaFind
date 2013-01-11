@@ -11,12 +11,11 @@ from five import grok
 from Products.SilvaFind import interfaces
 from Products.SilvaFind.silvaxml import NS_FIND_URI
 from Products.SilvaFind.interfaces import ICriterionData
-from Products.Silva.silvaxml.xmlexport import SilvaBaseProducer, theXMLExporter
 
-theXMLExporter.registerNamespace('silva-find', NS_FIND_URI)
+from silva.core.xml import producers
 
 
-class FindProducer(SilvaBaseProducer):
+class FindProducer(producers.SilvaProducer):
     """XML export a Silva Find object.
     """
     grok.adapts(interfaces.IFind, Interface)
@@ -49,7 +48,7 @@ class FindProducer(SilvaBaseProducer):
 
         self.startElementNS(
             NS_FIND_URI, 'find', {'id': self.context.id})
-        self.metadata()
+        self.sax_metadata()
         serializeOptions(
             'criterion',
             self.context.getSearchFields(),
