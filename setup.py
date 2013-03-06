@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '3.0.1dev'
+version = '3.0.1'
 
 setup(name='Products.SilvaFind',
       version=version,
@@ -42,6 +42,7 @@ setup(name='Products.SilvaFind',
               'silva.core.smi',
               'silva.core.upgrade',
               'silva.core.views',
+              'silva.core.xml',
               'silva.ui',
               'z3locales',
               'zeam.form.silva',
