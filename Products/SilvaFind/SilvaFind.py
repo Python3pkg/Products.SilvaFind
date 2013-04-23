@@ -18,6 +18,7 @@ from zope.component import getMultiAdapter
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.traversing.browser import absoluteURL
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.event import notify
 from zope import component
 
@@ -27,11 +28,12 @@ from Products.SilvaFind.i18n import translate as _
 from Products.Silva import SilvaPermissions
 
 from silva.core import conf as silvaconf
+from silva.core.messages.interfaces import IMessageService
 from silva.core.smi.content import IEditScreen
 from silva.core.views import views as silvaviews
 from silva.core.views.httpheaders import HTTPResponseHeaders
+from silva.fanstatic import need
 from silva.ui.rest import Screen, PageWithTemplateREST
-from silva.core.messages.interfaces import IMessageService
 from zeam.form import silva as silvaforms
 from zeam.utils.batch import batch
 from zeam.utils.batch.interfaces import IBatching
@@ -52,6 +54,10 @@ class FindResponseHeaders(HTTPResponseHeaders):
 
     def cachable(self):
         return False
+
+
+class IFindResources(IDefaultBrowserLayer):
+    silvaconf.resource('search.css')
 
 
 class SilvaFind(Query, Content, SimpleItem):
@@ -233,8 +239,10 @@ class FindView(silvaviews.View):
     """View a Silva Find.
     """
     grok.context(IFind)
+    resources = IFindResources
 
     def update(self):
+        need(self.resources)
         self.results = []
         self.result_widgets = []
         self.message = u''
