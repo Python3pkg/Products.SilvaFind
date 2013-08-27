@@ -16,7 +16,6 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from five import grok
 from silva.core.interfaces import IVersion, IImage
 from silva.core.interfaces.adapters import IIconResolver
-from silva.core.views.interfaces import IVirtualSite
 from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
 from zope.traversing.browser import absoluteURL
@@ -61,7 +60,7 @@ class MetatypeResultView(ResultView):
     def render(self, item):
         content = item.getObject()
         if IVersion.providedBy(content):
-            content = content.get_content()
+            content = content.get_silva_object()
         return self.get_icon(content)
 
 
@@ -133,7 +132,7 @@ class LinkResultView(ResultView):
         content = item.getObject()
         title = content.get_title_or_id()
         if IVersion.providedBy(content):
-            url = absoluteURL(content.get_content(), self.request)
+            url = absoluteURL(content.get_silva_object(), self.request)
         else:
             url = absoluteURL(content, self.request)
         ellipsis = '&#8230;'
@@ -200,7 +199,7 @@ class FullTextResultView(ResultView):
         # since fulltext always starts with id and title, lets remove that
         idstring = content.id
         if IVersion.providedBy(content):
-            idstring = content.get_content().id
+            idstring = content.get_silva_object().id
         skipwords = len(('%s %s' % (idstring, content.get_title())).split(' '))
         fulltext = fulltext[skipwords:]
         fulltextstr = ' '.join(fulltext)
