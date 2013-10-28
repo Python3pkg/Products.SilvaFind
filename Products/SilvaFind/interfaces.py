@@ -76,7 +76,7 @@ class IFind(interfaces.IContent, IQuery):
 
 
 
-class IFindService(interfaces.ISilvaService):
+class IFindService(interfaces.ISilvaService, interfaces.ISilvaInvisibleService):
     """Silva find service: provides default global search/result schema.
     """
 
