@@ -114,5 +114,5 @@ that set searchable by putting them in your schema is easy::
 Code repository
 ===============
 
-You can find the code of this extension in Mercurial:
-https://hg.infrae.com/Products.SilvaFind/.
+You can find the code of this extension in Git:
+https://github.com/silvacms/Products.SilvaFind

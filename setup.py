@@ -9,7 +9,7 @@ version = '3.0.4dev'
 
 setup(name='Products.SilvaFind',
       version=version,
-      description="Search support for Silva.",
+      description="Search extension for Silva CMS",
       long_description=open(os.path.join("Products", "SilvaFind", "README.txt")).read() + "\n" +
                        open(os.path.join("Products", "SilvaFind","HISTORY.txt")).read(),
       classifiers=[
@@ -20,7 +20,7 @@ setup(name='Products.SilvaFind',
       keywords='silva search zope2',
       author='Infrae',
       author_email='info@infrae.com',
-      url='http://infrae.com/products/silva/extensions/silva_find',
+      url='https://github.com/silvacms/Products.SilvaFind',
       license='BSD',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['Products'],
