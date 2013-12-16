@@ -17,14 +17,13 @@
   <div class="form-body">
     <div class="form-section ui-helper-clearfix" tal:repeat="field view/widgets">
       <div class="form-label" tal:define="name field/getName">
-        <input type="checkbox"
+        <input type="checkbox" class="field field-bool"
                tal:condition="field/canBeShown"
                tal:attributes="name string:show_${name}:bool;
                                checked python:context.isCriterionShown(name);" />
         <label tal:content="field/getTitle">
           element label
         </label>
-
         <p tal:content="structure field/getDescription">
           element description
         </p>
@@ -38,9 +37,18 @@
 
   <div class="form-footer">
     <div class="form-controls">
-      <a name="silvafind_save" class="form-control" title="save modifications"
-         i18n:attributes="title"
-         i18n:translate="">Save changes</a>
+      <a class="form-button open-screen" rel="content" href="."
+         data-form-shortcut="ctrl+z" title="Go back to the folder view"
+         i18n:attributes="title">
+        <ins class="icon form_cancel"></ins>
+        <tal:label i18n:translate="">Back</tal:label>
+      </a>
+      <a name="silvafind_save" class="form-control"
+         title="Save modifications on the item"
+         i18n:attributes="title">
+         <ins class="icon form_check"></ins>
+         <tal:label i18n:translate="">Save changes</tal:label>
+      </a>
     </div>
   </div>
 
@@ -52,9 +60,9 @@
 
   <div class="form-body">
     <div class="form-section ui-helper-clearfix" tal:repeat="result context/getResultFields">
-
-      <div class="form-label" tal:define="name result/getName">
+      <div class="form-checkbox" tal:define="name result/getName">
         <input type="checkbox" title="Check to show this field in the form"
+               class="field field-bool field-required"
                i18n:attributes="title"
                tal:attributes="name string:show_result_${name}:bool;
                                checked python:context.isResultShown(name);
@@ -73,9 +81,18 @@
 
   <div class="form-footer">
     <div class="form-controls">
-      <a name="silvafind_save" class="form-control" title="save modifications"
-         i18n:attributes="title"
-         i18n:translate="">Save changes</a>
+      <a class="form-button open-screen" rel="content" href="."
+         data-form-shortcut="ctrl+z" title="Go back to the folder view"
+         i18n:attributes="title">
+        <ins class="icon form_cancel"></ins>
+        <tal:label i18n:translate="">Back</tal:label>
+      </a>
+      <a name="silvafind_save" class="form-control"
+         title="Save modifications on the item"
+         i18n:attributes="title">
+         <ins class="icon form_check"></ins>
+         <tal:label i18n:translate="">Save changes</tal:label>
+      </a>
     </div>
   </div>
 
