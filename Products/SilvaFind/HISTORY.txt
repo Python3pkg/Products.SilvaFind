@@ -1,10 +1,12 @@
 Changes
 =======
 
-3.0.4 (unreleased)
+3.0.4 (2013/12/16)
 ------------------
 
-- ...
+- Improve edit page markup.
+
+- Mark service invisible as it doesn't provide any settings.
 
 3.0.3 (2013/10/08)
 ------------------
