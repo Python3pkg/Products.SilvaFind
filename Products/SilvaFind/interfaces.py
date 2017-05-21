@@ -96,8 +96,8 @@ class ICriterionField(Interface):
     query.
     """
     publicField = Attribute(
-        u"Boolean to authorize display of the field on"
-        u"the public search form")
+        "Boolean to authorize display of the field on"
+        "the public search form")
 
     def getName():
         """Return a unique name for the criterion.

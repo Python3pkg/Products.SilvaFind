@@ -44,6 +44,7 @@ from Products.SilvaFind.interfaces import IFind
 from Products.SilvaFind.interfaces import ICriterionView
 from Products.SilvaFind.interfaces import IResultView
 from Products.SilvaFind.interfaces import IQueryPart
+from functools import reduce
 
 
 class FindResponseHeaders(HTTPResponseHeaders):
@@ -94,13 +95,11 @@ class SilvaFind(Query, Content, SimpleItem):
     # ACCESSORS
     security.declareProtected(SilvaPermissions.View, 'getPublicResultFields')
     def getPublicResultFields(self):
-        return filter(lambda field: self.isResultShown(field.getName()),
-                      self.getResultFields())
+        return [field for field in self.getResultFields() if self.isResultShown(field.getName())]
 
     security.declareProtected(SilvaPermissions.View, 'getPublicSearchFields')
     def getPublicSearchFields(self):
-        return filter(lambda field: self.isCriterionShown(field.getName()),
-                      self.getSearchFields())
+        return [field for field in self.getSearchFields() if self.isCriterionShown(field.getName())]
 
     security.declareProtected(SilvaPermissions.View, 'isCriterionShown')
     def isCriterionShown(self, fieldName):
@@ -113,19 +112,19 @@ class SilvaFind(Query, Content, SimpleItem):
     security.declareProtected(SilvaPermissions.View, 'havePublicSearchFields')
     def havePublicSearchFields(self):
         # BBB map(bool) is here for previously non-boolean stored values
-        return reduce(operator.or_, map(bool, self.shownFields.values()))
+        return reduce(operator.or_, list(map(bool, list(self.shownFields.values()))))
 
     security.declareProtected(SilvaPermissions.View, 'searchResults')
     def searchResults(self, request={}, validate=True):
         options = self.getSearchCriterias(request)
         if validate:
             queryEmpty = True
-            for key, value in options.items():
+            for key, value in list(options.items()):
                 if key in ['path', 'meta_type']:
                     # these fields do not count as a real search query
                     # they are always there to filter unwanted results
                     continue
-                if type(value) is unicode and value.strip():
+                if type(value) is str and value.strip():
                     queryEmpty = False
                     break
                 elif type(value) is list:
@@ -134,17 +133,17 @@ class SilvaFind(Query, Content, SimpleItem):
             query = options.get('fulltext', '').strip()
             if query and query[0] in ['?', '*']:
                 raise ValueError(
-                    _(u'Search query can not start with wildcard character.'))
+                    _('Search query can not start with wildcard character.'))
             if queryEmpty:
                 raise ValueError(
-                    _(u'You need to fill at least one field in the search form.'))
+                    _('You need to fill at least one field in the search form.'))
         options['publication_status'] = ['public']
         catalog = self.get_root().service_catalog
         try:
             results = catalog.searchResults(options)
         except ParseError:
             raise ValueError(
-                _(u'Search query contains only common or reserved words.'))
+                _('Search query contains only common or reserved words.'))
 
         return results
 
@@ -167,7 +166,7 @@ InitializeClass(SilvaFind)
 class FindAddForm(silvaforms.SMIAddForm):
     """Add form for Silva Find.
     """
-    grok.name(u'Silva Find')
+    grok.name('Silva Find')
     grok.context(IFind)
 
 
@@ -179,7 +178,7 @@ class FindEditView(FormWithTemplateREST):
     grok.require('silva.ChangeSilvaContent')
     grok.implements(IEditScreen)
 
-    def send_message(self, message, type=u""):
+    def send_message(self, message, type=""):
         service = component.getUtility(IMessageService)
         service.send(message, self.request, namespace=type)
 
@@ -196,13 +195,13 @@ class FindEditView(FormWithTemplateREST):
 
         if not validate('show_', self.context.getSearchFields()):
             self.send_message(
-                _(u'You need to activate at least one search criterion.'),
-                type=u'error')
+                _('You need to activate at least one search criterion.'),
+                type='error')
             return
         if not validate('show_result_', self.context.getResultFields()):
             self.send_message(
-                _(u'You need to display at least one field in the results.'),
-                type=u'error')
+                _('You need to display at least one field in the results.'),
+                type='error')
             return
 
         for widget in self.widgets:
@@ -219,7 +218,7 @@ class FindEditView(FormWithTemplateREST):
                 self.request.form.get('show_result_' + fieldName, False))
 
         notify(ObjectModifiedEvent(self.context))
-        return self.send_message(_(u'Changes saved.'), type=u'feedback')
+        return self.send_message(_('Changes saved.'), type='feedback')
 
 
     def update(self):
@@ -245,8 +244,8 @@ class FindView(silvaviews.View):
         need(self.resources)
         self.results = []
         self.result_widgets = []
-        self.message = u''
-        self.batch = u''
+        self.message = ''
+        self.batch = ''
         # Search for results
         if 'search_submit' in self.request.form:
             try:
@@ -258,7 +257,7 @@ class FindView(silvaviews.View):
                 # XXX This could be done more in a more lazy fashion
                 verify = getSecurityManager().checkPermission
                 self.results = batch(
-                    filter(lambda b: verify('View', b.getObject()), results),
+                    [b for b in results if verify('View', b.getObject())],
                     count=20,
                     request=self.request)
 
@@ -272,7 +271,7 @@ class FindView(silvaviews.View):
                     self.batch = component.getMultiAdapter(
                         (self.context, self.results, self.request), IBatching)()
                 else:
-                    self.message = _(u'No items matched your search.')
+                    self.message = _('No items matched your search.')
 
         # Search Widgets
         self.widgets = []

@@ -15,11 +15,11 @@ def convertValue(value):
     """
     if not value:
         return None
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         return value
     if not (isinstance(value, list) or isinstance(value, tuple)):
-        return unicode(value, 'UTF-8')
-    return [unicode(item, 'UTF-8') for item in value if item] or None
+        return str(value, 'UTF-8')
+    return [str(item, 'UTF-8') for item in value if item] or None
 
 
 class CriterionData(grok.MultiAdapter):
@@ -30,7 +30,7 @@ class CriterionData(grok.MultiAdapter):
     def __init__(self, criterion, query):
         self.criterion = criterion
         self.query = query
-        self.name = unicode(criterion.getName())
+        self.name = str(criterion.getName())
 
     def getValue(self):
         return self.query.getCriterionValue(self.name)
@@ -46,7 +46,7 @@ class CriterionData(grok.MultiAdapter):
         if value is None:
             return []
         elif isinstance(value, list) or isinstance(value, tuple):
-            return [item if item is not None else u'' for item in value]
+            return [item if item is not None else '' for item in value]
         return [value]
 
     def setXMLValue(self, handler, value):
@@ -65,7 +65,7 @@ class CriterionView(grok.MultiAdapter):
         self.query = query
         self.request = request
         self.data = getMultiAdapter((criterion, query), ICriterionData)
-        self.name = unicode(criterion.getName())
+        self.name = str(criterion.getName())
 
     def renderEditWidget(self):
         return self.renderWidget(self.data.getValue())

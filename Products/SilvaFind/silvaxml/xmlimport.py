@@ -71,20 +71,20 @@ class FindHandler(handlers.SilvaHandler):
             importer = self.getExtra()
             if 'results' in self.fields:
                 schema = find.getResultsSchema()
-                for name in self.fields['results'].keys():
+                for name in list(self.fields['results'].keys()):
                     if name not in schema:
                         importer.reportProblem(
-                            u"Unknown result field {0}.".format(name),
+                            "Unknown result field {0}.".format(name),
                             find)
                     else:
                         find.shownResultsFields[name] = True
             if 'criterion' in self.fields:
                 schema = find.getSearchSchema()
-                for name, value in self.fields['criterion'].iteritems():
+                for name, value in self.fields['criterion'].items():
                     field = schema.getField(name, None)
                     if field is None:
                         importer.reportProblem(
-                            u"Unknown search field {0}.".format(name),
+                            "Unknown search field {0}.".format(name),
                             find)
                         continue
                     if field.publicField:

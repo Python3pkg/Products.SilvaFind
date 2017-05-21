@@ -19,7 +19,7 @@ HTML_CHARACTERS = {
 
 escape = lambda string: ''.join(HTML_CHARACTERS.get(c) or c for c in string)
 
-HTML = u"""<input class="field" type="text"
+HTML = """<input class="field" type="text"
                   name="%s" id="%s" value="%s" size="20" />"""
 
 
@@ -36,4 +36,4 @@ class FullTextCriterionView(CriterionView):
         value = self.request.form.get(self.name, None)
         if not value:
             return None
-        return unicode(value, 'UTF-8')
+        return str(value, 'UTF-8')

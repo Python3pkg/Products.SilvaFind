@@ -24,12 +24,12 @@ class SilvaFindUpgrader(BaseUpgrader):
     def upgrade(self, obj):
         service = getUtility(IReferenceService)
         fields = obj.service_find.getSearchSchema().getFields()
-        fields = filter(lambda x: IPathCriterionField.providedBy(x), fields)
+        fields = [x for x in fields if IPathCriterionField.providedBy(x)]
         root = obj.get_root()
         root_path = root.getPhysicalPath()
         for field in fields:
             field_name = field.getName()
-            if obj.searchValues.has_key(field_name):
+            if field_name in obj.searchValues:
                 value = obj.searchValues[field_name]
                 if value:
                     path = value.split('/')
@@ -38,7 +38,7 @@ class SilvaFindUpgrader(BaseUpgrader):
                         target = root.unrestrictedTraverse(traverse_path, None)
                         if target:
                             ref = service.new_reference(
-                                obj, name=unicode(field_name))
+                                obj, name=str(field_name))
                             ref.set_target(target)
                             logger.info('reference created for field %s of '
                                         'silva find at %s' %

@@ -30,8 +30,8 @@ class MetadataCriterionView(CriterionView):
 
     def renderValue(self, value):
         if isinstance(value, list):
-            value = u", ".join(value)
-        return u"<strong>%s</strong>" % value
+            value = ", ".join(value)
+        return "<strong>%s</strong>" % value
 
     def renderWidget(self, value):
         # XXX does None values work ?
@@ -92,7 +92,7 @@ class RangeMetadataCriterionTemplateView(CriterionTemplateView):
     def constructQuery(self, value):
         if value is None:
             return None
-        begin, end = map(self.convertValue, value)
+        begin, end = list(map(self.convertValue, value))
 
         if begin is None:
             if end is None:

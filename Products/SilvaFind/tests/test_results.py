@@ -65,9 +65,9 @@ class ResultTestCase(unittest.TestCase):
         view.update(self.documents)
         self.assertEqual(
             view.render(self.documents[0]),
-            u'<img height="16" width="16" '
-            u'src="http://localhost/root/++resource++icon-Mockup-VersionedContent.png" '
-            u'alt="Mockup VersionedContent" />')
+            '<img height="16" width="16" '
+            'src="http://localhost/root/++resource++icon-Mockup-VersionedContent.png" '
+            'alt="Mockup VersionedContent" />')
 
     def test_link(self):
         result = schema.LinkResultField('link', 'Link to result')
@@ -84,8 +84,8 @@ class ResultTestCase(unittest.TestCase):
         view.update(self.documents)
         self.assertEqual(
             view.render(self.documents[0]),
-            u'<a href="http://localhost/root/folder/info" '
-            u'class="searchresult-link">info</a>')
+            '<a href="http://localhost/root/folder/info" '
+            'class="searchresult-link">info</a>')
 
     def test_thumbnail(self):
         result = schema.ThumbnailResultField(
@@ -117,10 +117,10 @@ class ResultTestCase(unittest.TestCase):
         # have the same absolute_url
         self.assertEqual(
             view.render(self.documents[0]),
-            u'<span class="searchresult-breadcrumb">'
-            u'<a href="http://localhost/root">root</a>'
-            u'<span> &#183; </span>'
-            u'<a href="http://localhost/root/folder">Folder</a></span>')
+            '<span class="searchresult-breadcrumb">'
+            '<a href="http://localhost/root">root</a>'
+            '<span> &#183; </span>'
+            '<a href="http://localhost/root/folder">Folder</a></span>')
 
     def test_metadata(self):
         result = schema.MetadataResultField(
@@ -138,9 +138,9 @@ class ResultTestCase(unittest.TestCase):
         view.update(self.documents)
         self.assertEqual(
             view.render(self.documents[0]),
-            u'<span class="searchresult-field metadata-silva-extra-creator">'
-            u'<span class="searchresult-field-title">Creator</span>'
-            u'<span class="searchresult-field-value">author</span></span>')
+            '<span class="searchresult-field metadata-silva-extra-creator">'
+            '<span class="searchresult-field-title">Creator</span>'
+            '<span class="searchresult-field-value">author</span></span>')
 
 
 def test_suite():

@@ -31,7 +31,7 @@ class Query(object):
             return self.searchValues.get(name, None)
         else:
             raise ValueError(
-                u'No field named %s defined in search schema' %
+                'No field named %s defined in search schema' %
                 name)
 
     def deleteCriterionValue(self, name):
@@ -46,5 +46,5 @@ class Query(object):
             self.searchValues[name] = value
         else:
             raise ValueError(
-                u'No field named %s defined in search schema' %
+                'No field named %s defined in search schema' %
                 name)

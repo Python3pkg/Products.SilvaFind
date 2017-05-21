@@ -65,7 +65,7 @@ class PathCriterionView(CriterionTemplateView):
     interface = 'silva.core.interfaces.content.IContainer'
 
     def renderPublicWidget(self):
-        raise ValueError(u"Cannot render path widgets for the public")
+        raise ValueError("Cannot render path widgets for the public")
 
     def updateWidget(self, value):
         resolver = ReferenceInfoResolver(self.request, self.query, self)

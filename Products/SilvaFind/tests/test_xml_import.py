@@ -38,13 +38,13 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.assertTrue(verifyObject(IFind, search))
         self.assertEqual(
             search.get_title(),
-            u'Find something in your Site')
+            'Find something in your Site')
         self.assertEqual(
             binding.get('silva-extra', 'content_description'),
-            u'This content will find you, even if you hide, it will find you.')
+            'This content will find you, even if you hide, it will find you.')
         self.assertEqual(
             binding.get('silva-content', 'maintitle'),
-            u'Find something in your Site')
+            'Find something in your Site')
 
         # Actually those are the fields by default ...
         self.assertItemsEqual(
@@ -69,13 +69,13 @@ class XMLImportTestCase(SilvaXMLTestCase):
         self.assertTrue(verifyObject(IFind, search))
         self.assertEqual(
             search.get_title(),
-            u'Find something in your Site')
+            'Find something in your Site')
         self.assertEqual(
             binding.get('silva-extra', 'content_description'),
-            u'Best breed Belgium finder')
+            'Best breed Belgium finder')
         self.assertEqual(
             binding.get('silva-extra', 'lastauthor'),
-            u'editor')
+            'editor')
         self.assertItemsEqual(
             search.shownFields,
             [f.getName() for f in search.getSearchFields() if f.publicField])
@@ -84,8 +84,8 @@ class XMLImportTestCase(SilvaXMLTestCase):
             [field.getName() for field in search.getResultFields()])
         self.assertEqual(
             importer.getProblems(),
-            [(u'Unknown result field publicationtime.', search),
-             (u'Unknown result field expirationtime.', search)])
+            [('Unknown result field publicationtime.', search),
+             ('Unknown result field expirationtime.', search)])
 
         schema = search.getSearchSchema()
         data = getMultiAdapter((schema['meta_type'], search), ICriterionData)
@@ -126,7 +126,7 @@ class XMLImportTestCase(SilvaXMLTestCase):
         data = getMultiAdapter((schema['fulltext'], search), ICriterionData)
         self.assertEqual(
             data.getValue(),
-            u"silva rox")
+            "silva rox")
 
         data = getMultiAdapter((schema['meta_type'], search), ICriterionData)
         self.assertEqual(

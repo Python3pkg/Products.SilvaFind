@@ -34,7 +34,7 @@ class SilvaFindInstaller(DefaultInstaller):
             field_index = field.getIndexId()
             if field_index not in indexes:
                 raise ValueError(
-                    u'Name "%s" not indexed by the catalog' % field_index)
+                    'Name "%s" not indexed by the catalog' % field_index)
 
 install = SilvaFindInstaller('SilvaFind', IExtension)
 

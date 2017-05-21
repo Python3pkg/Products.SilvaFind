@@ -106,7 +106,7 @@ class EditorContentTestCase(AuthorContentTestCase):
         form.get_control('show_meta_type:bool').checked = True
         form.get_control('show_silva-content-maintitle:bool').checked = True
         form.get_control('show_silva-extra-keywords:bool').checked = True
-        form.get_control('silva-extra.keywords:record').value = u'keyword value'
+        form.get_control('silva-extra.keywords:record').value = 'keyword value'
         form.get_control('silvafind_save').click()
 
         self.assertEqual(browser.inspect.feedback, ['Changes saved.'])
@@ -119,7 +119,7 @@ class EditorContentTestCase(AuthorContentTestCase):
             form.get_control('show_silva-extra-keywords:bool').checked, True)
         self.assertEquals(
             form.get_control('silva-extra.keywords:record').value,
-            u'keyword value')
+            'keyword value')
 
         # Delete
         self.assertEqual(browser.inspect.breadcrumbs, ['root', 'Search'])

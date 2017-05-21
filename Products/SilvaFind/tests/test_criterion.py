@@ -49,13 +49,13 @@ class FulltextCriterionTestCase(CriterionTestCase):
         data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
-        data.setValue(u"I will go into the woods")
-        self.assertEqual(data.getValue(), u"I will go into the woods")
+        data.setValue("I will go into the woods")
+        self.assertEqual(data.getValue(), "I will go into the woods")
         # XXX Should I test that here ?
         self.assertTrue("fulltext" in search.searchValues)
         self.assertEqual(
             search.searchValues["fulltext"],
-            u"I will go into the woods")
+            "I will go into the woods")
 
         data.setValue(None)
         self.assertEqual(data.getValue(), None)
@@ -87,31 +87,31 @@ class FulltextCriterionTestCase(CriterionTestCase):
         view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
-        self.assertEqual(view.getWidgetValue(), u"Dancing fever")
+        self.assertEqual(view.getWidgetValue(), "Dancing fever")
 
         self.assertEqual(view.getIndexId(), "fulltext")
-        self.assertEqual(view.getIndexValue(), u"Dancing fever")
+        self.assertEqual(view.getIndexValue(), "Dancing fever")
 
         self.assertEqual(data.getValue(), None)
         view.saveWidgetValue()
-        self.assertEqual(data.getValue(), u"Dancing fever")
+        self.assertEqual(data.getValue(), "Dancing fever")
 
     def test_view_default_value(self):
         search = self.root.search
         field = criterion.FullTextCriterionField()
         request = TestRequest(form={"fulltext": ""})
         data = queryMultiAdapter((field, search), ICriterionData)
-        data.setValue(u"Disco night")
+        data.setValue("Disco night")
         view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
         # This fallback on stored value
-        self.assertEqual(view.getWidgetValue(), u"Disco night")
+        self.assertEqual(view.getWidgetValue(), "Disco night")
 
         self.assertEqual(view.getIndexId(), "fulltext")
-        self.assertEqual(view.getIndexValue(), u"Disco night")
+        self.assertEqual(view.getIndexValue(), "Disco night")
 
-        self.assertEqual(data.getValue(), u"Disco night")
+        self.assertEqual(data.getValue(), "Disco night")
         view.saveWidgetValue()
         # We didn't have any value in the request so it got deleted
         self.assertEqual(data.getValue(), None)
@@ -135,7 +135,7 @@ class PathCriterionTestCase(CriterionTestCase):
         data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
-        self.assertRaises(AssertionError, data.setValue, u"What ?")
+        self.assertRaises(AssertionError, data.setValue, "What ?")
         data.setValue(get_content_id(self.root.folder))
         self.assertEqual(data.getValue(), self.root.folder)
         self.assertEqual(aq_chain(data.getValue()), aq_chain(self.root.folder))
@@ -197,13 +197,13 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         data = queryMultiAdapter((field, search), ICriterionData)
         self.assertTrue(verifyObject(ICriterionData, data))
 
-        data.setValue([u"Silva Document", u"Silva Folder"])
-        self.assertEqual(data.getValue(), [u"Silva Document", u"Silva Folder"])
+        data.setValue(["Silva Document", "Silva Folder"])
+        self.assertEqual(data.getValue(), ["Silva Document", "Silva Folder"])
 
         # empty string or empty list is like None
-        data.setValue(u'')
+        data.setValue('')
         self.assertEqual(data.getValue(), None)
-        data.setValue(u'')
+        data.setValue('')
         self.assertEqual(data.getValue(), None)
 
     def test_view(self):
@@ -228,19 +228,19 @@ class MetaTypeCriterionTestCase(CriterionTestCase):
         search = self.root.search
         field = criterion.MetatypeCriterionField()
         request = TestRequest(
-            form={"meta_type": ["Silva Link", u"", "Silva Ghost"]})
+            form={"meta_type": ["Silva Link", "", "Silva Ghost"]})
         data = queryMultiAdapter((field, search), ICriterionData)
         view = queryMultiAdapter((field, search, request), ICriterionView)
 
         self.assertTrue(verifyObject(ICriterionView, view))
-        self.assertEqual(view.getWidgetValue(), [u"Silva Link", u"Silva Ghost"])
+        self.assertEqual(view.getWidgetValue(), ["Silva Link", "Silva Ghost"])
 
         self.assertEqual(view.getIndexId(), "meta_type")
-        self.assertEqual(view.getIndexValue(), [u"Silva Link", u"Silva Ghost"])
+        self.assertEqual(view.getIndexValue(), ["Silva Link", "Silva Ghost"])
 
         self.assertEqual(data.getValue(), None)
         view.saveWidgetValue()
-        self.assertEqual(data.getValue(), [u"Silva Link", u"Silva Ghost"])
+        self.assertEqual(data.getValue(), ["Silva Link", "Silva Ghost"])
 
 
 def test_suite():

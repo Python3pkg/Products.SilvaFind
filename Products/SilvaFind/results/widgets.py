@@ -77,7 +77,7 @@ class RankingResultView(ResultView):
         self.highest = 1.0
         self.rankings = {}
         if query:
-            query = unicode(query, 'utf8')
+            query = str(query, 'utf8')
             # XXX should use getUtility
             catalog = self.context.service_catalog
             index = catalog.Indexes['fulltext']
@@ -186,7 +186,7 @@ class FullTextResultView(ResultView):
     def render(self, item):
         ellipsis = '&#8230;'
         maxwords = 40
-        searchterm = unicode(self.request.form.get('fulltext', ''), 'utf8')
+        searchterm = str(self.request.form.get('fulltext', ''), 'utf8')
         catalog = self.context.service_catalog
         fulltext = catalog.getIndexDataForRID(item.getRID()).get('fulltext', [])
 
@@ -361,7 +361,7 @@ class MetadataResultView(ResultView):
         metadata_set = service.getMetadataSet(self.set_name)
         metadata_element = metadata_set.getElement(self.element_name)
         assert IMetadataElement.providedBy(metadata_element),\
-            u"Unknow metadata element %s" % self.result.getId()
+            "Unknow metadata element %s" % self.result.getId()
         self.renderValue = metadata_element.renderView
 
         if metadata_element.metadata_in_catalog_p:
